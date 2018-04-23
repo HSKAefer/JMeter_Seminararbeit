@@ -11,12 +11,20 @@
 \usepackage{xcolor} %color instead of color for the definecolor >html<
 \usepackage{kpfonts}
 \usepackage{natbib}
+\usepackage[colorlinks=false]{hyperref}
 
 \definecolor{eclipseKeywords}{HTML}{7F0074} %purple %html stands for hexa rgb -> yellow e.g. 255,255,0 = FF FF 00
 \definecolor{eclipseComments}{HTML}{3F7F5F} %green
 \definecolor{eclipseStrings}{HTML}{2A00FF} %blue
 \definecolor{graybackgroundColor}{HTML}{E5E5E5} %gray!20 for gray!30 use D9D9D9 for gray!10 F2F2F2
 \definecolor{brownlocalObjects}{HTML}{957D47}
+
+\hypersetup{ %required package hyperrref
+  colorlinks   = true, %Colours links instead of ugly boxes
+  urlcolor     = blue, %Colour for external hyperlinks
+  linkcolor    = black, %Colour of internal links
+  citecolor   = black %Colour of citations
+}
 
 \lstset{
 aboveskip=20pt plus2pt minus 4pt,
@@ -84,19 +92,18 @@ User Acceptance Testing, Compatibility Tests
 
 
 \section{Apache JMeter}
-Auf den ersten Blick erscheint Apache JMeter wie das Relikt aus einer längst vergangenen Zeit. Doch man sollte sich von der Swing-basierten GUI Oberfläche nicht täuschen lassen. 
+Auf den ersten Blick erscheint Apache JMeter wie das Relikt aus einer längst vergangenen Zeit. Man sollte sich jedoch von der veralteten und trägen Swing-basierten GUI nicht täuschen lassen, denn hinter der Oberfläche steckt ein mächtiges Werkzeug, mit dem sich alle Arten von Tests erstellen und ausführen lassen. \cite{online:heiseJMeterOderGatling}\par
+Tatsächlich stammt JMeter aus einer Zeit als das Web und Application Server noch in den Kinderschuhen steckten. Ursprünglich wurde JMeter entwickelt um den Application Server Tomcat zu testen. Seitdem wurde das Programm fortlaufend weiter entwickelt, so dass man heute in der Lage ist von verteilte Tests in der Cloud, über das Testen von dynamischen Webseiten bis hin zu JUnit Tests, alle möglichen Arten von Tests zu realisieren. \cite{online:ApacheJMeter}
 
-Tatsächlich stammt JMeter aus einer Zeit als das Web und Application Server noch in den Kinderschuhen steckten.
-
-
-Man sollte sich jedoch nicht täuschen lassen. Eierlegende  
+ 
 \includegraphics[width=1\textwidth]{bilder/jmeter_1.png}\par\vspace{1cm}
 JMeter Platformunabhängig wegen java anwendung. kann sowohl auf mac als auch auf windows laufen. lediglich die java runtime
 
 Wann wurde das Tool das erste mal entwickelt? wie oft wird es eingesetzt. auch von großen unternehmen? kommt bei sap auch zum einsatz
 
 \subsection{Was kann JMeter}
-
+Es lassen sich ebenfalls mehrere Benutzer erzeugen und eine Anwendung mit diesen simultan testen.  
+ 
 \subsubsection{Lastentests}
 
 \subsubsection{Captcha Analyse}
@@ -221,6 +228,6 @@ Alles in allem ist JMeter ein Super tool
 
 \pagebreak
 \bibliographystyle{plain}
-\bibliography{bibliography}
+\bibliography{Bibliography}
 
 \end{document}
