@@ -5,19 +5,41 @@
 \usepackage{graphicx}
 \usepackage{lmodern}
 \usepackage{float}
-\usepackage{url}
+\usepackage[hyphens]{url} %hyphen for too long urls in the bibiography
 \usepackage{listings}
 \usepackage[nottoc]{tocbibind} %includes the bibtex bibliography into toc
 \usepackage{xcolor} %color instead of color for the definecolor >html<
 \usepackage{kpfonts}
 \usepackage{natbib}
 \usepackage[colorlinks=false]{hyperref}
+\usepackage[hang]{footmisc}
+\usepackage{fancyhdr}	%package for calling \pagestyle{fancy} 
+\usepackage{ifthen} %to set the chaptertitle not in the tocs
+\usepackage{titletoc}
 
-\definecolor{eclipseKeywords}{HTML}{7F0074} %purple %html stands for hexa rgb -> yellow e.g. 255,255,0 = FF FF 00
-\definecolor{eclipseComments}{HTML}{3F7F5F} %green
-\definecolor{eclipseStrings}{HTML}{2A00FF} %blue
+\makeatletter
+\author{Daniel Sch\"afer} \let\Author\@author
+\makeatother
+
+\pagestyle{fancy}
+\fancyhf{}
+%\fancyhead[RE]{\scshape\nouppercase{\leftmark}}	%LE - left side of the header for even pages, and right side for odd pages
+\fancyhead[LO]{\scshape\nouppercase{\rightmark}}
+\fancyhead[RO]{\thepage}
+
+\setlength{\textheight}{598pt} %origin 598 in a4
+\setlength{\headsep}{20pt}
+\setlength{\headheight}{16pt}
+\setlength{\topmargin}{0.46cm} %origin a4 = 17pt
+\setlength{\marginparwidth}{38pt}
+\setlength{\parindent}{0mm}	%neuer paragraph wird nicht eingerückt
+\setlength{\parskip}{1mm}	%abstand nach unten hin
+\setlength{\skip\footins}{1cm} %before footnote space
+\setlength{\footnotemargin}{1em} %standardvalue = 1.8em
+\setlength{\intextsep}{20pt plus2pt minus 4pt}	%space between text and the float environment like a picture. 
+\setlength{\floatsep}{20pt plus2pt minus 4pt} %two floats behind space between them
+
 \definecolor{graybackgroundColor}{HTML}{E5E5E5} %gray!20 for gray!30 use D9D9D9 for gray!10 F2F2F2
-\definecolor{brownlocalObjects}{HTML}{957D47}
 
 \hypersetup{ %required package hyperrref
   colorlinks   = true, %Colours links instead of ugly boxes
@@ -44,13 +66,8 @@ belowskip=20pt plus2pt minus 4pt,
 }
 
 \lstdefinestyle{Cpp} {
-language=C++,
-  keywordstyle=\color{eclipseKeywords},
-   stringstyle=\color{eclipseStrings},
-  commentstyle=\color{eclipseComments},
-  morecomment=[l][\color{eclipseComments}]{\#}
+language=C++
 }
-
 
 
 \begin{document}
@@ -77,22 +94,41 @@ language=C++,
 %{\large \today\par}
 \end{titlepage}
 
-
+\pagenumbering{roman}
+\setcounter{page}{2}
+\thispagestyle{empty}
 \tableofcontents
 \pagebreak
 %\addcontentsline{toc}{section}{Abbildungsverzeichnis}
 %\listoffigures
 
+\pagenumbering{arabic}
+\setcounter{page}{4}
+
 \section{Einführung}
-\subsection{Motivation - Wozu überhaupt Testing?}
-Man erlebt es immer wieder, dass Webseiten unter zu hoher Last in die Knie gezwungen werden. Sei es nun Amazon, Ebay oder auch Hochschul interne Seiten, die durch bestimmte Anmeldefristen viele Nutzer gleichzeitig versorgen müssen. Doch warum passiert sowas in der heutigen zeit immer noch? Und kann man dem vorbeigeund entgegenwirken? Sogenannte Last oder Performance Test sind dafür nötig. Das frei Verfügbare unter Public License Key stehende Java Programm JMeter bietet diese und weitere funktionalität um die Leistung einer Webseite bis ins kleinste Detail zu analysieren und zu testen.
-\subsection{Verschiedene Testarten}
-User Acceptance Testing, Compatibility Tests
-\subsection{Automatisierte und manuelle Tests}
+Mit dieser Ausarbeitung zur Seminararbeit wird das Performance und Last-Test Programm Apache JMeter ausführlich unter die Lupe genommen. Es werden seine Funktionen und Möglichkeiten erläutert und kurz Alternativen dazu erwähnt. Zusammenfassend werden Vor- und Nachteile aufgelistet, sowie ein Fazit gegeben.
+
+\subsection{Motivation}
+Man erlebt es immer wieder, dass Webseiten unter zu hoher Last in die Knie gezwungen werden. Sei es nun Amazon oder Netflix durch DDoS-Angriffe \cite{online:AmazonDDoS}, oder auch Hochschulinterne Seiten, die durch gegebene Anmeldefristen eine hohe Anzahl von gleichzeitigen Benutzern bewältigen müssen. 
+
+Gerade letzteres Szenario lässt sich im voraus gut vermeiden, da man die grobe Anzahl der Studierenden kennt und somit präventiv die Webseite auf die eingehende Last testen kann. Dabei werden sehr viele nebenläufige Anfragen an einen Anwendung gestartet und die Response Zeiten ausgewertet. Diese Art von Tests nennt man Last oder Performance-Tests und wird in die Klasse der Systemtests kategorisiert \cite{online:LastUndPerformanceTest}. 
+
+Das frei verfügbare, unter Public License Key stehende Java Programm JMeter bietet diese und weitere Funktionalität um die Leistung einer Webseite bis ins kleinste Detail zu analysieren, testen, auswerten und visualisieren.
+
+\subsection{Manuelle vs automatisierte Tests}
+Im vorherigen Abschnitt wurden bereits die Systemtests angesprochen. Diese Tests können sowohl manuell, als auch automatisiert ausgeführt werden. 
+
+\subsubsection{Manuelles Testen}
+Beim manuellen Testen werden bestimmte Aktionen und Request von mehreren Benutzern nach bestimmten Vorgaben gestartet und die resultierenden Ergebnisse protokolliert. Es liegt auf der Hand, dass diese Art des testens ziemlich zeit -und resourcenaufwändig ist. Zusätzlich muss das Personal, sprich die Tester organisiert, betreut und verpflegt werden. Falls es sich um die Programmierer selbst handelt, stehen diese im Zeitraum auch nicht für andere Tätigkeiten zur Verfügung. Da es sich um Menschen handelt, kann natürlich auch nicht ausgeschlossen werden, dass Fehler während der Testphasen gemacht und diese entsprechend nicht erfasst werden. \cite[p. 11]{book:ApacheJMeter}
+
+Trotz einiger Nachteile sollte man auf zusätzliche manuelle Tests\footnote{Das sogenannte User Acceptance Testing (UAT) ist gerade im finalen Entwicklungsstadium einer Anwendung unabdingbar. \cite{online:wikiUAT}} einer Anwendung nie verzichten, da eine echte Person über den Tellerrand schauen kann und es dadurch möglich ist, diverse Bugs ausfindig zu machen, die mit dem eigentlichen Test nichts zu tun haben.
+
+
 
 
 \section{Apache JMeter}
-Auf den ersten Blick erscheint Apache JMeter wie das Relikt aus einer längst vergangenen Zeit. Man sollte sich jedoch von der veralteten und trägen Swing-basierten GUI nicht täuschen lassen, denn hinter der Oberfläche steckt ein mächtiges Werkzeug, mit dem sich alle Arten von Tests erstellen und ausführen lassen. \cite{online:heiseJMeterOderGatling}\par
+Auf den ersten Blick erscheint Apache JMeter wie das Relikt aus einer längst vergangenen Zeit. Man sollte sich jedoch von der veralteten und trägen Swing-basierten GUI nicht täuschen lassen, denn hinter der Oberfläche steckt ein mächtiges Werkzeug, mit dem sich alle Arten von Tests erstellen und ausführen lassen. \cite{online:heiseJMeterOderGatling}
+
 Tatsächlich stammt JMeter aus einer Zeit als das Web und Application Server noch in den Kinderschuhen steckten. Ursprünglich wurde JMeter entwickelt um den Application Server Tomcat zu testen. Seitdem wurde das Programm fortlaufend weiter entwickelt, so dass man heute in der Lage ist von verteilte Tests in der Cloud, über das Testen von dynamischen Webseiten bis hin zu JUnit Tests, alle möglichen Arten von Tests zu realisieren. \cite{online:ApacheJMeter}
 
  
@@ -227,6 +263,7 @@ Ziemlich resourcenhungrig. Trotz 16GB Arbeitsspeicher hängt sich das Ding gerne
 Alles in allem ist JMeter ein Super tool
 
 \pagebreak
+\thispagestyle{empty}
 \bibliographystyle{plain}
 \bibliography{Bibliography}
 
