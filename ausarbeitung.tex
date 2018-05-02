@@ -4,6 +4,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 \usepackage{lmodern}
+\usepackage{todonotes}
 \usepackage{float}
 \usepackage[hyphens]{url} %hyphen for too long urls in the bibiography
 \usepackage{listings}
@@ -46,6 +47,11 @@
   urlcolor     = blue, %Colour for external hyperlinks
   linkcolor    = black, %Colour of internal links
   citecolor   = black %Colour of citations
+}
+
+%with this command its possible to set inline codesnippets with a colorbox
+\newcommand{\codeInLine}[1]{%
+\colorbox{graybackgroundColor}{\lstinline{#1}} %Colorbox instead of colorbox
 }
 
 \lstset{
@@ -112,7 +118,7 @@ language=C++
 Mit dieser Ausarbeitung zur Seminararbeit wird das Performance und Last-Test Programm Apache JMeter ausführlich unter die Lupe genommen. Es werden seine Funktionen und Möglichkeiten erläutert und kurz Alternativen dazu erwähnt. Zusammenfassend werden Vor- und Nachteile aufgelistet, sowie ein Fazit gegeben.
 
 \subsection{Motivation}
-Man erlebt es immer wieder, dass Webseiten unter zu hoher Last in die Knie gezwungen werden. Sei es nun Amazon, Netflix und Konsorten durch DDoS-Angriffe \cite{online:AmazonDDoS}, oder auch hochschulinterne Seiten, die durch gegebene Anmeldefristen eine hohe Anzahl von gleichzeitigen Benutzern zu bewältigen haben. 
+Man erlebt es immer wieder, das Webseiten unter zu hoher Last in die Knie gezwungen werden. Sei es nun Amazon, Netflix und Konsorten durch DDoS-Angriffe \cite{online:AmazonDDoS}, oder auch hochschulinterne Seiten, die durch gegebene Anmeldefristen eine hohe Anzahl von gleichzeitigen Benutzern zu bewältigen haben. 
 
 Gerade letzteres Szenario lässt sich im voraus gut vermeiden, da man die grobe Anzahl der Studierenden kennt und somit präventiv die Webseite auf die eingehende Last testen kann. Dabei werden sehr viele nebenläufige Anfragen an einen Anwendung gestartet und die Response Zeiten ausgewertet. Diese Art von Tests nennt man Last oder Performance-Tests und wird in die Klasse der Systemtests kategorisiert \cite{online:LastUndPerformanceTest}. 
 
@@ -124,7 +130,7 @@ Bevor es an das eigentliche Thema JMeter geht, gibt es einen kleinen Exkurs in d
 \subsubsection{Manuelles Testen}
 Beim manuellen Testen werden bestimmte Aktionen und Request von mehreren Benutzern nach bestimmten Vorgaben gestartet und die resultierenden Ergebnisse protokolliert. Es liegt auf der Hand, dass diese Art des testens ziemlich zeit -und resourcenaufwändig ist. Zusätzlich muss das Personal, sprich die Tester organisiert, betreut und verpflegt werden. Falls es sich dabei um die Programmierer selbst handelt, stehen diese im Zeitraum auch nicht für andere Tätigkeiten zur Verfügung. Der Faktor Mensch spielt natürlich bei dieser Art der Tests eine Rolle, wodurch nicht ausgeschlossen werden kann, dass Fehler während der Testphasen gemacht und diese entsprechend nicht erfasst werden. \cite[S. 11]{book:ApacheJMeter}
 
-Trotz dieser Nachteile sollte man auf zusätzliche manuelle Tests\footnote{Das sogenannte User Acceptance Testing (UAT) ist gerade im finalen Entwicklungsstadium einer Anwendung unabdingbar. \cite{online:wikiUAT}} einer Anwendung nie verzichten, da eine "`reale"' Person über den Tellerrand schauen kann und es dadurch möglich ist, diverse Bugs ausfindig zu machen, die mit dem eigentlichen Test unter umständen gar nichts zu tun haben.
+Trotz dieser Nachteile sollte man auf zusätzliche manuelle Tests\footnote{Das sogenannte User Acceptance Testing (UAT) ist gerade im finalen Entwicklungsstadium einer Anwendung unabdingbar. \cite{online:wikiUAT}} einer Anwendung nie verzichten, da eine "`reale"' Person über den Tellerrand schauen kann und es dadurch möglich ist, diverse Bugs ausfindig zu machen, die mit dem eigentlichen Test unter Umständen gar nichts zu tun haben.
 
 \subsubsection{Automatisiertes Testen}
 Automatisiertes Testen funktionieren immer dann recht gut, wenn häufige Wiederholungen auftreten. Beispielsweise bei Regressiontests. Aber auch bei Lasttests ist die Testautomatisierung ein gängiges Verfahren. Die Tests laufen in erster Linie mit Software, was zur Folge hat, dass sie ziemlich statisch sind und dadurch beispielsweise keine Ästhetik geprüft werden kann, wie dies etwa bei menschlichen Testpersonen der Fall wäre.
@@ -132,7 +138,7 @@ Automatisiertes Testen funktionieren immer dann recht gut, wenn häufige Wiederh
 Jedoch haben automatisierte Tests den großen Vorteil, dass sie kosteneffizienter sind. Man benötigt lediglich ein Budget für etwaige Lizenzgebühren der Software oder für den Support. Des weiteren ist man durch Testsoftware in der Lage, sehr viele Benutzer gleichzeitig zu erzeugen und parallel auf ein System zugreifen zu lassen. Mit Testskripten sogar rund um die Uhr \cite{online:Testautomatisierung}. Dadurch werden Systeme bis zur ihren Grenzen und darüber hinaus getestet.
 
 \section{Apache JMeter}
-Wen man sich nun für die Testautomation entschieden hat, steht man vor der Wahl einer entsprechenden Software. Diese befinden sich in einer Preisspanne von kostenlos bis hin zu einem fünfstelligen Bereich. Die Wahl hängt letzten endes von den eigenen Anforderungen ab \cite[S. 15]{book:ApacheJMeter}. Da sich die Arbeit auf JMeter bezieht richten wir unser Augenmerk auf dise spezielle Software.
+Wen man sich nun für die Testautomation entschieden hat, steht man vor der Wahl einer entsprechenden Software. Diese befinden sich in einer Preisspanne von kostenlos bis hin zu einem fünfstelligen Bereich. Die Wahl hängt letzten Endes von den eigenen Anforderungen ab \cite[S. 15]{book:ApacheJMeter}. Da sich die Arbeit auf JMeter bezieht richten wir unser Augenmerk auf diese spezielle Software.
 
 Wie man in Abbildung~\ref{fig:jmeter_gui} erkennen kann, erscheint Apache JMeter mit seinen "`Metal-Look-and-Feel"' \cite{online:wikiSwing} Widgets wie das Relikt aus einer längst vergangenen Zeit. Man sollte sich jedoch von der veralteten und trägen Swing-basierten GUI nicht täuschen lassen, denn hinter der Oberfläche steckt ein mächtiges Werkzeug, mit dem man alle möglichen Arten von Tests erstellen und ausführen kann. \cite{online:heiseJMeterOderGatling}
 
@@ -144,22 +150,24 @@ Tatsächlich stammt JMeter aus einer Zeit als das Web und Application Server noc
   \caption{Apache JMeter GUI}
   \label{fig:jmeter_gui}
 \end{figure}
-Apache JMeter wurde in Java geschrieben und kann durch seine platformunabhängigkeit unter jedem beliebigen Betriebssystem, welches eine Java Runtime Environment (JRE) installiert hat, verwendet werden. Neben der GUI kann man Apache JMeter auch mit der Kommandozeile bedienen. Dies ist gerade bei speicherintensiven Lasttests empfehlenswert, da die GUI schnell an ihre Grenzen kommt und sich die Testergebnisse nicht mehr genau erfassen lassen. Mehr zum Thema Kommandozeile im Abschnitt \nameref{chap:jmeter_commandline}.
+Apache JMeter wurde in Java geschrieben und kann durch seine platformunabhängigkeit unter jedem beliebigen Betriebssystem, welches eine Java Runtime Environment (JRE) installiert hat, verwendet werden. Neben der GUI kann man Apache JMeter auch mit der Kommandozeile bedienen. Dies ist gerade bei speicherintensiven Lasttests empfehlenswert, da die GUI schnell an ihre Grenzen kommt und sich die Testergebnisse nicht mehr genau erfassen lassen. Mehr zum Thema Kommandozeile in Abschnitt~\ref{chap:jmeter_commandline}.
 
-Apache JMeter bietet zusätzlich eine gut dokumentierte API an, mit der es möglich ist das Programm selbstständig zu erweitern.
+Apache JMeter bietet zusätzlich eine gut dokumentierte API an, mit der es möglich ist das Programm selbständig zu erweitern.
 
 \subsection{Historisches}
 Ursprünglich wurde Apache JMeter von Stefano Mazzocchi, seiner Zeit Entwickler bei der Apache Software Foundation, programmiert um die Performance von Apache Tomcat (damals noch Apache JServ) zu testen. Kurz danach wurde das Programm neu entworfen und mit einer verbesserten GUI und zusätzlichen Möglichkeiten von Funktionstests ausgestattet. Im Jahr 2011 wurde JMeter zu einem sogenannten Top Level Apache project, was eine offizielle Homepage und ein Projekt Management Committee mit sich brachte \cite{online:officialJMeter}.
 
-Mitlerweile ist Apache JMeter ein wichtiger Bestandteil von Performance Tests in sehr vielen Firmen geworden. Großkonzerne wie SAP oder 1\&1 verwenden regelmäßig JMeter um die Verfügbarkeit ihrer Produkte unter hoher Last zu prüfen. 
+Mittlerweile ist Apache JMeter ein wichtiger Bestandteil von Performance Tests in sehr vielen Firmen geworden. Großkonzerne wie SAP oder 1\&1 verwenden regelmäßig JMeter um die Verfügbarkeit ihrer Produkte unter hoher Last zu prüfen. 
 
 \subsection{Was kann JMeter}
 Apache JMeter dient in einer Client/Server Landschaft als Client und kann dadurch Anfragen an bestimmte Anwendungen absetzen. Dadurch erhält man unter anderem die Responsezeit, Responsemesage oder aber auch den Speicherverbrauch.
 
-Anfragen können sowohl an statische als auch an dynamische Resourcen erfolgen. Darunter fallen unter anderem satische Dateien, Servlets, FTP Server, Datenbanken, Java Objekte und Skripte.
+Anfragen können sowohl an statische als auch an dynamische Resourcen erfolgen. Darunter fallen unter anderem statische Dateien, Servlets, FTP Server, Datenbanken, Java Objekte und Skripte.
 Um diese Anfragen in einer entsprechend großen Anzahl abzufeuern, bietet das Programm die Simulation von vielen gleichzeitigen Benutzern an. Diese Threads lassen sich in einzelne Thread Gruppen unterteilen.
 
-Nach den Tests bietet JMeter ein HTML Dashboard an, in dem sehr viele Informationen über die Anfragen und Ergebnisse in Tabellen und Statistiken grafisch aufbereitet dargestellt werden. Abbildung~\ref{fig:dashboard} zeigt einen Ausschnitt dieser Möglichkeit, die im Abschnitt xxx genauer untersucht wird.  
+In JMeter ist es ebenfalls möglich, den Test in eine Cloud Infrastruktur auszulagern und die Tests unabhängig vom eigenen System bzw. Hardware laufen zu lassen. \todo{hier noch entsprechendes Chapter und besser formulieren} Es ist auch möglich die Testfälle in ein verteiltes System zu packen und dadurch deutlich mehr Resourcen zu verwenden. \todo{Cloud + Verteilte Systeme noch recherchieren}
+
+Nach den Tests bietet JMeter ein HTML Dashboard an, in dem sehr viele Informationen über die Anfragen und Ergebnisse in Tabellen und Statistiken grafisch aufbereitet dargestellt werden. Abbildung~\ref{fig:dashboard} zeigt einen Ausschnitt des Dashboards, welches im Abschnitt~\ref{chap:html_dashboard} genauer untersucht wird.  
 
 \begin{figure}[htb]%[ht]
  \centering
@@ -167,15 +175,79 @@ Nach den Tests bietet JMeter ein HTML Dashboard an, in dem sehr viele Informatio
   \caption{HTML Dashboard Report}
   \label{fig:dashboard}
 \end{figure}
-skript erstellen und aufzeichnen
-In Java geschriebene JUnit Tests importieren und ausführen.!!
+
+Eine weitere nützliche Funktion ist das Aufzeichnen von Userinteraktionen. Dieser Http Test Script Recorder wird in JMeter mit bestimmten Filtern und Pattern vorkonfiguriert und gestartet. Jede Aktion im Browser mit der entsprechenden URL und Port wird dann als einzelner HTTP Request Sampler angelegt. Der Recorder wird initial einmal ausgeführt und kann dann für diverse Tests recycelt werden.    
+
+Seit der JMeter Version 2.1.2 ist es außerdem möglich in Java geschriebene JUnit Tests als JUnit Sampler zu importieren und ausführen. Diese nützliche Funktion wird im Abschnitt \nameref{chap:junit_tests} untersucht.
 
 \subsection{Installation}
-\subsubsection{Setting up the environment}
-\subsubsection{Running JMeter}
+Im folgenden Kapitel werden notwendige Schritte zur Inbetriebnahme von Apache JMeter erklärt.
+
+\subsubsection{Einrichten der Umgebung}
+Apache JMeter wurde als reine Java Anwendung entwickelt. Sie ist dadurch platformunabhängig und benötigt keine zusätzlichen Treiber oder Installation. Alle notwendigen Abhängigkeiten und Klassen sind im entsprechenden Archiv hinterlegt. Zum Starten muss man lediglich die *.jar Datei aus dem Verzeichnis ausführen.
+
+Auf der offiziellen Seite von Apache JMeter \url{http://jmeter.apache.org/download_jmeter.cgi} muss man sich zunächst eine Release Version herunterladen. Den Build entpackt man dann in ein beliebiges Verzeichnis, beispielsweise \codeInLine{C:\\\\Program Files\\jmeter\\}.
+Es sollte bereits eine aktuelle JRE vorhanden sein, da diese Grundvorausstzung ist um *.jar Dateien auszuführen. Prüfen kann man dies, indem man in der Kommandozeile den Befehl \codeInLine{java -version} eingibt. Wenn keine JRE installiert ist kommt eine entsprechende Meldung, dass der Befehl nicht gefunden wurde. In diesem Fall hilft eine Installation der Java runtime environment von der offiziellen Oracle Seite unter \url{http://www.oracle.com/technetwork/java/javase/downloads/index.html}.
+
+Im Installationspfad befinden sich mehrere Unterverzeichnisse. Wichtig sind hier der \codeInLine{\\bin} Ordner und der \codeInLine{\\lib} Ordner. Im ersteren befindet sich die ApacheJMeter.jar Datei welche die GUI von JMeter startet. Im lib Verzeichnis sind alle Libraries und Erweiterungen hinterlegt. Dies ist auch der Ort an dem zusätzliche Third-Party -Plugins hineinkopiert werden müssen.
+
+\subsubsection{Starten von JMeter}
+JMeter lässt sich wie bereits erwähnt als GUI bzw. als Kommandozeilenprogramm verwenden.  Um JMeter als GUI zu starten kann man direkt die ApacheJMeter.jar ausführen. Sitzt man hinter einer Firewall empfiehlt es sich die GUI via Kommandozeile zu starten. Folgende Parameter  sollten dabei verwendet werden:
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|l|l|}
+		\hline
+		\textbf{Parametername} & \textbf{Bedeutung} \\
+		\hline
+		-H & Proxy Server Hostname bzw. IP-Adresse \\
+		-P & Port vom Proxy Server \\
+		-N & Host ohne Proxy (localhost) \\ 
+		-u & Benutzername für den Proxy \\
+		-p & Passwort für den Proxy \\
+		\hline
+	\end{tabular}
+	\caption[tab_parameter_gui]{Befehle für Firewall Einstellungen}
+	\label{tab_parameter_gui}
+\end{table}
+
+Beispiel: Aus der Kommandozeile ins /bin Verzeichnis von JMeter navigieren und folgenden Befehl ausführen: 
+
+\codeInLine{jmeter -H 196.168.178.1 -P 1337 -u lindan -a hispassword -N localhost}.
+
+Alternativ dazu die Befehle der JMeter Kommandozeile ohne GUI:
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|l|l|}
+		\hline
+		\textbf{Parametername} & \textbf{Bedeutung} \\
+		\hline
+		-n & non-GUI - keine GUI Oberfläche \\
+		-t & jmx Datei, dass die Testfälle enthält \\
+		-l & jtl Datei, in dem die Logs gespeichert werden \\ 
+		-r & Verwende alle Remote Server aus jmeter.properties \\
+		\hline
+	\end{tabular}
+	\caption[tab_parameter_non_gui]{Befehle für JMeter Kommandozeile}
+	\label{tab_parameter_non_gui}
+\end{table}
+
+Beispiel um die test.jmx Datei auszuführen und in logtest.jmx zu speichern: Aus der Kommandozeile ins /bin Verzeichnis von JMeter navigieren und folgenden Befehl ausführen: 
+
+\codeInLine{jmeter -n -t test.jmx -l logtest.jtl} 
+
 
 \subsection{JMeter GUI}
-\includegraphics[width=1\textwidth]{bilder/jmeter_2.png}\par\vspace{1cm}
+Die GUI von JMeter ist die erste Anlaufstelle für Anfänger und interessierte Benutzer. Es wird hauptsächlich dazu verwendet um die Test Sampler zu generieren, die dann später als *.jmx Datei gestartet werden.
+
+\begin{figure}[htb]%[ht]
+ \centering
+    \includegraphics[width=1\textwidth]{bilder/jmeter_2.png}
+  \caption{JMeter GUI mit Graph}
+  \label{fig:gui_graph}
+\end{figure}
+
 
 \subsection{JMeter Command Line}
 \label{chap:jmeter_commandline}
@@ -211,9 +283,6 @@ In der folgenden Tabelle sieht man einige häufig verwendete Parameter und ihre 
 \end{table}
 
 
-
-
-
 \section{Der Testplan}
 Was ist überhaupt ein Testplan
 \subsection{Elemente eines Testplans}
@@ -239,7 +308,11 @@ Mit jmeter lassen sich assertions testen. Dazu wird der response von einem reque
 
 \section{Funktionale Tests}
 
+\section{JUnit Tests}
+\label{chap:junit_tests}
+
 \section{Auswertung HTML Dashboard}
+\label{chap:html_dashboard}
 APDEX index. selbst bearbeiten in /bin/user.properties file.
 
 \section{Wissenswertes und Besonderheiten}
