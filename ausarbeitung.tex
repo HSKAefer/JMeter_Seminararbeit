@@ -212,9 +212,9 @@ JMeter lässt sich wie bereits erwähnt als GUI bzw. als Kommandozeilenprogramm 
 \end{table}
 
 Beispiel: Aus der Kommandozeile ins /bin Verzeichnis von JMeter navigieren und folgenden Befehl ausführen: 
-
-\codeInLine{jmeter -H 196.168.178.1 -P 1337 -u lindan -a hispassword -N localhost}.
-
+\begin{lstlisting}
+jmeter -H 196.168.178.1 -P 1337 -u lindan -a hispassword -N localhost
+\end{lstlisting}
 Alternativ dazu die Befehle der JMeter Kommandozeile ohne GUI:
 
 \begin{table}[H]
@@ -233,13 +233,18 @@ Alternativ dazu die Befehle der JMeter Kommandozeile ohne GUI:
 	\label{tab_parameter_non_gui}
 \end{table}
 
-Beispiel um die test.jmx Datei auszuführen und in logtest.jmx zu speichern: Aus der Kommandozeile ins /bin Verzeichnis von JMeter navigieren und folgenden Befehl ausführen: 
-
-\codeInLine{jmeter -n -t test.jmx -l logtest.jtl} 
-
+Beispiel um die test.jmx Datei auszuführen und in logtest.jmx zu speichern: Aus der Kommandozeile ins /bin Verzeichnis von JMeter navigieren und folgenden Befehl ausführen: \
+\begin{lstlisting}
+jmeter -n -t test.jmx -l logtest.jtl
+\end{lstlisting}
+Mehr zum Thema GUI und Kommandozeilenaufurf in den nachfolgenden Kapiteln.
 
 \subsection{JMeter GUI}
-Die GUI von JMeter ist die erste Anlaufstelle für Anfänger und interessierte Benutzer. Es wird hauptsächlich dazu verwendet um die Test Sampler zu generieren, die dann später als *.jmx Datei gestartet werden.
+Die GUI von JMeter ist die erste Anlaufstelle für Anfänger und interessierte Benutzer. Hier kann man schnell und einfach Testaufrufe erzeugen und Ergebnisse anhand von Graphen und Tabellen anzeigen. 
+
+Die GUI wird von erfahrenen Anwendern hauptsächlich dazu verwendet um die Test Sampler zu generieren, die dann später aus der Kommandozeile heraus als *.jmx Dateien gestartet werden.
+
+Hier kann man auch den HTTP Test Script Recorder konfigurieren und starten, mit dem es möglich ist, diverse HTTP Anfragen an Webseiten aufzuzeichnen. Mehr zum Thema Recording und Aufzeichnen von Aktionen in Kapitel \ref{sec:wissenswertes}. Abbildung \ref{fig:gui_graph} zeigt die GUI beim Abarbeiten mehrerer gleichzeitiger Anfragen an eine Webseite. Der Graph kann das ganze zusätzlich visualisieren. Dadurch erkennt man, an welchen Stellen noch  optimiert werden kann.
 
 \begin{figure}[htb]%[ht]
  \centering
@@ -249,59 +254,77 @@ Die GUI von JMeter ist die erste Anlaufstelle für Anfänger und interessierte B
 \end{figure}
 
 
-\subsection{JMeter Command Line}
+\subsection{JMeter Kommandozeile}
 \label{chap:jmeter_commandline}
-GUI verbraucht viel Speicher. Nicht empfohlen für große Lastentests
-Command Line ist geeignet für die Integration in andere Systeme wie Jenkins/Continious Integration
-\subsubsection{Ausführen des Console Clients}
-Zuerst sollte ein Testscript verfügbar sein. Man kann hier ein vorhandenes File verwenden oder in JMeter selbst ein neues *jmx-File erzeugen. Minimale Voraussetzungen sind eine Thread Group sowie ein Sampler wie etwa ein HTTP Request mit entsprechender URI.
+Möchte man nun einen auswendigeren Lasttest machen, eignet sich die GUI ab einer gewissen Anzahl von gleichzeitigen Benutzern nicht mehr. Durch die steigende Anzahl der Anfragen wird auch der Resourcenbedarf immer größer und der ohnehin schon recht hohe Speicherbedarf der GUI selbst kann sich dann negativ auf die Messergebnisse auswirken und diese verfälschen.
 
-JMeter GUI beenden und Command Line starten. Danch in das /bin Verzeichnis von JMeter navigieren. Dort startet man den Test via dem Befehl:
-\begin{lstlisting}[style=Cpp]
-  jmeter -n -t [jmx file] -l [results file]
-\end{lstlisting}
-In der folgenden Tabelle sieht man einige häufig verwendete Parameter und ihre Bedeutung. Um eine Übersicht aller Parameter zu erhalten, kann man in der Console den jmeter -? ausführen.
+Hier kommt der sogenannte "`Non-GUI Modus"' ins Spiel. Dies ist die Bezeichnung um JMeter in der Kommandozeile auszuführen. Mit Hilfe des Kommandozeilenaufrufes lassen sich am Ende des Tests CSV oder XML Dateien erstellen, die Testergebnisse beinhalten. Auch der HTML Dashboard Report lässt sich nur hier generieren.
+
+\subsubsection{Ausführen des Non-GUI Modus}
+Zuerst sollte ein Testscript verfügbar sein. In diesem sind alle Requests und Konfigurationen wie Cache/Cookie verhalten und Authorization Management enthalten. Man kann hier ein vorhandenes File verwenden oder in JMeter selbst ein neues jmx-File erzeugen. Minimale Voraussetzungen sind eine Thread Group sowie ein Sampler, beispielsweise ein HTTP Request, mit entsprechender URI und Operation.
+
+Nun startet man die Kommandozeile und navigiert in das /bin Verzeichnis von JMeter. Dort startet man den Test via folgendem Befehl:
+\begin{lstlisting}
+jmeter -n -t [Pfad zum jmx-file] -l [Pfad zum result file] -e -o [Pfad zum HTML Dashboard Ordner]
+\end{lstlisting} 
+In der folgenden Tabelle sieht man einige häufig verwendete Parameter und ihre Bedeutung. Um eine Übersicht aller Parameter zu erhalten, kann man in der Kommandozeile den Befehl \codeInLine{jmeter -?} ausführen. Ein zweiter sehr nützlicher Befehl ist \codeInLine{jmeter -h}, welcher eine Vorauswahl von Kommandozeilenbefehle von JMeter anbietet.
 \begin{table}[H]
 	\centering
 	\begin{tabular}{|l|l|}
 		\hline
 		\textbf{Parametername} & \textbf{Bedeutung} \\
 		\hline
-		-n & non gui mode \\
-		-t & location of jmeter script - combined with -n \\
-		-l & location of result file \\
-		-? & alle Parameter an die zur Auswahl stehen \\
+		-n & Non-GUI Modus \\
+		-t & Pfad zum JMeter Skript; in Verbindung mit -n \\
+		-l & Pfad zum Result File \\
+		-? & Hilfe; zeigt alle Parameter an \\
 		-h & Beispielbefehle, die man verwenden kann \\
 		-L & Log level - Wann soll etwas geloggt werden \\
-		-e & Um html Reports zu erzeugen\\
-		-o & Location of the output folder - combined with -e or -g \\
-		-g & html report wird aus einem csv file erzeugt \\ 
+		-e & Um HTML Reports zu erzeugen\\
+		-o & Pfad zum Output Folder; in Verbindung mit -e or -g \\
+		-g & HTML Report wird aus einem CSV file erzeugt \\ 
 		\hline
 	\end{tabular}
-	\caption[tab_parameter_non_gui]{Befehle der JMeter Command Line}
+	\caption[tab_parameter_non_gui]{Befehle der JMeter Kommandozeile}
 	\label{tab_parameter_non_gui}
 \end{table}
 
+Pauschal kann man sagen, dass man die GUI bei kleineren Tests bzw. Testplanerstellung verwendet. Für alles andere sollte der Non-GUI Modus die erste Wahl sein.
 
 \section{Der Testplan}
-Was ist überhaupt ein Testplan
+Nach dem ganzen Vorgeplänkel geht es nun an die Erstellung eines ersten Testplans für JMeter.
+Doch was ist überhaupt ein Testplan? Man kann ihn sich wie eine Schablone vorstellen, in dem man verschiedene Tests anlegt. Ein Testplan ist ein JMeter Skript im Format JMX.
+JMX..... erklären??
+
 \subsection{Elemente eines Testplans}
 Welche Elemente kann ein Testplan enthalten
 
 1 Testplan anlegen
 \subsubsection{Thread-Groups}
-Ähnlich wie JUnit. Hier möglichkeiten setup teardown neben den eigentlichen gruppen
+Ähnlich wie JUnit. Hier Möglichkeiten setup teardown neben den eigentlichen gruppen
+theads sind die user
 Gleichzeitige Benutzer usw.
 \subsubsection{Sampler}
-Sind die eigentlichen Tests
+Sind die eigentlichen requests
+\subsubsection{Config Elemente}
+\subsubsection{Timer}
+Delay hinzufügen
 \subsubsection{Listener}
 Elemente die Informationen über die Performance Tests enthalten
 Zum abfragen bzw. ergebnisse visualisieren
 
 werden verwendet um ergebnisse und metriken der tests anzuzeigen
 
-\subsubsection{http request}
+Reporting, Logging und Debugging
+
+\subsubsection{Pre Processors}
+modify the request
+\subsubsection{Post processor}
+parse the response
+\subsubsection{Logic Controller}
+
 \subsubsection{Assertions}
+error checking
 Mit jmeter lassen sich assertions testen. Dazu wird der response von einem request untersucht assert 200. assert 500 etc.
 
 \section{Lasttests von Webseiten}
@@ -316,6 +339,7 @@ Mit jmeter lassen sich assertions testen. Dazu wird der response von einem reque
 APDEX index. selbst bearbeiten in /bin/user.properties file.
 
 \section{Wissenswertes und Besonderheiten}
+\label{sec:wissenswertes}
 Man kann die Ergebnisse zur Laufzeit in Logfiles schreiben.
 
 \subsection{JMeter Plugin Manager}
@@ -357,6 +381,9 @@ Wenn ein Variablenfeld required ist. z.b. bei JDBC Connection Configuration. dan
 
 Ziemlich resourcenhungrig. Trotz 16GB Arbeitsspeicher hängt sich das Ding gerne mal auf.
 
+Passwort im Klartext. Gerade wenn man das zeug verteilt verwendet mit mehreren benutzern nicht sehr sicher
+
+Keine Captcha erkennung
 \section{Alternativen}
 \subsection{Gatling}
 https://www.heise.de/developer/artikel/Last-und-Performance-Tests-mit-JMeter-oder-Gatling-3648505.html
