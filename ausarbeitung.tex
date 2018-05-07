@@ -253,7 +253,6 @@ Hier kann man auch den HTTP Test Script Recorder konfigurieren und starten, mit 
   \label{fig:gui_graph}
 \end{figure}
 
-
 \subsection{JMeter Kommandozeile}
 \label{chap:jmeter_commandline}
 Möchte man nun einen auswendigeren Lasttest machen, eignet sich die GUI ab einer gewissen Anzahl von gleichzeitigen Benutzern nicht mehr. Durch die steigende Anzahl der Anfragen wird auch der Resourcenbedarf immer größer und der ohnehin schon recht hohe Speicherbedarf der GUI selbst kann sich dann negativ auf die Messergebnisse auswirken und diese verfälschen.
@@ -293,39 +292,96 @@ Pauschal kann man sagen, dass man die GUI bei kleineren Tests bzw. Testplanerste
 
 \section{Der Testplan}
 Nach dem ganzen Vorgeplänkel geht es nun an die Erstellung eines ersten Testplans für JMeter.
-Doch was ist überhaupt ein Testplan? Man kann ihn sich wie eine Schablone vorstellen, in dem man verschiedene Tests anlegt. Ein Testplan ist ein JMeter Skript im Format JMX.
-JMX..... erklären??
+Doch was ist überhaupt ein Testplan? Jeder JMeter Test hat genau einen Testplan, der als Wurzel in der Hierarchie angelegt ist. Man kann ihn sich als einen Container vorstellen, der weitere Komponenten beinhaltet kann, die nötig sind um einen Testlauf erfolgreich zu starten. Der Testplan ist ein Skript in einem speziellen JMX Format. Betrachtet man die Datei in einem Texteditor erkennt man, dass es sich hier um eine xml-Datei handelt (Siehe Abbildung \ref{fig:jmx_xml}). Nach anlegen und abspeichern des Testplans kann man diesen via Kommandozeile oder GUI starten. Falls man auf einem Testplan die Option "`Functional Test Mode"' aktiviert, sorgt das dafür, dass JMeter den Response jedes Sample-Aufrufs in ein Log-File speichert. Diese Log-Files lassen sich in den Listenern konfigurieren.
+
+\begin{figure}[htb]%[ht]
+ \centering
+    \includegraphics[width=1\textwidth]{bilder/jmx_xml.png}
+  \caption{JMX-Datei in Notepad++ geöffnet}
+  \label{fig:jmx_xml}
+\end{figure}
 
 \subsection{Elemente eines Testplans}
-Welche Elemente kann ein Testplan enthalten
+Um einen Test zu starten benötigt man mindestens einen Testplan, darunter eine Thread Group sowie einer oder mehrere Sampler. Nachfolgend eine Auflistung der wichtigsten Elemente und ihre Funktion, die in einem Testplan verwendet werden.
 
-1 Testplan anlegen
 \subsubsection{Thread-Groups}
-Ähnlich wie JUnit. Hier Möglichkeiten setup teardown neben den eigentlichen gruppen
-theads sind die user
-Gleichzeitige Benutzer usw.
+Zu jedem Testplan gehört mindestens eine Thread-Group. Diese steht stellvertretend für die Anzahl der gleichzeitigen Benutzer und Wiederholungen, die simuliert werden. Abbildung~\ref{fig:thread_group} zeigt die wichtigsten Einstellungen der Thread Group. Neben den selbsterklärenden Bezeichnungen und Werte gibt es noch die Ramp-Up Period. Diese gibt an, in welcher Zeitspanne die Threads erzeugt werden sollen.
+Angenommen man gibt 10 Threads an und die Ramp-Up Period stellt man auf 20 Sekunden, wird alle 2 Sekunden ein neuer Thread erzeugt. Dies verhindert ein gleichzeitiges Erzeugen aller Threads und dadurch eine zu hohe Systemauslastung zu Beginn des Tests.
+
+\begin{figure}[htb]%[ht]
+ \centering
+    \includegraphics[width=1\textwidth]{bilder/thread_group.png}
+  \caption{Wichtige Einstellungen der Thread-Group}
+  \label{fig:thread_group}
+\end{figure}
+
+Thread-Groups kann man zusätzlich auch als setUp- oder tearDown-Gruppen anlegen. Diese werden analog zu JUnit Tests entsprechend vor der eigentlichen Thread-Group gestartet oder eben nach Beendigung aller Thread-Groups. Sehr hilfreich, wenn man beispielsweise Werte aus einer Datenbank auslesen und diese in Variablen speichern möchte, bevor der eigentliche Test beginnt und das Auslesen nicht in den eigentlichen Test mit einfließen sollen \cite{online:testingJournals}.
+
 \subsubsection{Sampler}
-Sind die eigentlichen requests
-\subsubsection{Config Elemente}
+Sampler und Logic Controller steuern die Abarbeitung eines Tests. Dabei sind Sampler für das Senden eines Requests verantwortlich und die Logic Controller für den zeitlichen Aspekt, also wann dieser Request gesendet wird. Innerhalb der Thread-Group lassen sich mehrere Sampler anlegen. Diese Sampler sind die eigentlichen Anfragen des Tests und stellen die Verbindung zu den zu testenden Objekten her. Es gibt Sampler für die unterschiedlichsten Protokolle wie HTTP, FTP, JDBC SOAP/XML und Java-Objekte. 
+
+HTTP-Sampler sind die wohl am häufigsten eingesetzten Sampler. Mit ihnen lassen sich unter anderem REST Aufrufe an entsprechende Server starten. Abbildung \ref{fig:http_request_sampler} zeigt einen HTTP-Request Sampler an die hochschulinterne API mit der GET-Methode.
+
+\begin{figure}[htb]%[ht]
+ \centering
+    \includegraphics[width=1\textwidth]{bilder/http_request_sampler.png}
+  \caption{HTTP-Request Sampler}
+  \label{fig:http_request_sampler}
+\end{figure}
+
+\subsubsection{Logic Controller}
+Der Logic Controller steuert den zeitlichen Ablauf einzelner Teile, insbesondere der Sampler und kann man unter anderem angeben, wie oft ein Sampler wiederholt werden soll oder wann dieser gestartet werden soll. Aber auch komplexere Szenarien, etwa durch reguläre Ausdrücke bei beim If-Controller sind machbar.
+
 \subsubsection{Timer}
-Delay hinzufügen
+Durch einen Timer kann man eine Verzögerung nach jedem Thread einbauen, so dass der Test für kurze Zeit angehalten wird. Es gibt konstante und Zufallstimer.
+
+\subsubsection{Config Elements}
+Zu einzelnen Samplern oder Thread-Groups gibt es noch diverse Config Elements. Diese dienen dazu default parameter einmalig anzulegen und darauf zuzugreifen. Wird dann in den jeweiligen Controllern kein Wert in die entsprechenden Label eingetragen, wird auf den Wert im Config Element zurückgegriffen. Speziell für HTTP-Sampler gibt es darüber hinaus noch weitere Config Elemente, wie Header, Authorization oder Cookie Informationen, die man zentral für den ganzen Testplan abspeichern kann \cite{online:performanceTools}.
+
 \subsubsection{Listener}
-Elemente die Informationen über die Performance Tests enthalten
-Zum abfragen bzw. ergebnisse visualisieren
-
-werden verwendet um ergebnisse und metriken der tests anzuzeigen
-
-Reporting, Logging und Debugging
+Listener sind Elemente die Informationen über die Ergebnisse der Performance Tests enthalten. Es gib verschiedene Arten von Listenern, wie etwa den Graph Result Listener, den View Results Tree Listener oder den Aggregation Report. Wichtiger Hinweis an der Stelle: Egal welcher Listener verwendet wird, die Daten die gespeichert werden sind immer die selben. Lediglich die Darstellung dieser auf dem Ausgabemedium unterscheidet sich. Man kann Listener an jede beliebige Stelle im Test hängen; auch unter einem Testplan. Es werden jedesmal die Daten gesammelt, die ab der eingehängter Stelle präsent sind.
 
 \subsubsection{Pre Processors}
 modify the request
 \subsubsection{Post processor}
 parse the response
-\subsubsection{Logic Controller}
 
 \subsubsection{Assertions}
-error checking
-Mit jmeter lassen sich assertions testen. Dazu wird der response von einem request untersucht assert 200. assert 500 etc.
+Mit JMeter lassen sich auch Assertions untersuchen. Dazu wird der Response eines Requests auf seinen Statuscode hin überprüft. Auch Antwortzeiten lassen sich mit Hilfe von Assertions prüfen. Liegt die Response in einer bestimmten Zeitspanne oder überschreitet der Response diese Zeit kann man entsprechend darauf reagieren.  
+
+\section{Aufzeichnen von Aktionen}
+Es leuchtet ein, dass wenn man eine Webseite auf ihre Performance untersuchen will, sehr viele, möglichst unterschiedliche Anfragen an die Seite stellen möchte. Es soll natürlich eine Testabdeckung von nahezu 100\% erreicht werden und so gut es geht alle Pfade innerhalb der URL zumindest einmal besucht werden. Um in JMeter nicht jeden Sampler einzeln anzulegen, gibt es diverse Tools, die Aktionen auf Webseiten aufzeichnen, die in den folgenden Kapiteln kurz erwähnt werden.  
+
+\subsection{Chrome Plugin Blazemeter}
+Ein wohl recht bekanntes Tool ist Blazemeter. Das kostenlose platformunabhängige Chrome-Plugin ist in der Lage Aktionen von bestimmten URLS aufzunehmen und danach zu exportieren. Ein kleiner Wermutstropfen muss man hier noch zu erwähnen. Für das exportieren der Aufzeichnung in das JMX Format muss man sich für die Anwendung kostenlos registrieren. Wem dies nichts ausmacht, erhält mit Blazemeter ein solides Recorcing Tool, dass eng mit JMeter zusammenarbeitet. 
+
+\begin{figure}[htb]%[ht]
+ \centering
+    \includegraphics[width=0.2\textwidth]{bilder/blazemeter.png}
+  \caption{Blazemeter}
+  \label{fig:blazemeter}
+\end{figure}
+
+\subsection{Spezielle Software}
+Natürlich gibt es auch die Möglichkeit speziell für Recording entwickelte Software zu verwenden. Diese gibt es in Hülle und Fülle im Internet. Sowohl kostenpflichtig als auch Open-Source-Lösungen. Für Windows Nutzer gibt es beispielsweise die Software BadBoy. Unter \url{http://www.badboy.com.au} kann man sich die neuste Version unter Angaben eines Namen und Email Adresse herunterladen und installieren. Abbildung~\ref{fig:badboy} zeigt die Oberfläche von BadBoy in Aktion. 
+
+\begin{figure}[htb]%[ht]
+ \centering
+    \includegraphics[width=1\textwidth]{bilder/badboy.png}
+  \caption{BadBoy Recording Software}
+  \label{fig:badboy}
+\end{figure}
+
+\subsection{Build-in Lösung}
+Für JMeter Enthusiasten gibt es einen integrierten Testscript Recorder. Diesen findet man entweder beim Testplan unter folgendem Menüpunkt \codeInLine{Add -> Non-Test-Elements\n -> HTTP Test Script Recorder} oder über den Weg \codeInLine{File -> Templates... -> Recording Template Create}.
+Abbildung~\ref{fig:https_recorder} zeigt den erstellten Recorder. Nachdem der Port angepasst wurde klickt man auf Start und muss nun im Browser den entsprechenden ProxyServer konfigurieren. Als Adresse wählt man \codeInLine{localhost} und der Port entsprechend den JMeter Settings. Jede Aktion die nun im Browser getriggert wird, wird als Sampler im JMeter Testplan unter der entsprechenden Thread-Group angelegt. Zusätzliche Cookies und Variable Konfigurationen werden automatisch angelegt.
+
+\begin{figure}[htb]%[ht]
+ \centering
+    \includegraphics[width=1\textwidth]{bilder/https_recorder.png}
+  \caption{HTTP Test Script Recorder}
+  \label{fig:https_recorder}
+\end{figure}
 
 \section{Lasttests von Webseiten}
 
@@ -343,22 +399,6 @@ APDEX index. selbst bearbeiten in /bin/user.properties file.
 Man kann die Ergebnisse zur Laufzeit in Logfiles schreiben.
 
 \subsection{JMeter Plugin Manager}
-
-
-
-\subsection{Aufzeichnen von Aktionen - UI web Test}
-Build in Solution:
-Bei non-test-Elements Testscript Recorder <-hiermit kann man ein script aufzeichnen um ganze Webseiten zu untersuchen
-
-\includegraphics[width=1\textwidth]{bilder/badboy.png}\par\vspace{1cm}
-Für Windows only Platformabhängig BadBoy:
-Ansonsten drittanbieter verwenden wie etwa badboy.
-
-Chrome Plugin:
-Blazemeter
-Mit Blazemeter ist man in der Lage direkt in Chrome und somit platformunabhängig Aufzeichnungen von Aktionen auf Webseiten aufzunehmen.
-Kleiner Nachteil: Man muss sich bei Blazemeter registrieren um den Export in .jmx Dateien ausführen zu können.
-\includegraphics[width=0.5\textwidth]{bilder/blazemeter.png}\par\vspace{1cm}
 
 \subsection{Datenbankabfragen - Datenbank testplan?}
 Auch datenbankabfragen lassen sich damit visualisieren
@@ -387,6 +427,7 @@ Keine Captcha erkennung
 \section{Alternativen}
 \subsection{Gatling}
 https://www.heise.de/developer/artikel/Last-und-Performance-Tests-mit-JMeter-oder-Gatling-3648505.html
+\subsection{Selenium}
 
 \section{Fazit}
 Alles in allem ist JMeter ein Super tool
