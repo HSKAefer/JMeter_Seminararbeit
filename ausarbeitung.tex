@@ -341,11 +341,6 @@ Zu einzelnen Samplern oder Thread-Groups gibt es noch diverse Config Elements. D
 \subsubsection{Listener}
 Listener sind Elemente die Informationen über die Ergebnisse der Performance Tests enthalten. Es gib verschiedene Arten von Listenern, wie etwa den Graph Result Listener, den View Results Tree Listener oder den Aggregation Report. Wichtiger Hinweis an der Stelle: Egal welcher Listener verwendet wird, die Daten die gespeichert werden sind immer die selben. Lediglich die Darstellung dieser auf dem Ausgabemedium unterscheidet sich. Man kann Listener an jede beliebige Stelle im Test hängen; auch unter einem Testplan. Es werden jedesmal die Daten gesammelt, die ab der eingehängter Stelle präsent sind.
 
-\subsubsection{Pre Processors}
-modify the request
-\subsubsection{Post processor}
-parse the response
-
 \subsubsection{Assertions}
 Mit JMeter lassen sich auch Assertions untersuchen. Dazu wird der Response eines Requests auf seinen Statuscode hin überprüft. Auch Antwortzeiten lassen sich mit Hilfe von Assertions prüfen. Liegt die Response in einer bestimmten Zeitspanne oder überschreitet der Response diese Zeit kann man entsprechend darauf reagieren.  
 
@@ -374,7 +369,7 @@ Natürlich gibt es auch die Möglichkeit speziell für Recording entwickelte Sof
 
 \subsection{Build-in Lösung}
 Für JMeter Enthusiasten gibt es einen integrierten Testscript Recorder. Diesen findet man entweder beim Testplan unter folgendem Menüpunkt \codeInLine{Add -> Non-Test-Elements\n -> HTTP Test Script Recorder} oder über den Weg \codeInLine{File -> Templates... -> Recording Template Create}.
-Abbildung~\ref{fig:https_recorder} zeigt den erstellten Recorder. Nachdem der Port angepasst wurde klickt man auf Start und muss nun im Browser den entsprechenden ProxyServer konfigurieren. Als Adresse wählt man \codeInLine{localhost} und der Port entsprechend den JMeter Settings. Jede Aktion die nun im Browser getriggert wird, wird als Sampler im JMeter Testplan unter der entsprechenden Thread-Group angelegt. Zusätzliche Cookies und Variable Konfigurationen werden automatisch angelegt.
+Abbildung~\ref{fig:https_recorder} zeigt den erstellten Recorder. Falls man den Weg direkt über den Testplan geht muss man zusätzlich eine Thread-Group sowie einen Recording Controller erstellen.
 
 \begin{figure}[htb]%[ht]
  \centering
@@ -383,8 +378,54 @@ Abbildung~\ref{fig:https_recorder} zeigt den erstellten Recorder. Nachdem der Po
   \label{fig:https_recorder}
 \end{figure}
 
-\section{Lasttests von Webseiten}
+Nachdem der Port angepasst wurde klickt man auf Start und muss nun im Browser den entsprechenden ProxyServer konfigurieren. Als Adresse wählt man \codeInLine{localhost} und der Port entsprechend den JMeter Settings. Jede Aktion die nun im Browser getriggert wird, wird als Sampler im JMeter Testplan unter der entsprechenden Thread-Group angelegt. Zusätzliche Cookies und Variable Konfigurationen werden automatisch angelegt.
 
+\section{Lasttests von Webseiten}
+Nach dem Aufzeichnen der Ablauffolgen und der Sampler kann man nun einen ersten intensiven Lasttest starten. Es wird zunächst empfohlen, die Java Heap Größe zu erhöhen, da der Standard 1GB Speicher für Lasttests ab einer gewissen Anzahl von Threads nicht ausreichend ist. Zum permanenten Ändern der Heap Größe muss man ein zusätzliches File \codeInLine{setenv.sh} im \codeInLine{/bin} Ordner anlegen. Diese Datei wird ausgeführt, sobald man die JMeter startet. 
+
+\begin{lstlisting}
+# Config file bin/setenv.sh
+# Use bigger heap than the default
+export HEAP="-Xms2G -Xmx2G"
+\end{lstlisting}
+
+Jetzt hat man statt den Defaultwerten einen 2GB großen Head. Das erstellte Testskript wird als nächstes über die Kommandozeile mit folgendem Befehl gestartet:
+
+\begin{lstlisting}
+jmeter -n -t IWI_PAGE.jmx -l testfolder -e -o testfolder/html_dashboard
+\end{lstlisting} 
+
+Nach einer kurzen Rechenzeit sollte JMeter fertig sein und ein "`end of run"' erscheinen. Siehe Abbildung~\ref{fig:start_jmeter_cmd}. Es wird bereits während des Testens einiges an Informationen angezeigt, wie etwa Aktive Threads, Fehlerhäufigkeit oder Dauer. Das eigentliche Herzstück davon ist der HTML Dashboard Report..\todo{dashboard}
+
+\begin{figure}[htb]%[ht]
+ \centering
+    \includegraphics[width=1\textwidth]{bilder/start_jmeter_cmd.png}
+  \caption{JMeter Lasttest non-GUI Asuführung}
+  \label{fig:start_jmeter_cmd}
+\end{figure}
+
+\section{Verteiltes Testen}
+Zunächst hört sich das Testen auf verteilten Systemen recht unkompliziert an. Man hat eine Master Instanz von JMeter laufen und mehrere Slave Instanzen. Über die Master Instanz werden die Slaves gesteuert, gestartet und beendet \cite{online:jmetercloud}. Dadurch kann man völlig problemlos mehrere 1000+ Threads auf eine Webseite zugreifen lassen.
+So die Theorie. In der Praxis jedoch hat man mit einigen Problemen zu kämpfen:
+\begin{itemize}
+  \item Verfügbarkeit von mehreren Servern
+	
+	Um die Performance Tests zu clustern, benötigt man natürlich mehrere Systeme. Da nicht jeder Anwender einen oder mehrere Server zu Hause stehen hat, geht man in der Regel den Weg in die Cloud und verwendet die dort zur Verfügung stehenden Resourcen, etwa EC2 Instanzen\footnote{EC2 sind Compute Units von Amazon in der Cloud \url{https://aws.amazon.com/ec2/}}.
+  \item Kommunikationsprotokoll von JMeter
+	
+	JMeter verwendet zur Kommunikation mit den Slave Systemen das Java RMI (Remote Method Invocation)\footnote{\url{https://en.wikipedia.org/wiki/Java_remote_method_invocation}} und dazu müssen Master und Slave im gleichen Subnetz sein. Dies ist aber in Cloud Umgebungen nicht machbar. Unter \cite{online:jmetercloud} gibt einen Workaround um genau die Subnetzproblematik zu umgehen. 
+
+	\item Aktive Firewall
+	
+	Falls man eine Firewall aktiviert hat, sollte man diese für Testzwecke kurz beenden oder sicherstellen, dass die JMeter Ports offen sind. 
+\end{itemize}
+
+Für die Master Instanz sollte sichergestellt sein, dass in seiner jmeter.properties Datei im \codeInLine{/bin} Ordner, die Zeile \codeInLine{remote_hosts=127.0.0.1} durch die entsprechenden Instanzen Komma separiert ersetzt wird. Die Master Instanz führt lediglich das Starten der Slave Instanzen aus und sollte keine Tests beeinhalten. Das Starten der Anwendungen geschieht dann über die Datei \codeInLine{jmeter-server.bat} aus dem \codeInLine{/bin} Verzeichnis.
+
+Eine Ausführliche Anleitung zum verteilten Testen von JMeter findet man auch auf der offiziellen Apache Seite \cite{online:apache_distributed}.
+
+\section{JDBC Testing}
+auch cool datenbank tests :-)
 \section{Funktionale Tests}
 
 \section{JUnit Tests}
@@ -431,6 +472,9 @@ https://www.heise.de/developer/artikel/Last-und-Performance-Tests-mit-JMeter-ode
 
 \section{Fazit}
 Alles in allem ist JMeter ein Super tool
+
+Um Server-Anwendungen und insbesondere HTTP-Server hinsichtlich ihrer Performance zu testen, ist JMeter ein hervoragendes Tool, welches eine große Menge an Möglichkeiten der Konfiguration des Testes bietet. Sowohl die Laststeuerung als auch Anfragesteurung ermöglichen aussagekräftige Ergebnisse. Um allerdings detailliert Java-Code zu testen, d.h. Zeitverbrauch der einzelnen Methoden und Speicherbelgeung, dann empfiehlt sich JMeter nicht. JMeter bietet zum Einem nur eine Zeitmessung und eine inhaltliche Überprüfung der Ergebnisse auf Textbasis, zum Anderem besteht nur die Möglichkeit ein Programm oder eine Methode in Gänze zu testen und nicht auf Teile davon einzugehen. Eine Aussage, das Programm oder die Methode dauert so lang, weil die darin aufgerufene Methode 90\% der CPU-Zeit verbraucht, ist nicht möglich \cite{online:performanceTools}.
+
 
 \pagebreak
 \thispagestyle{empty}
