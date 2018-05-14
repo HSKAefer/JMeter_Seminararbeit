@@ -165,7 +165,7 @@ Apache JMeter dient in einer Client/Server Landschaft als Client und kann dadurc
 Anfragen können sowohl an statische als auch an dynamische Resourcen erfolgen. Darunter fallen unter anderem statische Dateien, Servlets, FTP Server, Datenbanken, Java Objekte und Skripte.
 Um diese Anfragen in einer entsprechend großen Anzahl abzufeuern, bietet das Programm die Simulation von vielen gleichzeitigen Benutzern an. Diese Threads lassen sich in einzelne Thread Gruppen unterteilen.
 
-In JMeter ist es ebenfalls möglich, den Test in eine Cloud Infrastruktur auszulagern und die Tests unabhängig vom eigenen System bzw. Hardware laufen zu lassen. \todo{hier noch entsprechendes Chapter und besser formulieren} Es ist auch möglich die Testfälle in ein verteiltes System zu packen und dadurch deutlich mehr Resourcen zu verwenden. \todo{Cloud + Verteilte Systeme noch recherchieren}
+In JMeter ist es ebenfalls möglich, den Test in eine Cloud Infrastruktur auszulagern und die Tests unabhängig vom eigenen System bzw. Hardware laufen zu lassen. Ebenfalls kann man mehrere Systeme dazu bringen, die Tests verteilt auszuführen, was den Vorteil bringt, deutlich mehr Resourcen zur Verfügung stehen zu haben. 
 
 Nach den Tests bietet JMeter ein HTML Dashboard an, in dem sehr viele Informationen über die Anfragen und Ergebnisse in Tabellen und Statistiken grafisch aufbereitet dargestellt werden. Abbildung~\ref{fig:dashboard} zeigt einen Ausschnitt des Dashboards, welches im Abschnitt~\ref{chap:html_dashboard} genauer untersucht wird.  
 
@@ -369,7 +369,7 @@ Natürlich gibt es auch die Möglichkeit speziell für Recording entwickelte Sof
 \end{figure}
 
 \subsection{Build-in Lösung}
-Für JMeter Enthusiasten gibt es einen integrierten Testscript Recorder. Diesen findet man entweder beim Testplan unter folgendem Menüpunkt \codeInLine{Add -> Non-Test-Elements\n -> HTTP Test Script Recorder} oder über den Weg \codeInLine{File -> Templates... -> Recording Template Create}.
+Für JMeter Enthusiasten gibt es einen integrierten Testscript Recorder. Diesen findet man entweder beim Testplan unter folgendem Menüpunkt $\rightarrow$ Add $\rightarrow$ Non-Test-Elements $\rightarrow$ HTTP Test Script Recorder oder über den Weg File $\rightarrow$ Templates... $\rightarrow$ Recording Template Create.
 Abbildung~\ref{fig:https_recorder} zeigt den erstellten Recorder. Falls man den Weg direkt über den Testplan geht muss man zusätzlich eine Thread-Group sowie einen Recording Controller erstellen.
 
 \begin{figure}[htb]%[ht]
@@ -530,6 +530,23 @@ Im nächsten Schritt wird man nun die Anzahl der Benutzer und Requests in der Th
 
 \section{JUnit Tests}
 \label{chap:junit_tests}
+Ab Version 2.1.2 ist es möglich JUnit Sampler auszuführen und damit auch JUnit Tests zu untersuchen. Doch warum sollte man die altbewährte JUnit Tests der IDE durch angepasste Jmeter Tests ergänzen? Es bietet sich an, durch die Möglichkeiten von JMeter ganz bestimmte Lasten und Zeiten auf individuelle Tests zu setzen und dadurch deutlich mehr Umfang im Test zu erzielen. Zunächst sollte eine JUnit Testklasse vorhanden sein. Wichtig ist hier, dass sowohl alle Testmethoden, als auch die Testklasse selbst als "`public"' deklariert werden, da diese sonst nicht gefunden werden können. Abbildung~\ref{fig:calculator_test} zeigt zwei Testmethoden. Die \codeInLine{addTest()} Methode schlägt fehl, die \codeInLine{quadTest()} Methode läuft erfolgreich durch. 
+
+		\begin{figure}[htb]%[ht]
+ \centering
+    \includegraphics[width=1\textwidth]{bilder/calculator_test.png}
+  \caption{JUnit Tests von Calculator}
+  \label{fig:calculator_test}
+\end{figure}
+
+Diese Klasse muss man als JAR-File exportieren und in das Verzeichnis \codeInLine{/lib/junit} kopieren. Jetzt kann man in JUnit einen JUnit Request Sampler anlegen. Darin kann man Einstellungen vornehmen wie "`Success Messages"', "`Success Codes"' und andere. Wenn jetzt eine Test Methode aus der Testklasse ausgewählt und gestartet wird kann man diese wiederum in einem Listener anzeigen lassen und analysieren (Siehe Abbildung~\ref{fig:calculator_test_jmeter}).
+
+	\begin{figure}[htb]%[ht]
+ \centering
+    \includegraphics[width=1\textwidth]{bilder/calculator_test_jmeter.png}
+  \caption{JUnit View Results Tree}
+  \label{fig:calculator_test_jmeter}
+\end{figure}
 
 \section{Wissenswertes und Besonderheiten}
 \label{sec:wissenswertes}
@@ -550,42 +567,61 @@ Das Ergebnis der zwei Berechnungen sieht man in der Logging Console. Falls sie n
 \subsection{JMeter Plugin Manager}
 Erwähnenswert ist der Plugin Manager von JMeter. Anstatt sich diverse Plugins manuell zu installieren und sich mit unterschiedlichen Versionen und JARs herumzuärgern, übernimmt der Plugin Manager die Installation, Deinstallation und Upgradeverwaltung für den Benutzer. \cite{online:jmeter}
 
-Unter Options -> Plugin Manager gelangt man in die Erweiterung. Dort kann man oben genannten Aktionen ausführen. Um eine Übersicht der JMeter Erweiterungen zu erhalten sollte man die Webseite \url{https://jmeter-plugins.org/} besuchen.
+Unter Options $\rightarrow$ Plugin Manager gelangt man in die Erweiterung. Dort kann man oben genannten Aktionen ausführen. Um eine Übersicht der JMeter Erweiterungen zu erhalten sollte man die Webseite \url{https://jmeter-plugins.org/} besuchen.
 
 \subsection{Extrahieren von Daten aus einem Request}
-Sehr hilfreich sind auch die Post Processor Extraktoren. Diese werden nach dem Request ausgeführt und können zusätzliche Informationen in Form von XPath -und Regular Expressions aus dem Response herauslesen und etwa in JMeter Variablen speichern. Die Sampler hierfür befinden sich unter -> Post Processors -> Regular Expression Extractor / XPath Extractor.
+Sehr hilfreich sind auch die Post Processor Extraktoren. Diese werden nach dem Request ausgeführt und können zusätzliche Informationen in Form von XPath -und Regular Expressions aus dem Response herauslesen und etwa in JMeter Variablen speichern. Die Sampler hierfür befinden sich unter $\rightarrow$ Post Processors $\rightarrow$ Regular Expression Extractor / XPath Extractor.
 
 Ein praxisbezogenes Beispiel wäre hier das herauslesen einer serverseitig vergebenen ID für ein neu angelegtes Objekt, welches man dann im Folgeaufruf erneut verwenden kann \cite{online:lasttestjmeter}.   
 
-\subsection{Virtuelle Compute Unit}
-In die Cloud um an einer zentralen stelle viele rechner zu bedienen?
-Eventuell viele Rechner simulierenö
-
-
 \section{Nachteile von JMeter}
-Wenn ein Variablenfeld required ist. z.b. bei JDBC Connection Configuration. dann wird einem der fehler nicht direkt im feld angezeigt.
+Neben der vielzahl von positiven Features gibt es natürlich auch einige Mängel, die JMeter mit sich bringt.
 
-Ziemlich resourcenhungrig. Trotz 16GB Arbeitsspeicher hängt sich das Ding gerne mal auf.
-
-Passwort im Klartext. Gerade wenn man das zeug verteilt verwendet mit mehreren benutzern nicht sehr sicher
-
-Keine Captcha erkennung
-\section{Alternativen}
-Alternative  Last- und Performancetest Produkte auf dem Markt sollen natürlich nicht unerwähnt bleiben. Folgende drei Tools sind neben JMeter relativ bekannt und bieten auch einiges an Funktionalität:
 \begin{itemize}
-	\item Gatling
+	\item Konfigurationsfehler
 	
-	https://www.heise.de/developer/artikel/Last-und-Performance-Tests-mit-JMeter-oder-Gatling-3648505.html
-	\item Selenium
-	\item The Grinder
+	Wenn ein Variablenfeld in den JMeter Config Elements (Z.B. JDBC Connection Configuration) required ist, erkennt man dies nicht direkt im Feld, sondern erst beim Ausführen.
+	
+	\item Passwörter
+	
+	Ein großer sicherheitskritischer Punkt ist, dass eingegebene Passwörter bei Recorder im Klartext in der Config Datei gespeichert werden (Siehe Abbildung~\ref{fig:password}. Diese sollten so schnell wie möglich durch entsprechende Variablen, etwa \$\{USER\} und \$\{PASSWORD\}, ersetzt werden. In diesen Variablen muss man die entsprechenden Werte verschlüsselt hinterlegen (Stichwort Base64).
+Gerade bei JMeter Tests in Cloud Umgebungen ist es enorm wichtig, dass die Klartextwerte nicht einsehbar sind.  
+
+	\begin{figure}[htb]%[ht]
+ \centering
+    \includegraphics[width=1\textwidth]{bilder/password.png}
+  \caption{Speichern von Passwörter im Klartext}
+  \label{fig:password}
+\end{figure}
+
+	\item Resourcenbedarf
+	
+	Wie in der Einführung bereits erwähnt, ist Apache JMeter im GUI Modus sehr resourcenhungrig. Selbst auf einer Maschine mit 16GB Arbeitsspeicher hat sich die Oberfläche hin und wieder aufgehängt und reagierte nicht mehr. Falls man JMeter über die Kommandozeile verwendet, was bei größeren Lasttests auch empfohlen wird, hat man jedoch weniger Probleme und kann diesen Punkt getrost ignorieren.
+
+\item Captcha Erkennung
+
+Eine Captcha Abfrage dient dazu, eine "`reale"' Person von einem Bot oder Computerprogramm zu unterscheiden. Dementsprechend trickreich sind die Captcha Abfragen aufgebaut. Für JMeter ist es daher auch nicht möglich die Captchas als Programm zu erkennen. Man sollte daher die Captcha Erkennung serverseitig entweder deaktivieren oder ein vordefiniertes Captcha mit der entsprechenden Antwort bereitstellen, auf das im Test zurückgegriffen wird.
+
 \end{itemize}
-Allerdings würde das Testen und Verwenden dieser Programme den Rahmen der Ausarbeitung sprengen weshalb diese lediglich erwähnt wurden.
+
+\section{Alternativen}
+Alternative  Last- und Performancetest Produkte auf dem Markt sollen natürlich nicht unerwähnt bleiben. Die folgenden drei gelisteten Tools mit entsprechender URL sind neben JMeter relativ bekannt und können bei Bedarf weiter untersucht werden: 
+\begin{itemize}
+	\item Gatling \url{https://gatling.io/}
+	\item Selenium \url{https://www.seleniumhq.org/}
+	\item The Grinder \url{http://grinder.sourceforge.net/}
+\end{itemize}
 
 \section{Fazit}
-Alles in allem ist JMeter ein Super tool
+Durch eine Vielzahl von Literatur und Manuals, auch auf der offiziellen Apache Webseite, fällt einem der Einstieg in die Welt von Performance Tests sehr leicht und durch die flache Lernkurve bleibt man stehts motiviert sich weiter mit dem Thema zu beschäftigen.
 
-Um Server-Anwendungen und insbesondere HTTP-Server hinsichtlich ihrer Performance zu testen, ist JMeter ein hervoragendes Tool, welches eine große Menge an Möglichkeiten der Konfiguration des Testes bietet. Sowohl die Laststeuerung als auch Anfragesteurung ermöglichen aussagekräftige Ergebnisse. Um allerdings detailliert Java-Code zu testen, d.h. Zeitverbrauch der einzelnen Methoden und Speicherbelgeung, dann empfiehlt sich JMeter nicht. JMeter bietet zum Einem nur eine Zeitmessung und eine inhaltliche Überprüfung der Ergebnisse auf Textbasis, zum Anderem besteht nur die Möglichkeit ein Programm oder eine Methode in Gänze zu testen und nicht auf Teile davon einzugehen. Eine Aussage, das Programm oder die Methode dauert so lang, weil die darin aufgerufene Methode 90\% der CPU-Zeit verbraucht, ist nicht möglich \cite{online:performanceTools}.
+Um Server-Anwendungen und insbesondere HTTP-Server hinsichtlich ihrer Performance zu testen, ist JMeter ein hervoragendes Tool, welches eine große Menge an Möglichkeiten der Konfiguration des Testes bietet. Sowohl die Laststeuerung als auch Requeststeuerung ermöglichen aussagekräftige Ergebnisse. 
 
+Tolle Visualisierungsmöglichkeiten der Ergebnisse, etwa durch den HTML Dashboard Report, können dazu verwendet werden um die Ergebnisse aussagekräftige und verständlich zu kommunizieren.
+
+Durch eine breite Protokollunterstützung wie HTTP, FTP, JDBC oder POP3 kann man nicht durch typische Webanwendungen, sondern sogar eine gesamte Systeminfrastruktur testen.
+
+Um allerdings detailliert Java-Code zu testen, d.h. Zeitverbrauch der einzelnen Methoden und Speicherbelgeung, dann empfiehlt sich JMeter nicht. JMeter bietet zum Einem nur eine Zeitmessung und eine inhaltliche Überprüfung der Ergebnisse auf Textbasis, zum Anderem besteht nur die Möglichkeit ein Programm oder eine Methode in Gänze zu testen und nicht auf Teile davon einzugehen. Eine Aussage, das Programm oder die Methode dauert so lang, weil die darin aufgerufene Methode 90\% der CPU-Zeit verbraucht, ist nicht möglich \cite{online:performanceTools}.
 
 \pagebreak
 \thispagestyle{empty}
