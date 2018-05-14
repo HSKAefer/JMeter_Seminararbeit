@@ -282,6 +282,7 @@ In der folgenden Tabelle sieht man einige häufig verwendete Parameter und ihre 
 		-e & Um HTML Reports zu erzeugen\\
 		-o & Pfad zum Output Folder; in Verbindung mit -e or -g \\
 		-g & HTML Report wird aus einem CSV file erzeugt \\ 
+		-j & Log Datei nicht überschreiben, neues generieren \\
 		\hline
 	\end{tabular}
 	\caption[tab_parameter_non_gui]{Befehle der JMeter Kommandozeile}
@@ -381,7 +382,7 @@ Abbildung~\ref{fig:https_recorder} zeigt den erstellten Recorder. Falls man den 
 Nachdem der Port angepasst wurde klickt man auf Start und muss nun im Browser den entsprechenden ProxyServer konfigurieren. Als Adresse wählt man \codeInLine{localhost} und der Port entsprechend den JMeter Settings. Jede Aktion die nun im Browser getriggert wird, wird als Sampler im JMeter Testplan unter der entsprechenden Thread-Group angelegt. Zusätzliche Cookies und Variable Konfigurationen werden automatisch angelegt.
 
 \section{Lasttests von Webseiten}
-Nach dem Aufzeichnen der Ablauffolgen und der Sampler kann man nun einen ersten intensiven Lasttest starten. Es wird zunächst empfohlen, die Java Heap Größe zu erhöhen, da der Standard 1GB Speicher für Lasttests ab einer gewissen Anzahl von Threads nicht ausreichend ist. Zum permanenten Ändern der Heap Größe muss man ein zusätzliches File \codeInLine{setenv.sh} im \codeInLine{/bin} Ordner anlegen. Diese Datei wird ausgeführt, sobald man die JMeter startet. 
+Nach dem Aufzeichnen der Ablauffolgen und der Sampler kann man nun einen ersten intensiven Lasttest starten. Es wird zunächst empfohlen, die Java Heap Größe zu erhöhen, da der Standard 1GB Speicher für Lasttests ab einer gewissen Anzahl von Threads nicht ausreichend ist. Zum permanenten Ändern der Heap Größe muss man ein zusätzliches File \codeInLine{setenv.sh} im \codeInLine{/bin} Ordner anlegen. Diese Datei wird ausgeführt, sobald man JMeter startet. 
 
 \begin{lstlisting}
 # Config file bin/setenv.sh
@@ -389,13 +390,13 @@ Nach dem Aufzeichnen der Ablauffolgen und der Sampler kann man nun einen ersten 
 export HEAP="-Xms2G -Xmx2G"
 \end{lstlisting}
 
-Jetzt hat man statt den Defaultwerten einen 2GB großen Head. Das erstellte Testskript wird als nächstes über die Kommandozeile mit folgendem Befehl gestartet:
+Jetzt hat man statt den Defaultwerten einen 2GB großen Heap. Das erstellte Testskript wird als nächstes über die Kommandozeile mit folgendem Befehl gestartet:
 
 \begin{lstlisting}
-jmeter -n -t IWI_PAGE.jmx -l testfolder -e -o testfolder/html_dashboard
+jmeter -n -t IWI_PAGE.jmx -l testfolder/IWI_PAGE.csv -e -o testfolder/html_dashboard
 \end{lstlisting} 
 
-Nach einer kurzen Rechenzeit sollte JMeter fertig sein und ein "`end of run"' erscheinen. Siehe Abbildung~\ref{fig:start_jmeter_cmd}. Es wird bereits während des Testens einiges an Informationen angezeigt, wie etwa Aktive Threads, Fehlerhäufigkeit oder Dauer. Das eigentliche Herzstück davon ist der HTML Dashboard Report..\todo{dashboard}
+Nach einer kurzen Rechenzeit sollte JMeter fertig sein und ein "`end of run"' erscheinen. Siehe Abbildung~\ref{fig:start_jmeter_cmd}. Es wird bereits während des Testens einiges an Informationen angezeigt, wie etwa aktive Threads, Fehlerhäufigkeit oder Dauer. 
 
 \begin{figure}[htb]%[ht]
  \centering
@@ -403,6 +404,49 @@ Nach einer kurzen Rechenzeit sollte JMeter fertig sein und ein "`end of run"' er
   \caption{JMeter Lasttest non-GUI Asuführung}
   \label{fig:start_jmeter_cmd}
 \end{figure}
+
+\subsection{Result File}
+Die interessanteren Ergebnisse befinden sich jedoch im zuvor angelegten Ordner "`testfolder"'. Mit dem Flag -l hat man dafür gesort, dass eine Datei IWI\_PAGE.csv erzeugt wurde. Dieses sogenannte Result File ist gleichbedeutend mit einem Listener aus dem Testplan und listet alle Requests auf, die gesendet wurden, sowie zusätzliche Informationen. Ein kleiner Teil der Informationen ist in der folgenden Tabelle gelistet. Eine Übersicht aller Befehle gibt es auf \url{https://jmeter.apache.org/usermanual/listeners.html}. Falls die default-Werte immer noch nicht ausreichen, hat man die Möglichkeit das \codeInLine{jmeter.properties} File zu bearbeiten. Darin lassen sich weitere Werte hinzufügen.  
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|l|l|}
+		\hline
+		\textbf{Bezeichnung} & \textbf{Erklärung} \\
+		\hline
+		elapsed & Benötigte Zeit für den Request \\
+		bytes & Anzahl Bytes im Sampler hat \\
+		sentBytes & Anzahl der Bytes die man gesendet hat \\
+		grpThreads & Anzahl aktiver Threads in dieser Threadgruppe \\
+		allThreads & Anzahl aktiver Threads in allen Gruppen \\
+		latency & Zeitraum bis zur ersten Response \\
+		connect & Zeitraum um die Verbindung herzustellen \\
+		\hline
+	\end{tabular}
+	\caption[tab_csv_file]{Request Informationen der CSV}
+	\label{tab_csv_file}
+\end{table}
+
+Neben dem gängigen CSV-Format werden auch andere Formate, wie etwa JTL unterstützt. CSV hat allerdings den Vorteil, dass man es damit gut in Excel filtern und analysieren kann.
+
+\subsection{HTML Dashboard}
+\label{chap:html_dashboard}
+Mit dem Flag \codeInLine{-e -o testfolder/html_dashboard} lässt sich ein zweites tolles Feature erzeugen. Hier wird im "`testfolder"' eine index.html generiert, die man sich im Browser betrachten kann.
+Die schön gestalteten Torten -und Liniendiagramme geben sehr viel Auskunft über die einzelnen Aufrufe.
+
+Auf der Dashboard Hauptseite gibt es Test und Reportinformationen mit Start- und Endzeit, verwendete Filter, sowie der Name des Result Files, aus dem das Dashboard generiert wurde. Es gibt ein Tortendiagramm welches anzeigt, wieviel Prozent der Requests erfolgreich waren und wie viel schief liefen. 
+Und es wird ein sogenannter Application Performance Index (APDEX) angezeigt. APDEX ist ein offener Standard, der die Leistung von Anwendungen misst. Hier wurde die durchschnittliche Dauer, einer Anfrage an einen bestimmten Endpunkt ermittelt. Anhand von vordefinierten "`Toleration treshold"' und "`Frustration treshold"'-Werten, wird der Endpunkt dann als OK oder KO bewertet. Diese Werte lassen sich selbst definieren. Dazu muss man in das /bin Verzeichnis navigieren und Datei \codeInLine{user.properties} anpassen. Weiterhin gibt es Statistik Tabellen und zwei Error Tabellen für jeden Sampler.
+
+Hinter der Kategorie Charts verbergen sich Diagramme, die nochmals in "`Over Time"', "`Throughput"' und "`Response Times"' unterteilt sind. Wie die Namen vermuten lassen, kann man sich hier visualisierte Ergebnisse der einzelnen Samplern anzeigen lassen. Etwa über einen gewissen Zeitraum hinweg, den Datendurchsatz während der Testphase oder die Antwortzeiten. Abbildung ~\ref{fig:response_time_dashboard} zeigt ein Liniendiagramm der prozentualen Verteilung von Responsezeiten einzelner Sampler. Es ist auch möglich nur bestimmte Sampler in dem Diagramm, durch klicken der URL im unteren Bildrand, zu aktivieren.
+
+\begin{figure}[htb]%[ht]
+ \centering
+    \includegraphics[width=1\textwidth]{bilder/response_time_dashboard.png}
+  \caption{Dashboard Diagramm der Response Zeiten}
+  \label{fig:response_time_dashboard}
+\end{figure}
+
+Weiteres tolles Feature: Die Diagramme lassen sich alle direkt aus der HTML-Seite als PNG Datei abspeichern und wiederverwenden.
 
 \section{Verteiltes Testen}
 Zunächst hört sich das Testen auf verteilten Systemen recht unkompliziert an. Man hat eine Master Instanz von JMeter laufen und mehrere Slave Instanzen. Über die Master Instanz werden die Slaves gesteuert, gestartet und beendet \cite{online:jmetercloud}. Dadurch kann man völlig problemlos mehrere 1000+ Threads auf eine Webseite zugreifen lassen.
@@ -420,42 +464,103 @@ So die Theorie. In der Praxis jedoch hat man mit einigen Problemen zu kämpfen:
 	Falls man eine Firewall aktiviert hat, sollte man diese für Testzwecke kurz beenden oder sicherstellen, dass die JMeter Ports offen sind. 
 \end{itemize}
 
-Für die Master Instanz sollte sichergestellt sein, dass in seiner jmeter.properties Datei im \codeInLine{/bin} Ordner, die Zeile \codeInLine{remote_hosts=127.0.0.1} durch die entsprechenden Instanzen Komma separiert ersetzt wird. Die Master Instanz führt lediglich das Starten der Slave Instanzen aus und sollte keine Tests beeinhalten. Das Starten der Anwendungen geschieht dann über die Datei \codeInLine{jmeter-server.bat} aus dem \codeInLine{/bin} Verzeichnis.
+Für die Master Instanz sollte sichergestellt sein, dass in der jmeter.properties Datei im \codeInLine{/bin} Ordner, die Zeile \codeInLine{remote_hosts=127.0.0.1} durch die entsprechenden Instanzen Komma separiert ersetzt wird. Die Master Instanz führt lediglich das Starten der Slave Instanzen aus und sollte keine Tests beeinhalten. Das Starten der Anwendungen geschieht dann über die Datei \codeInLine{jmeter-server.bat} aus dem \codeInLine{/bin} Verzeichnis.
 
 Eine Ausführliche Anleitung zum verteilten Testen von JMeter findet man auch auf der offiziellen Apache Seite \cite{online:apache_distributed}.
 
-\section{JDBC Testing}
-auch cool datenbank tests :-)
-\section{Funktionale Tests}
+\section{Datenbank Testing}
+Apache JMeter bietet ebenfalls die Möglichkeit Lasttests auf Datenbankservern auszuführen. Dazu benötigt man lediglich entsprechende Zugangsberechtigung für die Datenbank und passende JDBC Treiber. 
+
+Ein kleines Beispiel zeigt einen Test auf eine lokale Postgres Datenbank:
+
+\begin{enumerate}
+	\item JDBC Treiber
+		
+	Aktuelle JDBC Treiber\footnote{\url{https://jdbc.postgresql.org/download.html}} für die Datenbank herunterladen und in das \codeInLine{/lib} Verzeichnis von JMeter kopieren. 
+	
+	\item Test Plan + Thread Group anlegen
+	
+	In der Thread Group kann man nach einer erfolgreichen Verbindung zur Datenbank die Useranzahl und gleichzeitige Verbindungen erhöhen.
+	
+	\item JDBC Connection Configuration
+	
+	Auf der Thread Group rechtsklick $\rightarrow$ Add $\rightarrow$ Config Element $\rightarrow$ JDBC Connection Configuration. Hier den Variablen namen für den Pool festlegen (myDatabase) und die Database Connection Configuration mit folgenden Werten füttern:
+	
+	\begin{table}[H]
+	\centering
+	\begin{tabular}{|l|l|}
+		\hline
+		\textbf{Name} & \textbf{Wert} \\
+		\hline
+		Database URL & jdbc:postgresql://hostname:ip/datenbankname \\
+		JDBC Driver class & org.postgresql.Driver \\
+		Username & username \\
+		Password & ******** \\
+		\hline
+	\end{tabular}
+	\caption[tab_jdbc_values]{Postgres JDBC Connection Configuration}
+	\label{tab_jdbc_values}
+\end{table}
+	
+	\item JDBC Request Sampler
+	
+	Auf der Thread Group einen JDBC Request Sampler adden und im Feld "`Variable Name Bound to Pool"' den zuvor gewählten Variablennamen (myDatabase) eintragen.  
+	Im SQL Query Feld kann man nun ein entsprechendes Statement abfeuern um die Datenbank zu kontaktieren. Siehe Abbildung~\ref{fig:jdbc_request} In diesem Fall wurden die Spalten "`id"' und "`name"' Tabelle "`country"' ausgewählt.
+	
+	\begin{figure}[htb]%[ht]
+ \centering
+    \includegraphics[width=1\textwidth]{bilder/jdbc_request.png}
+  \caption{JDBC Request Sampler}
+  \label{fig:jdbc_request}
+\end{figure}
+	
+	\item View Results tree
+	
+	Das Ergebnis des Query lässt sich mit einem Listener, etwa View Results Tree anzeigen. Abbildung~\ref{fig:jdbc_results} zeigt den erfolgreiche Response mit drei gefundenen Ländern.
+		
+			\begin{figure}[htb]%[ht]
+ \centering
+    \includegraphics[width=1\textwidth]{bilder/jdbc_results.png}
+  \caption{JDBC Request Results Tree}
+  \label{fig:jdbc_results}
+\end{figure}
+\end{enumerate}
+
+Im nächsten Schritt wird man nun die Anzahl der Benutzer und Requests in der Thread Group erhöhen und anpassen. Beispielsweise 50 Benutzer (Threads), 2 Requests und 100 Wiederholungen. Macht insgesamt 10000 JDBC Requests und würde die Datenbank deutlich mehr belasten.
 
 \section{JUnit Tests}
 \label{chap:junit_tests}
 
-\section{Auswertung HTML Dashboard}
-\label{chap:html_dashboard}
-APDEX index. selbst bearbeiten in /bin/user.properties file.
-
 \section{Wissenswertes und Besonderheiten}
 \label{sec:wissenswertes}
-Man kann die Ergebnisse zur Laufzeit in Logfiles schreiben.
+Dieses Kapitel gibt einen kleinen Exkurs in erweiterte Funktionen und Besonderheiten, die Apache JMeter zu bieten hat.
+
+\subsection{Java Code in JMeter verwenden}
+Wenn man die Funktionalität von JMeter um eigene Methoden erweitern möchte, gibt es BeanShell Sampler \cite{online:beanshell}. BeanShell ist eine leichtgewichtige Skriptsprache für Java, welche die JMeter API nutzen kann und das darunter liegende Java SDK. Abbildung~\ref{fig:beanshell} zeigt eine zuvor in Java erstellte Klasse Calculator welche in JMeter bei einem Testplan als JAR hinzugefügt wurde und die Methoden daraus in der Beanshell verwendet werden.
+
+\begin{figure}[htb]%[ht]
+ \centering
+    \includegraphics[width=1\textwidth]{bilder/beanshell.png}
+  \caption{Verewndung von Java in Beanshell}
+  \label{fig:beanshell}
+\end{figure}
+
+Das Ergebnis der zwei Berechnungen sieht man in der Logging Console. Falls sie nicht aktiviert ist, genügt ein Klick auf das gelbe Dreieck mit dem Ausrufezeichen in der rechten oberen Ecke.
 
 \subsection{JMeter Plugin Manager}
+Erwähnenswert ist der Plugin Manager von JMeter. Anstatt sich diverse Plugins manuell zu installieren und sich mit unterschiedlichen Versionen und JARs herumzuärgern, übernimmt der Plugin Manager die Installation, Deinstallation und Upgradeverwaltung für den Benutzer. \cite{online:jmeter}
 
-\subsection{Datenbankabfragen - Datenbank testplan?}
-Auch datenbankabfragen lassen sich damit visualisieren
+Unter Options -> Plugin Manager gelangt man in die Erweiterung. Dort kann man oben genannten Aktionen ausführen. Um eine Übersicht der JMeter Erweiterungen zu erhalten sollte man die Webseite \url{https://jmeter-plugins.org/} besuchen.
 
-Falls interersse besteht, wie es funktioniert bitte in die Ausarbeitung schauen.
-Thread Gruppe erstellen -> Configuration (JDBC Connection Configuration)
-MySQL jdbc jar in lib folder von jmeter adden 
-DAnn Sampler -> JDBC Request and put in values.. z.b. select * from table
+\subsection{Extrahieren von Daten aus einem Request}
+Sehr hilfreich sind auch die Post Processor Extraktoren. Diese werden nach dem Request ausgeführt und können zusätzliche Informationen in Form von XPath -und Regular Expressions aus dem Response herauslesen und etwa in JMeter Variablen speichern. Die Sampler hierfür befinden sich unter -> Post Processors -> Regular Expression Extractor / XPath Extractor.
 
+Ein praxisbezogenes Beispiel wäre hier das herauslesen einer serverseitig vergebenen ID für ein neu angelegtes Objekt, welches man dann im Folgeaufruf erneut verwenden kann \cite{online:lasttestjmeter}.   
 
 \subsection{Virtuelle Compute Unit}
 In die Cloud um an einer zentralen stelle viele rechner zu bedienen?
 Eventuell viele Rechner simulierenö
 
-\subsection{JMeter change Settings}
-In /bin folder von JMeter kann man die Datei user.properties öffnen und Werte anpassen.
 
 \section{Nachteile von JMeter}
 Wenn ein Variablenfeld required ist. z.b. bei JDBC Connection Configuration. dann wird einem der fehler nicht direkt im feld angezeigt.
@@ -466,9 +571,15 @@ Passwort im Klartext. Gerade wenn man das zeug verteilt verwendet mit mehreren b
 
 Keine Captcha erkennung
 \section{Alternativen}
-\subsection{Gatling}
-https://www.heise.de/developer/artikel/Last-und-Performance-Tests-mit-JMeter-oder-Gatling-3648505.html
-\subsection{Selenium}
+Alternative  Last- und Performancetest Produkte auf dem Markt sollen natürlich nicht unerwähnt bleiben. Folgende drei Tools sind neben JMeter relativ bekannt und bieten auch einiges an Funktionalität:
+\begin{itemize}
+	\item Gatling
+	
+	https://www.heise.de/developer/artikel/Last-und-Performance-Tests-mit-JMeter-oder-Gatling-3648505.html
+	\item Selenium
+	\item The Grinder
+\end{itemize}
+Allerdings würde das Testen und Verwenden dieser Programme den Rahmen der Ausarbeitung sprengen weshalb diese lediglich erwähnt wurden.
 
 \section{Fazit}
 Alles in allem ist JMeter ein Super tool
