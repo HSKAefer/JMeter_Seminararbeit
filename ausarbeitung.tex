@@ -285,8 +285,8 @@ In der folgenden Tabelle sieht man einige häufig verwendete Parameter und ihre 
 		-j & Log Datei nicht überschreiben, neues generieren \\
 		\hline
 	\end{tabular}
-	\caption[tab_parameter_non_gui]{Befehle der JMeter Kommandozeile}
-	\label{tab_parameter_non_gui}
+	\caption[tab_parameter_non_gui_all]{Befehle der JMeter Kommandozeile}
+	\label{tab_parameter_non_gui_all}
 \end{table}
 
 Pauschal kann man sagen, dass man die GUI bei kleineren Tests bzw. Testplanerstellung verwendet. Für alles andere sollte der Non-GUI Modus die erste Wahl sein.
@@ -305,7 +305,7 @@ Doch was ist überhaupt ein Testplan? Jeder JMeter Test hat genau einen Testplan
 \subsection{Elemente eines Testplans}
 Um einen Test zu starten benötigt man mindestens einen Testplan, darunter eine Thread Group sowie einer oder mehrere Sampler. Nachfolgend eine Auflistung der wichtigsten Elemente und ihre Funktion, die in einem Testplan verwendet werden.
 
-\subsubsection{Thread-Groups}
+\subsubsection{Thread Groups}
 Zu jedem Testplan gehört mindestens eine Thread-Group. Diese steht stellvertretend für die Anzahl der gleichzeitigen Benutzer und Wiederholungen, die simuliert werden. Abbildung~\ref{fig:thread_group} zeigt die wichtigsten Einstellungen der Thread Group. Neben den selbsterklärenden Bezeichnungen und Werte gibt es noch die Ramp-Up Period. Diese gibt an, in welcher Zeitspanne die Threads erzeugt werden sollen.
 Angenommen man gibt 10 Threads an und die Ramp-Up Period stellt man auf 20 Sekunden, wird alle 2 Sekunden ein neuer Thread erzeugt. Dies verhindert ein gleichzeitiges Erzeugen aller Threads und dadurch eine zu hohe Systemauslastung zu Beginn des Tests.
 
@@ -316,7 +316,7 @@ Angenommen man gibt 10 Threads an und die Ramp-Up Period stellt man auf 20 Sekun
   \label{fig:thread_group}
 \end{figure}
 
-Thread-Groups kann man zusätzlich auch als setUp- oder tearDown-Gruppen anlegen. Diese werden analog zu JUnit Tests entsprechend vor der eigentlichen Thread-Group gestartet oder eben nach Beendigung aller Thread-Groups. Sehr hilfreich, wenn man beispielsweise Werte aus einer Datenbank auslesen und diese in Variablen speichern möchte, bevor der eigentliche Test beginnt und das Auslesen nicht in den eigentlichen Test mit einfließen sollen \cite{online:testingJournals}.
+Thread Groups kann man zusätzlich auch als setUp- oder tearDown Gruppen anlegen. Diese werden analog zu JUnit Tests entsprechend vor der eigentlichen Thread Group gestartet oder eben nach Beendigung aller Thread Groups. Sehr hilfreich, wenn man beispielsweise Werte aus einer Datenbank auslesen und diese in Variablen speichern möchte, bevor der eigentliche Test beginnt und das Auslesen nicht in den eigentlichen Test mit einfließen sollen \cite{online:testingJournals}.
 
 \subsubsection{Sampler}
 Sampler und Logic Controller steuern die Abarbeitung eines Tests. Dabei sind Sampler für das Senden eines Requests verantwortlich und die Logic Controller für den zeitlichen Aspekt, also wann dieser Request gesendet wird. Innerhalb der Thread-Group lassen sich mehrere Sampler anlegen. Diese Sampler sind die eigentlichen Anfragen des Tests und stellen die Verbindung zu den zu testenden Objekten her. Es gibt Sampler für die unterschiedlichsten Protokolle wie HTTP, FTP, JDBC SOAP/XML und Java-Objekte. 
@@ -337,7 +337,7 @@ Der Logic Controller steuert den zeitlichen Ablauf einzelner Teile, insbesondere
 Durch einen Timer kann man eine Verzögerung nach jedem Thread einbauen, so dass der Test für kurze Zeit angehalten wird. Es gibt konstante und Zufallstimer.
 
 \subsubsection{Config Elements}
-Zu einzelnen Samplern oder Thread-Groups gibt es noch diverse Config Elements. Diese dienen dazu default parameter einmalig anzulegen und darauf zuzugreifen. Wird dann in den jeweiligen Controllern kein Wert in die entsprechenden Label eingetragen, wird auf den Wert im Config Element zurückgegriffen. Speziell für HTTP-Sampler gibt es darüber hinaus noch weitere Config Elemente, wie Header, Authorization oder Cookie Informationen, die man zentral für den ganzen Testplan abspeichern kann \cite{online:performanceTools}.
+Zu einzelnen Samplern oder Thread Groups gibt es noch diverse Config Elements. Diese dienen dazu default parameter einmalig anzulegen und darauf zuzugreifen. Wird dann in den jeweiligen Controllern kein Wert in die entsprechenden Label eingetragen, wird auf den Wert im Config Element zurückgegriffen. Speziell für HTTP-Sampler gibt es darüber hinaus noch weitere Config Elemente, wie Header, Authorization oder Cookie Informationen, die man zentral für den ganzen Testplan abspeichern kann \cite{online:performanceTools}.
 
 \subsubsection{Listener}
 Listener sind Elemente die Informationen über die Ergebnisse der Performance Tests enthalten. Es gib verschiedene Arten von Listenern, wie etwa den Graph Result Listener, den View Results Tree Listener oder den Aggregation Report. Wichtiger Hinweis an der Stelle: Egal welcher Listener verwendet wird, die Daten die gespeichert werden sind immer die selben. Lediglich die Darstellung dieser auf dem Ausgabemedium unterscheidet sich. Man kann Listener an jede beliebige Stelle im Test hängen; auch unter einem Testplan. Es werden jedesmal die Daten gesammelt, die ab der eingehängter Stelle präsent sind.
@@ -575,7 +575,7 @@ Sehr hilfreich sind auch die Post Processor Extraktoren. Diese werden nach dem R
 Ein praxisbezogenes Beispiel wäre hier das herauslesen einer serverseitig vergebenen ID für ein neu angelegtes Objekt, welches man dann im Folgeaufruf erneut verwenden kann \cite{online:lasttestjmeter}.   
 
 \section{Nachteile von JMeter}
-Neben der vielzahl von positiven Features gibt es natürlich auch einige Mängel, die JMeter mit sich bringt.
+Neben der Vielzahl von positiven Features gibt es natürlich auch einige Mängel, die JMeter mit sich bringt.
 
 \begin{itemize}
 	\item Konfigurationsfehler
@@ -596,7 +596,7 @@ Gerade bei JMeter Tests in Cloud Umgebungen ist es enorm wichtig, dass die Klart
 
 	\item Resourcenbedarf
 	
-	Wie in der Einführung bereits erwähnt, ist Apache JMeter im GUI Modus sehr resourcenhungrig. Selbst auf einer Maschine mit 16GB Arbeitsspeicher hat sich die Oberfläche hin und wieder aufgehängt und reagierte nicht mehr. Falls man JMeter über die Kommandozeile verwendet, was bei größeren Lasttests auch empfohlen wird, hat man jedoch weniger Probleme und kann diesen Punkt getrost ignorieren.
+	Wie in der Einführung bereits erwähnt, ist Apache JMeter im GUI Modus sehr ressourcenhungrig. Selbst auf einer Maschine mit 16GB Arbeitsspeicher hat sich die Oberfläche hin und wieder aufgehängt und reagierte nicht mehr. Falls man JMeter über die Kommandozeile verwendet, was bei größeren Lasttests auch empfohlen wird, hat man jedoch weniger Probleme und kann diesen Punkt getrost ignorieren.
 
 \item Captcha Erkennung
 
@@ -613,15 +613,19 @@ Alternative  Last- und Performancetest Produkte auf dem Markt sollen natürlich 
 \end{itemize}
 
 \section{Fazit}
-Durch eine Vielzahl von Literatur und Manuals, auch auf der offiziellen Apache Webseite, fällt einem der Einstieg in die Welt von Performance Tests sehr leicht und durch die flache Lernkurve bleibt man stehts motiviert sich weiter mit dem Thema zu beschäftigen.
+Durch eine Vielzahl von Literatur und Manuals, auch auf der offiziellen Apache Webseite, fällt einem der Einstieg in die Welt von Performance Tests sehr leicht und durch die flache Lernkurve bleibt man stets motiviert sich weiter mit dem Thema zu beschäftigen.
 
-Um Server-Anwendungen und insbesondere HTTP-Server hinsichtlich ihrer Performance zu testen, ist JMeter ein hervoragendes Tool, welches eine große Menge an Möglichkeiten der Konfiguration des Testes bietet. Sowohl die Laststeuerung als auch Requeststeuerung ermöglichen aussagekräftige Ergebnisse. 
+Um Anwendungen und insbesondere HTTP-Server bezüglich ihrer Performance zu testen, ist JMeter trotz des hohen Resourcenverbrauchs, ein hervorragendes Tool, welches eine große Menge an Möglichkeiten der Konfiguration des Testes bietet. Sowohl die Laststeuerung als auch Requeststeuerung ermöglichen aussagekräftige Ergebnisse.
 
-Tolle Visualisierungsmöglichkeiten der Ergebnisse, etwa durch den HTML Dashboard Report, können dazu verwendet werden um die Ergebnisse aussagekräftige und verständlich zu kommunizieren.
+Tolle Visualisierungsmöglichkeiten der Ergebnisse, etwa durch den HTML Dashboard, können dazu verwendet werden um aussagekräftige und verständliche Reports zu kommunizieren und Schwachstellen und Engpässe im System zu erkennen und entgegenzusteuern.
 
-Durch eine breite Protokollunterstützung wie HTTP, FTP, JDBC oder POP3 kann man nicht durch typische Webanwendungen, sondern sogar eine gesamte Systeminfrastruktur testen.
+Durch eine breite Protokollunterstützung wie HTTP, FTP, JDBC oder das Aufrufen von Java Klassen, kann man nicht durch typische Webanwendungen, sondern sogar eine gesamte Systeminfrastruktur testen.
 
-Um allerdings detailliert Java-Code zu testen, d.h. Zeitverbrauch der einzelnen Methoden und Speicherbelgeung, dann empfiehlt sich JMeter nicht. JMeter bietet zum Einem nur eine Zeitmessung und eine inhaltliche Überprüfung der Ergebnisse auf Textbasis, zum Anderem besteht nur die Möglichkeit ein Programm oder eine Methode in Gänze zu testen und nicht auf Teile davon einzugehen. Eine Aussage, das Programm oder die Methode dauert so lang, weil die darin aufgerufene Methode 90\% der CPU-Zeit verbraucht, ist nicht möglich \cite{online:performanceTools}.
+Zum ausführlichen Testen von JMeter in der Cloud fehlten leider die Ressourcen, um eine aussagekräftiges Fazit geben zu können. Alle Cloud Dienste die zur Auswahl standen, etwa EC2 oder Blazemeter, waren kostenpflichtig und konnten nicht getestet werden.
+
+Im Vergleich zu Unit oder Integrationstests fristen Last- und Performance Tests in vielen Unternehmen, aufgrund von Zeit oder Geldmangel immer noch ein Nischen-Dasein. Dort sind Lasttests eher ein wildes unkontrolliertes umherklicken von mehreren Mitarbeitern. Diese Tests können jedoch nicht reproduziert werden und haben keine Aussagekraft bezüglich Performance Engpässen der Software oder Webanwendungen. 
+
+Man kann sich nur erhoffen, dass sich diese Sichtweise über längere Zeit ändert und die Firmen wieder verstärkt auf diesen Sektor eingehen. So hat man etwa bei kritischen Situationen und Stoßzeiten, die Gewissheit, dass die Webanwendung den Ansturm vieler Nutzer meistert und die Kundenzufriedenheit dadurch gewährleistet ist.
 
 \pagebreak
 \thispagestyle{empty}
