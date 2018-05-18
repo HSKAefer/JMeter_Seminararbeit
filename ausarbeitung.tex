@@ -120,7 +120,7 @@ Mit dieser Ausarbeitung zur Seminararbeit wird das Performance und Last-Test Pro
 \subsection{Motivation}
 Man erlebt es immer wieder, das Webseiten unter zu hoher Last in die Knie gezwungen werden. Sei es nun Amazon, Netflix und Konsorten durch DDoS-Angriffe \cite{online:AmazonDDoS}, oder auch hochschulinterne Seiten, die durch gegebene Anmeldefristen eine hohe Anzahl von gleichzeitigen Benutzern zu bewältigen haben. 
 
-Gerade letzteres Szenario lässt sich im voraus gut vermeiden, da man die grobe Anzahl der Studierenden kennt und somit präventiv die Webseite auf die eingehende Last testen kann. Dabei werden sehr viele nebenläufige Anfragen an einen Anwendung gestartet und die Response Zeiten ausgewertet. Diese Art von Tests nennt man Last oder Performance-Tests und wird in die Klasse der Systemtests kategorisiert \cite{online:LastUndPerformanceTest}. 
+Gerade letzteres Szenario lässt sich im voraus gut vermeiden, da man die grobe Anzahl der Studierenden kennt und somit präventiv die Webseite auf die eingehende Last testen kann. Dabei werden sehr viele nebenläufige Anfragen an einen Anwendung gestartet und die Antwortzeiten ausgewertet. Diese Art von Tests nennt man Last- oder Performance-Tests und wird in die Klasse der Systemtests kategorisiert \cite{online:LastUndPerformanceTest}. 
 
 Das frei verfügbare, unter Public License Key stehende Java Programm JMeter bietet diese und weitere Funktionalität um die Leistung einer Webseite bis ins kleinste Detail zu analysieren, testen, auswerten und visualisieren.
 
@@ -259,7 +259,6 @@ Möchte man nun einen auswendigeren Lasttest machen, eignet sich die GUI ab eine
 
 Hier kommt der sogenannte "`Non-GUI Modus"' ins Spiel. Dies ist die Bezeichnung um JMeter in der Kommandozeile auszuführen. Mit Hilfe des Kommandozeilenaufrufes lassen sich am Ende des Tests CSV oder XML Dateien erstellen, die Testergebnisse beinhalten. Auch der HTML Dashboard Report lässt sich nur hier generieren.
 
-\subsubsection{Ausführen des Non-GUI Modus}
 Zuerst sollte ein Testscript verfügbar sein. In diesem sind alle Requests und Konfigurationen wie Cache/Cookie verhalten und Authorization Management enthalten. Man kann hier ein vorhandenes File verwenden oder in JMeter selbst ein neues jmx-File erzeugen. Minimale Voraussetzungen sind eine Thread Group sowie ein Sampler, beispielsweise ein HTTP Request, mit entsprechender URI und Operation.
 
 Nun startet man die Kommandozeile und navigiert in das /bin Verzeichnis von JMeter. Dort startet man den Test via folgendem Befehl:

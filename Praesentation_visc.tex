@@ -1,0 +1,606 @@
+\documentclass[xcolor=dvipsnames]{beamer}
+%\usetheme{Pittsburgh}
+\usepackage{pgfpages}
+\usepackage{graphicx}
+\usepackage{colortbl}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{booktabs}
+\usepackage[scientific-notation=true]{siunitx}
+\usetikzlibrary{decorations.pathreplacing}
+%\usetheme{Darmstadt}
+%\usetheme{CambridgeUS}
+\usetheme{MarburG}
+%\usetheme{Dresden}
+%\usetheme{Rochester}
+%\usetheme{Madrid} 
+%\usetheme{AnnArbor}
+%\usetheme{Bergen}
+%\usetheme{Antibes}
+%\usetheme{JuanLesPins}
+%\usetheme{Singapore}
+\usecolortheme{whale}
+%\usecolortheme{beaver, albatross, whale}
+%\setbeameroption{show notes on second screen=left}
+%\usetheme{Copenhagen}
+%\usetheme{Berkeley}
+%\usetheme{Goettingen}
+%\usetheme{Hannover}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\newcommand{\pro}{\item[\boldmath${\color{green}+}$ ]}
+\newcommand{\con}{\item[\boldmath$ {\color{red}-}$ ]}
+\usetikzlibrary{shapes.misc}
+\usetikzlibrary{calc}
+\tikzset{cross/.style={cross out, draw=red, minimum size=2*(#1-\pgflinewidth), inner sep=0pt, outer sep=0pt},
+%default radius will be 1pt. 
+cross/.default={1mm}}
+
+\let\oldfootnotesize\footnotesize
+\renewcommand*{\footnotesize}{\oldfootnotesize\tiny}
+
+\newcommand{\tikzmark}[1]{\tikz[overlay,remember picture] \node (#1) {};}
+\newcommand{\DrawBox}[1][]{%
+    \tikz[overlay,remember picture]{
+    \draw[red,#1]
+      ($(left)+(-0.84cm,0.9cm)$) rectangle
+      ($(right)+(-0.22cm,-0.2cm)$);}
+}
+
+%OPTIONAL - WENN TOC DABEISTEHT WEGLASSEN!!!!!
+%\AtBeginSection[]{
+%\frame{
+%\frametitle{Agenda}
+%\tableofcontents[currentsection]
+%}
+%}
+%ENDE OPTIONAL
+
+%Title definieren
+\title{Performance Testing mit JMeter}
+\subtitle{Seminararbeit SS 2018}
+\titlegraphic {\includegraphics[width=4cm]{bilder/hskalogo}}
+%\subtitle{Virtual Instruction Set Computer}
+\author{Daniel Schäfer}
+\date{\today}
+%\institute{Seminararbeit SS 2016}
+
+%Ende Titel
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}
+\frametitle{Agenda}
+		\tableofcontents
+\end{frame}
+
+\section{Einleitung}
+\begin{frame}\frametitle{Einleitung}
+	Historischer Verlauf von Prozessoren + \emph{Death of CPU Scale}
+%\begin{figure}
+%\includegraphics[width=0.7\textwidth]{bilder/deathofcpu}
+%\end{figure}
+\begin{figure}
+        \begin{tikzpicture}[scale=0.9]
+				\draw [color=gray!50]  [step=5mm] (0,0) grid (7.6,5.1);
+		\draw[color=blue, line width=2.5pt] plot[smooth]coordinates{(0.3,0.7)(1.5,1.2)(3,1.8)(4.5,2.7)(6,3.8)(7.5,5)};
+			\draw[color=Green, line width=2.5pt] plot[smooth]coordinates{(0.3,0.4)(1.5,0.7)(3,1.2)(4.5,2)(6,2.2)(7.5,2.21)};	
+				% Achsen zeichnen
+		\draw[->,thick] (0,0) -- (7.7,0) node[right] {$\scriptstyle Jahr$};
+		\draw[->,thick] (0,0) -- (0,5.2) node[above] {$\scriptstyle $};
+		%\draw[rotate=90] (0,0) node[left] {$\scriptstyle Nanu$};
+		%\node[rotate=90,left] at (-1,3) {$\scriptstyle Transistoren$};
+		
+		 \draw(-0.1,0) -- (0.1,0) node[left=4pt] {$\scriptstyle 0$};
+		\draw(-0.1,1) -- (0.1,1) node[left=4pt] {$\scriptstyle 10^1$};
+		\draw(-0.1,2) -- (0.1,2) node[left=4pt] {$\scriptstyle 10^3$};
+		\draw(-0.1,3) -- (0.1,3) node[left=4pt] {$\scriptstyle 10^5$};
+		\draw(-0.1,4) -- (0.1,4) node[left=4pt] {$\scriptstyle 10^7$};
+		\draw(-0.1,5) -- (0.1,5) node[left=4pt] {$\scriptstyle 10^{10}$};
+		
+		
+		\draw(0,-0.1) -- (0,0) node[below=4pt] {$\scriptstyle 1970$};
+		\draw(1.5,-0.1) -- (1.5,0) node[below=4pt] {$\scriptstyle 1980$};
+		\draw(3,-0.1) -- (3,0) node[below=4pt] {$\scriptstyle 1990$};
+		\draw(4.5,-0.1) -- (4.5,0) node[below=4pt] {$\scriptstyle 2000$};
+		\draw[color=red,style=dashed,line width=1pt](5.2,3.5) -- (5.2,-0.1) node[below=1pt] {$\scriptstyle 2004$};		
+		\draw(6,-0.1) -- (6,0) node[below=4pt] {$\scriptstyle 2010$};
+		\draw[color=red,style=dashed,line width=1pt](6.8,4.7) -- (6.8,-0.1) node[below=1pt] {$\scriptstyle 2016$};
+		\draw(7.5,-0.1) -- (7.5,0) node[below=4pt] {$\scriptstyle 2020$};
+
+	 %\draw (2.25,0) node[cross,rotate=15] {};
+		%\draw (3.46,0) node[cross,rotate=15] {};
+		%\draw (4.5,0) node[cross,rotate=15] {};
+		%\draw (5.1,0) node[cross,rotate=15] {};
+		
+		\filldraw[color=red, nearly opaque] (2.25,1.8) -- (2,2) -- (1.2,2) -- (1.2,1.6) -- (2,1.6) --cycle;
+		\filldraw[color=red, nearly opaque] (3.46,2.4) -- (3.21,2.6) -- (1.8,2.6) -- (1.8,2.2) -- (3.21,2.2) --cycle;
+		\filldraw[color=red, nearly opaque] (4.5,3.0) -- (4.25,3.2) -- (3.6,3.2) -- (3.6,2.8) -- (4.25,2.8) --cycle;
+		\filldraw[color=red, nearly opaque] (5.1,3.5) -- (4.85,3.7) -- (3.45,3.7) -- (3.45,3.3) -- (4.85,3.3) --cycle;
+		\filldraw[color=red, nearly opaque] (6.6,4.6) -- (6.35,4.8) -- (4.5,4.8) -- (4.5,4.4) -- (6.35,4.4) --cycle;
+		
+		\draw (2.0,1.8)node[left]{$\scriptstyle 386$};
+		\draw (3.3,2.4)node[left]{$\scriptstyle Pentium$};
+		\draw (4.3,3.0)node[left]{$\scriptstyle P4$};
+		\draw (5,3.5)node[left]{$\scriptstyle Itanium\;2$};
+		\draw (6.5,4.6)node[left]{$\scriptstyle Octa\;Core\;i7$};
+		
+		
+		\fill[yellow!10] (0.2,4.0) rectangle (3.5,5);
+		\draw [color=blue, line width=1pt](0.4,4.75)--(0.6,4.75) node[right]{$\scriptstyle Transistoren\;(000)$};
+		\draw [color=Green, line width=1pt](0.4,4.25)--(0.6,4.25) node[right]{$\scriptstyle Takt\;(MHz)$};
+		
+		%\foreach \x in {1,2,3,4,5}
+			
+			%\draw (\x,-0.1) -- (\x,0) node[below=4pt] {$\scriptstyle \x$};
+    %\foreach \y in {0,1,2,3}
+			%\draw (-0.1,\y) -- (0.1,\y) node[left=4pt] {$\scriptstyle \y$};
+				\end{tikzpicture}	
+\end{figure}
+
+
+\begin{description}
+\item [2004 -] Einführung Mehrkernprozessoren 
+\item [2016 -] Leistungssteigerung im Singlethread Betrieb
+%\item [2020 -] 10 Mrd. Transistoren
+\end{description}
+\end{frame}
+
+
+
+\subsection{Idee hinter VISC}
+\begin{frame}
+\frametitle{Idee hinter VISC}
+\includegraphics[width=1.0\textwidth]{bilder/cpu_auslastung}
+\end{frame}
+
+\begin{frame}
+\frametitle{Idee hinter VISC}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\emph{Multithreading}
+\begin{figure}
+        \begin{tikzpicture}
+				\node at (-2.8,0.7) {\includegraphics[scale=0.05]{bilder/amd_logo}};
+				\node at (-1.5,1) {\includegraphics[scale=0.05]{bilder/intel_logo}};
+					\node at (-0.3,0.8) {\includegraphics[scale=0.05]{bilder/arm_logo}};
+				\draw[->,color=black,line width=1.5pt](-3.2,0)--(-1.8,-1.5) node[right] {};
+				\draw[->,color=black,line width=1.5pt](0.2,0)--(-1.2,-1.5) node[right] {};
+				\draw[->,color=black,line width=1.5pt](-2.0,0)--(-1.6,-1.5) node[right] {};
+				\draw[->,color=black,line width=1.5pt](-1.0,0)--(-1.4,-1.5) node[right] {};
+				
+				%\fill[brown] (-1.9,-1.6) rectangle (-1.2,-3.0);
+				
+				\fill[top color=Blue!90,bottom color=Blue!2,middle color=Blue!30,shading=axis,opacity=0.25
+				,line width=1.5pt] (-1.5,-1.8) circle (0.4 and 0.1);
+				%\fill[top color=Blue!50!black,bottom color=Blue!10,middle color=Blue,shading=axis,opacity=0.25,line width=1.5pt,line width=1.5pt] (-1.5,-2.8) circle (0.4 and 0.1);
+				\fill[left color=Blue!50!black,right color=Blue!50!black,middle color=Blue!50,shading=axis,opacity=0.25] (-1.1,-1.8) -- (-1.1,-2.8) arc (360:180:0.4cm and 0.1cm) -- (-1.9,-1.8) arc (180:360:0.4cm and 0.1cm);
+				
+				\draw[Blue] (-1.5,-3.5)node[above]{$\scriptstyle 1\;Kern$};
+				\draw (-2.2,-1.2)node[left]{$\scriptstyle 4\;Threads$};
+								
+				\end{tikzpicture}
+				\end{figure}
+
+\end{column}
+\vrule{}
+\begin{column}{0.5\textwidth}
+\emph{Inverse Hyperthreading}
+\begin{figure}
+        \begin{tikzpicture}
+				
+				\node at (1,0) {\includegraphics[scale=0.2]{bilder/visc_logo}};
+				
+				\draw[line width=1.5pt,color=black](1,-0.6) -- (1,-1.1) node[right] {};
+				\draw (1.2,-0.8)node[right]{$\scriptstyle 1\;Thread$};
+				\draw[->,line width=1.5pt,color=black](1,-1.1) -- (-1,-2) node[right] {};
+				\draw[->,line width=1.5pt,color=black](1,-1.1) -- (0.5,-2) node[right] {};
+				\draw[->,line width=1.5pt,color=black](1,-1.1) -- (1.6,-2) node[right] {};
+				\draw[->,line width=1.5pt,color=black](1,-1.1) -- (3,-2) node[right] {};
+				
+				
+				\fill[top color=Blue!90,bottom color=Blue!2,middle color=Blue!30,shading=axis,opacity=0.25
+				,line width=1.5pt] (-1,-2.3) circle (0.4 and 0.1);
+				\fill[left color=Blue!50!black,right color=Blue!50!black,middle color=Blue!50,shading=axis,opacity=0.25] (-0.6,-2.3) -- (-0.6,-3.3) arc (360:180:0.4cm and 0.1cm) -- (-1.4,-2.3) arc (180:360:0.4cm and 0.1cm);
+				
+				\fill[top color=Blue!90,bottom color=Blue!2,middle color=Blue!30,shading=axis,opacity=0.25
+				,line width=1.5pt] (0.3,-2.3) circle (0.4 and 0.1);
+				\fill[left color=Blue!50!black,right color=Blue!50!black,middle color=Blue!50,shading=axis,opacity=0.25] (0.7,-2.3) -- (0.7,-3.3) arc (360:180:0.4cm and 0.1cm) -- (-0.1,-2.3) arc (180:360:0.4cm and 0.1cm);
+				
+				
+				\fill[top color=Blue!90,bottom color=Blue!2,middle color=Blue!30,shading=axis,opacity=0.25
+				,line width=1.5pt] (1.6,-2.3) circle (0.4 and 0.1);
+				\fill[left color=Blue!50!black,right color=Blue!50!black,middle color=Blue!50,shading=axis,opacity=0.25] (2,-2.3) -- (2,-3.3) arc (360:180:0.4cm and 0.1cm) -- (1.2,-2.3) arc (180:360:0.4cm and 0.1cm);
+				
+				\fill[top color=Blue!90,bottom color=Blue!2,middle color=Blue!30,shading=axis,opacity=0.25
+				,line width=1.5pt] (2.9,-2.3) circle (0.4 and 0.1);
+				\fill[left color=Blue!50!black,right color=Blue!50!black,middle color=Blue!50,shading=axis,opacity=0.25] (3.3,-2.3) -- (3.3,-3.3) arc (360:180:0.4cm and 0.1cm) -- (2.5,-2.3) arc (180:360:0.4cm and 0.1cm);
+				
+				\draw(1.1,-4) node[below,color=Blue] {$\scriptstyle 4\;Kerne$};
+				
+				\end{tikzpicture}
+				\end{figure}
+
+\end{column}
+\end{columns}
+
+%\begin{figure}
+ %       \begin{tikzpicture}
+	%\draw [densely dashed] (0.5,0) -- (0.5,10);
+%\end{tikzpicture}
+	%			\end{figure}
+%\begin{itemize}
+%	\item Hyperthreading bei AMD, Intel, ARM
+%\end{itemize}
+%\begin{figure}
+%\includegraphics[width=0.7\textwidth]{bilder/multithreading}
+%\end{figure}
+%\begin{itemize}
+%	\item \emph{Inverse Hyperthreading} bei VISC
+%\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}
+	\frametitle{Idee hinter VISC}
+	\begin{figure}%
+	\begin{tikzpicture}
+	\node at (-2,4.2)  {\includegraphics[width=0.2\textwidth]{bilder/cisc_cpu}};
+		\node at (3,4.4) {\includegraphics[width=0.2\textwidth]{bilder/risc_cpu}};
+	\draw(-2,3) node {$\scriptstyle \textbf{CISC}$};
+		\draw (2,3.5) node {$\scriptstyle \textbf{RISC}$};
+		\node at (-2,2) [rotate=12] {\fbox{\includegraphics[width=0.25\textwidth]{bilder/cisc_mul}}};
+	\node at (2,2) [rotate=-14] {\fbox{\includegraphics[width=0.25\textwidth]{bilder/risc_mul}}};
+		\draw[rounded corners, fill=Blue!50] (-4,0) rectangle (4,-1); 
+		\node at (0,-0.5) {$\scriptstyle VISC\;-\;Instruction\;Set\;Architecture$};
+		\draw[->,line width=1pt] (-1.5,1.5) -- (-0.4,0);
+		\draw[->,line width=1pt] (1.5,0.9) -- (0.7,0);
+		
+	\end{tikzpicture}
+	
+	\end{figure}
+\end{frame}
+
+
+%Präsentation Blatt 1
+\subsection{VISC-Begriffsdefinition}
+\begin{frame}
+\frametitle{VISC-Begriffsdefinition}
+\begin{description}
+\item [\textbf{VISC -}] \textbf{V}irtual \textbf{I}nstruction \textbf{S}et \textbf{C}omputer
+\end{description}
+\begin{itemize}
+\item Verbesserte IPC-Werte durch \emph{Inverse Hyperthreading}
+	\item kann x86 und ARM Architekturen verarbeiten
+\end{itemize}
+\begin{figure}\footnote{http://www.softmachines.com/wp-content/uploads/2014/12/Soft-Machines-VISCtm-Architecture-Tech-Briefing-vF.pdf}
+\includegraphics[width=0.25\textwidth]{bilder/visc}
+\end{figure}
+\end{frame}
+%Ende Blatt 1
+
+%beginn blatt 2
+	\subsection{Soft Machines}
+\begin{frame}{Soft Machines}
+%\frametitle{Soft Machines} <-alternative schreibweise des frametitle
+\begin{figure}
+\includegraphics[width=0.7\textwidth]{bilder/sm}
+\end{figure}
+	\begin{itemize}
+		\item<1-> Halbleiterhersteller aus Santa Clara - Kalifornien (Silicon Valley)
+		\item Gründer Mohammad Abdallah kam von Intel 
+		\item ca. 250 Mitarbeiter
+		\item 7 Jahre Entwicklungszeit
+		\item 80 Patente im Bereich VISC
+		\item Budget von ca. \$125 Mio.
+		\item Investoren wie AMD, Samsung, GlobalFoundries
+	\end{itemize}
+\end{frame}
+%ende blatt 2
+
+%beginn blatt 3
+
+%ende blatt 3
+
+%beginn blatt 4
+\section{VISC-Architektur}
+\begin{frame}
+\frametitle{VISC-Architektur}
+	\begin{center}
+		\begin{tikzpicture}
+			\draw [fill=Gray!50] (-3,3) rectangle (3,4);
+			\node at (0,3.5) {$\scriptstyle [SW]\;Sequential\;Code$};
+			\draw [->,line width=1pt, color=Blue] (0,3) -- (0,1.2);
+			\node at (1.5,2.5) [color=Blue] {$\scriptstyle [SW]\;Single\;Thread$};
+			\draw [rounded corners, color=Gray!50!Black] (-4.4,-3.3) rectangle (4.4,2);
+				\draw[->,color=Blue!40, line width=1pt] plot[smooth]coordinates{(0,0.2)(-1.5,-0.2)(-2,-1)};
+				\draw[->,color=Blue!40, line width=1pt] plot[smooth]coordinates{(0,0.2)(1.5,-0.2)(2,-1)};
+				
+			\draw [fill=Blue!40] (-2.5,1.2) rectangle (2.5,0.2);
+			
+			\node at (0,0.7) {$\scriptstyle [HW]\;Global\;Front\;End$};
+	
+			\draw [top color=White, bottom color=Blue!30] (-4,-2.6) -- (-3,-1.6) -- (-0.2,-1.6) -- (-1.2,-2.6) --cycle;
+			\draw [top color=White, bottom color=Blue!30] (-0.2,-2.6) -- (0.8,-1.6) -- (4,-1.6) -- (3,-2.6) --cycle;
+			
+			
+			\draw [fill=Blue!40](-4,-2) -- (-3,-1) -- (0.5,-1) -- (-0.5,-2) -- (-4,-2);
+			\draw [fill=Blue!40] (-0.5,-2) -- (0.5,-1) -- (4,-1) -- (3,-2) -- (-3,-2);
+			\draw [<->,line width=1pt,dashed,color=White] (-1,-1.5) -- (1,-1.5);
+			
+			
+			
+			\node at (-2,-1.5) [color=White]{$\scriptstyle Virtual\;Core\;1$};
+		\node at (2,-1.5) [color=White]{$\scriptstyle Virtual\;Core\;2$};
+				\node at (-2.3,1.7) [color=Gray!50!Black] {$\scriptstyle [HW]\;Virtual\;Cores\;(Blackbox)$};
+				
+				\node at (3,-0.5) [color=Blue!50] {$\scriptstyle [HW]\;Threadlets$};
+				
+				\node at (-2.3,-2.3) {$\scriptstyle Core\;1$};
+				\node at (1.8,-2.3) {$\scriptstyle Core\;2$};
+				
+			
+		\end{tikzpicture}
+	\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{VISC-Architektur}
+	\begin{center}
+	\begin{figure}\footnote{http://www.softmachines.com/wp-content/uploads/2015/10/Soft-Machines-VISC-Linley-PC-7Oct-2015-Final-Presentation.pdf}
+\includegraphics[width=0.95\textwidth]{bilder/visc_architektur}
+\end{figure}
+	\end{center}
+\end{frame}	
+
+
+
+\subsection{Virtual Software Layer}
+\begin{frame}
+\frametitle{Virtual Software Layer}
+	\begin{enumerate}
+		\item Softwareseitige Konvertierung von eingehender ISA in VISC-ISA
+		\item Conversion Layer mit Legacy Modus 
+		\item x86 und ARM Unterstützung soll möglich sein
+	\end{enumerate}
+\end{frame}	
+
+\subsection{Global Front End}
+\begin{frame}
+\frametitle{Global Front End}
+\begin{figure}
+\footnote{http://www.softmachines.com/wp-content/uploads/2014/10/SMI\_Dual\_SW\_Threads-04.png}
+\includegraphics[width=0.45\textwidth]{bilder/front_end}
+\end{figure}
+\begin{itemize}
+\item Herzstück von Soft Machines R\&D Abteilung
+\item Einzigartiges Stück Hardware
+\item Hier entsteht die größte Leistungssteigerung
+\item Gewichtung der Anwendungen in Heavy/Light Apps
+\item Zerlegung SW-Threads in HW-Threadlets
+\item Virtual Cores einbinden / Zuweisung an Kerne 
+\end{itemize}
+	
+\end{frame}
+
+
+
+\subsection{Virtual Cores}
+\begin{frame}
+\frametitle{Virtual Cores (Single Thread)}
+ %Global Front End - Mit den virtuellen Kernen und Threadlets
+\begin{figure}
+        \begin{tikzpicture}
+				
+				\node at (0,3.4) {$\scriptstyle Heavy\;App$};
+				\draw [->,line width=5pt,color=Blue!40] (0,3.1) -- (0,2.4);
+				
+				\draw [top color=White!50, bottom color=Blue!50] (-4,-0.5) -- (-3,1.5) -- (-0,1.5) -- (-1,-0.5) -- (-4,-0.5);
+				\draw [top color=White!50, bottom color=Blue!50] (0,-0.5) -- (1,1.5) -- (4,1.5) -- (3,-0.5) -- (0,-0.5);
+			
+				\draw [fill=Blue!40] (-4,0) -- (-3,2) -- (4,2) -- (3,0) -- (-4,0);
+				
+				\node at  (0,1.2) [fill=Blue!40] {$\scriptstyle Virtual\;Core\;1$};
+				
+				\node at  (-2.5,-0.8) {$\scriptstyle Physical\;Core\;1$};
+				\node at  (1.5,-0.8) {$\scriptstyle Physical\;Core\;2$};
+				
+				\draw [->,line width=1pt,style=dashed,color=white] (-0.2,0.8) .. controls (-2,0.6) .. (-3.5,-0.2);
+				\draw [->,line width=1pt,style=dashed,color=white] (0,0.8) .. controls (-1,0.6) .. (-1.5,-0.2);
+				\draw [->,line width=1pt,style=dashed,color=white] (0.3,0.8) .. controls (1,0.6) .. (2,-0.2);
+				
+				\node at (2,0.6) [color=white] {$\scriptstyle Threadlets$};
+				
+				\draw [rounded corners, color=Blue] (-4.3,-1.2) rectangle (4.3,4.4);
+				\node at (-3,4) [color=Blue] {$\scriptstyle Virtual\;Cores$};	
+			\end{tikzpicture}
+			\end{figure}
+\end{frame}	
+
+	\begin{frame}
+		\frametitle{Virtual Cores (Dual Threads)}
+\begin{figure}
+        \begin{tikzpicture}
+				\node at (-1,3.4) {$\scriptstyle Heavy\;App$};
+				\draw [->,line width=5pt,color=Blue!40] (-1,3.1) -- (-1,2.4);
+				
+				\node at (3.2,3.4) {$\scriptstyle Light\;App$};
+				\draw [->,line width=1pt,color=Green!60] (3.5,3.1) -- (3.5,2.4);
+				
+					\draw [top color=White!50, bottom color=Blue!50] (-4,-0.5) -- (-3,1.5) -- (-0,1.5) -- (-1,-0.5) -- (-4,-0.5);
+				\draw [top color=White!50, bottom color=Blue!50] (0,-0.5) -- (1,1.5) -- (3.2,1.5) -- (2.2,-0.5) -- (0,-0.5);
+				
+				\draw [top color=White, bottom color=Green!50] (2.2,-0.5) -- (3.2,1.5) -- (4,1.5) -- (3,-0.5) -- (2.2,-0.5);
+				
+			
+				\draw [fill=Blue!40] (-4,0) -- (-3,2) -- (2.8,2) -- (1.8,0) -- (-4,0);
+				\draw [fill=Green!60] (2,0) -- (3,2) -- (4,2) -- (3,0) -- (2,0);
+				
+				\node at  (0,1.2) [fill=Blue!40] {$\scriptstyle Virtual\;Core\;1$};
+				\node at  (3.1,1.2)  {$\scriptstyle VC2$};
+				
+				\node at  (-2.5,-0.8) {$\scriptstyle Physical\;Core\;1$};
+				\node at  (1.5,-0.8) {$\scriptstyle Physical\;Core\;2$};
+				
+				\draw [rounded corners, color=Blue] (-4.3,-1.2) rectangle (4.3,4.4);
+				\node at (-3,4) [color=Blue] {$\scriptstyle Virtual\;Cores$};
+				
+				\node at (-2.6,0.8) [color=white] {$\scriptstyle Threadlets$};
+				\draw [->,line width=1pt,style=dashed,color=white] (-0.2,0.8) .. controls (-2,0.6) .. (-3.5,-0.2);
+				\draw [->,line width=1pt,style=dashed,color=white] (0,0.8) .. controls (-1,0.6) .. (-1.5,-0.2);
+				\draw [->,line width=1pt,style=dashed,color=white] (0.3,0.8) .. controls (0.6,0.6) .. (0.6,-0.2);
+				\draw [->,line width=1pt,style=dashed,color=white] (0.4,0.8) .. controls (0.6,0.7) .. (1.2,-0.2);
+				
+				\draw [->,line width=1pt,style=dashed,color=white] (2.9,0.8) .. controls (2.7,0.7) .. (2.5,-0.2);
+				
+				
+				\end{tikzpicture}
+				\end{figure}
+
+	\end{frame}
+	
+	
+
+%Weglassen??
+%\subsubsection{Threadlets}	
+%\begin{frame}{Threadlets}
+	%Singlethread wird durch den virtuellen Kern in mehrere Threadlets zerlegt und auf die einzelnen physischen Kerne verteilt
+%\begin{itemize}
+%	\item Flaschenhals Zuweisung von Befehlen an die Kerne
+%	\item Durch Threadlets maximal 1 Taktzyklus
+%	\item Datenaustausch zwischen Registern sehr komplex
+%	\item Gute Überwachung und Koordination, da sonst Datenverlust
+%\end{itemize}
+
+%\end{frame}	
+	
+%		\subsection{Pipeline}
+%\begin{frame}
+%\frametitle{Pipeline}
+%	\begin{center}
+%	Pipeline eventuell einbauen und/oder weglassen? guter übergang eventuell zu benchmark.
+%	\end{center}
+%\end{frame}
+
+	
+	\section{Benchmarks}
+	\begin{frame}
+		\frametitle{Benchmarks}
+		%\begin{center}
+
+%\begin{figure}%
+%\begin{tikzpicture}
+%	\node at (0,0) {\includegraphics[width=1\textwidth]{bilder/bench_1}};
+%	\draw [color=Red, line width=1pt] (-0.5,-1.52) rectangle (0.7,1.6);
+%\end{tikzpicture}
+%\end{figure}
+	%\end{center}
+	\begin{center}
+		
+	\footnotesize
+	\begin{tabular}{m{1cm}|>{\columncolor{lightgray!40}}m{0.8cm}|m{0.8cm}|>{\columncolor{lightgray!40}}m{0.8cm}|m{0.8cm}|>{\columncolor{lightgray!40}}m{0.9cm}|m{0.8cm}}
+	\cline{6-6} & \textbf{Intel Atom 1Core} & \textbf{ARM A15 1Core} & \textbf{ARM A57 1Core} & \textbf{Apple A7 1Core} &\textbf{Soft Machine 2VCore Proto}  \tikzmark{left} & \textbf{Intel Haswell 1Core}\\
+	\cline{6-6}
+	\hline
+	Compiled Code & 32-Bit & 32-Bit & 32 Bit & 32-Bit & 32-Bit & 64-Bit\\
+	\hline
+	Cache & 2M & 1M & 2M & 1M + 4M & 1M & 2M\\
+	\hline
+	Out-of-Order & 2-Way & 3-Way & 5-Way & 6-Way & 4-Way & 8-Way\\
+	\hline
+	%{\cellcolor[gray]{.8}}
+	\rowcolor{Blue!20} {\cellcolor{white}}IPC (SPEC06*) & \textbf{0.69} & \textbf{0.71} & \textbf{0.87} & \textbf{1.0} & \textbf{\small2.1} & \tikzmark{right} \textbf{1.39}\\
+	\cline{6-6}
+	\end{tabular}
+	\DrawBox[thick]
+	\end{center}
+
+	
+	\normalsize
+	
+	\vspace{1cm} *Spec2006 Test mit GCC 4.6 Compiler, normalisiert mit 32-Bit und 28nm (2014)
+	\end{frame}
+	
+\begin{frame}
+\frametitle{Benchmarks}
+	\begin{center}
+	\begin{figure}
+	\footnote{http://www.softmachines.com/wp-content/uploads/2014/12/Soft-Machines-VISCtm-Architecture-Tech-Briefing-vF.pdf}
+\includegraphics[width=0.95\textwidth]{bilder/bench}
+\end{figure}
+	\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Benchmarks}
+	\begin{center}
+	\begin{figure}
+	\footnote{http://www.softmachines.com/wp-content/uploads/2015/10/Soft-Machines-VISC-Linley-PC-7Oct-2015-FINAL.pdf}
+\includegraphics[width=0.95\textwidth]{bilder/bench_3}
+\end{figure}
+	\end{center}
+\end{frame}
+
+%\begin{frame}
+	%\frametitle{Benchmarks}
+	%\begin{itemize}
+		%\item VISC-Zweikern Prozessor
+		%\item unterschiedliche Prozessoren zum Vergleichen normalisiert
+		%\item SPEC2006 mit 32-Bit, 16nm Kerne und GCC 4.6 Compiler
+		%\item 1.7-fache Leistungssteigerung bei gleichem Energieverbrauch
+	%	\item Serverleistung mit Stromverbrauch im Mobile Sektor
+	%\end{itemize}
+%\end{frame}
+	
+\section{Vermarktung}	
+\begin{frame}
+	\frametitle{Vermarktung}
+	Keine eigene Produktion von Soft Machines
+	\begin{itemize}
+		\item \textbf{Lizensierung} - Architektur, Implementierung oder Technologie
+		\item \textbf{Individuallösungen} - Integration in bestehende Systeme 
+	\end{itemize}
+	
+\end{frame}
+
+\section{VISC Roadmap}
+	\begin{frame}
+		\frametitle{VISC Roadmap}
+	\begin{figure}\footnote{http://www.softmachines.com/wp-content/uploads/2015/10/Soft-Machines-VISC-Linley-PC-7Oct-2015-Final-Presentation.pdf}
+\includegraphics[width=0.95\textwidth]{bilder/roadmap}
+\end{figure}
+	\end{frame}
+	
+
+
+
+\section{Fazit}
+\begin{frame}
+\frametitle{Fazit}
+	\begin{itemize}
+	  \pro Singlethread Optimierung
+		\pro 2-4x mehr Leistung/Watt durch bessere IPC-Werte
+		\pro Kompatibel mit allen ISA's
+		\pro Vielversprechende Investoren
+		\pro Belebt den Prozessormarkt
+		\con Benchmarks nur unter optimalen Bedinungen
+		\con Bisher noch kein Lizenznehmer
+		\con Releasetermin für Shasta schon überschritten
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Fazit}
+	\begin{itemize}
+	  \item Falls alle Ankündigungen umgesetzt werden, wird VISC der Überflieger, bis dahin bleibt es allerdings ein theoretisches Gebilde
+	\end{itemize}
+\end{frame}
+
+
+\end{document}
+

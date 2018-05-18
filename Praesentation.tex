@@ -1,0 +1,142 @@
+\documentclass[xcolor=dvipsnames]{beamer}
+%\usetheme{Pittsburgh}
+\usepackage{pgfpages}
+\usepackage{graphicx}
+\usepackage{colortbl}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{booktabs}
+\usepackage[scientific-notation=true]{siunitx}
+\usetikzlibrary{decorations.pathreplacing}
+\usetheme{MarburG}
+\usecolortheme{whale}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\newcommand{\pro}{\item[\boldmath${\color{green}+}$ ]}
+\newcommand{\con}{\item[\boldmath$ {\color{red}-}$ ]}
+\usetikzlibrary{shapes.misc}
+\usetikzlibrary{calc}
+\tikzset{cross/.style={cross out, draw=red, minimum size=2*(#1-\pgflinewidth), inner sep=0pt, outer sep=0pt},
+%default radius will be 1pt. 
+cross/.default={1mm}}
+
+\let\oldfootnotesize\footnotesize
+\renewcommand*{\footnotesize}{\oldfootnotesize\tiny}
+
+\newcommand{\tikzmark}[1]{\tikz[overlay,remember picture] \node (#1) {};}
+\newcommand{\DrawBox}[1][]{%
+    \tikz[overlay,remember picture]{
+    \draw[red,#1]
+      ($(left)+(-0.84cm,0.9cm)$) rectangle
+      ($(right)+(-0.22cm,-0.2cm)$);}
+}
+
+%\setbeameroption{hide notes} % Only slide
+%\setbeameroption{show only notes} % Only notes
+\setbeameroption{show notes on second screen=left} % Both
+
+\title{Last-Tests von Webseiten mit JMeter}
+\subtitle{Seminararbeit SS 2018}
+\titlegraphic {\includegraphics[width=2cm]{bilder/hskalogo_only}}
+\author{Daniel Schäfer}
+\date{\today}
+
+%----------------------------------------------------------------------
+\begin{document}
+
+%titelseite------------
+\begin{frame}
+\titlepage
+\end{frame}
+%----------------------
+
+%inhaltsverzeichnis----
+\begin{frame}
+\frametitle{Agenda}
+		\tableofcontents
+\end{frame}
+%----------------------
+
+%-------1--------------
+\section{Einleitung}
+\begin{frame}
+\frametitle{Einleitung}
+Was sind Last-Tests?
+Wozu Last-Tests? (Stabilität der Anwendung prüfen)
+\note{IWI Seite bricht am Stichtag ein}
+\end{frame}
+%----------------------
+
+%-------2--------------
+\section{Apache JMeter}
+\begin{frame}
+\frametitle{Apache JMeter}
+\end{frame}
+%----------------------
+
+
+%-------2.1------------
+\subsection{JMeter Übersicht}
+\begin{frame}
+\frametitle{JMeter Übersicht}
+\end{frame}
+%----------------------
+
+%------2.2-------------
+\subsection{Die JMeter GUI}
+\begin{frame}
+\frametitle{Die JMeter GUI}
+\end{frame}
+%----------------------
+
+%------2.3-------------
+\subsection{JMeter Elemente}
+\begin{frame}
+\frametitle{JMeter Elemente}
+\end{frame}
+%----------------------
+
+%-------2--------------
+\section{Live Demo}
+\begin{frame}
+\frametitle{Live Demo}
+\begin{itemize}
+	\item Test von 10k Threads im GUI Modus mit Graph 
+	\item HTML Dashboard mit Konsolenaufruf
+\end{itemize}
+\end{frame}
+%----------------------
+
+ 
+\section{Fazit}
+\begin{frame}
+\frametitle{Fazit}
+\end{frame}
+
+\subsection{Vor- und Nachteile}	
+\begin{frame}
+	\frametitle{Vor- und Nachteile}
+	\begin{itemize}
+	  \pro xxx
+		\con yyy
+	\end{itemize}
+\end{frame}
+
+\subsection{Abschließende Worte}
+%\subsection{Ausblick}
+\begin{frame}
+\frametitle{Abschließende Worte}
+
+\note[item]{in den zeiten von TDD ist der fokus vermehrt wieder testen gerückt. allerdings nur in richtung unit component integration testing. lasttests fristen nach wie vor ein nischendaschein... hoffentlich ändert sich es blabla..}
+
+	Die Funktionalität einer Anwendungen steht immer an erster Stelle. Erst wenn alle Anforderungen erfüllt sind und noch Zeit/Budget vorhanden ist wird optimiert! 
+	\end{frame}
+
+
+\end{document}
+
+
+
+FRAGEN:
+live test des programms? recording nicht, aber z.b. test der iwi seite mit 10000 benutzern und live graph? danach noch das dashboard.
+alternativprogramme erwähnen, auch wenn man die nicht getestet hat. oder noch testen/ganz weglassen?
