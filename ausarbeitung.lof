@@ -1,18 +1,18 @@
 \select@language {ngerman}
-\contentsline {figure}{\numberline {1}{\ignorespaces Apache JMeter GUI}}{7}{figure.1}
-\contentsline {figure}{\numberline {2}{\ignorespaces HTML Dashboard Report}}{9}{figure.2}
-\contentsline {figure}{\numberline {3}{\ignorespaces JMeter GUI mit Graph}}{12}{figure.3}
+\contentsline {figure}{\numberline {1}{\ignorespaces Apache JMeter}}{7}{figure.1}
+\contentsline {figure}{\numberline {2}{\ignorespaces HTML-Dashboard-Report}}{9}{figure.2}
+\contentsline {figure}{\numberline {3}{\ignorespaces JMeter-GUI mit Graph}}{12}{figure.3}
 \contentsline {figure}{\numberline {4}{\ignorespaces JMX-Datei in Notepad++ ge\IeC {\"o}ffnet}}{14}{figure.4}
-\contentsline {figure}{\numberline {5}{\ignorespaces Wichtige Einstellungen der Thread-Group}}{15}{figure.5}
-\contentsline {figure}{\numberline {6}{\ignorespaces HTTP-Request Sampler}}{15}{figure.6}
+\contentsline {figure}{\numberline {5}{\ignorespaces Wichtige Einstellungen der Thread-Gruppe}}{14}{figure.5}
+\contentsline {figure}{\numberline {6}{\ignorespaces HTTP-Request-Sampler}}{15}{figure.6}
 \contentsline {figure}{\numberline {7}{\ignorespaces Blazemeter}}{17}{figure.7}
 \contentsline {figure}{\numberline {8}{\ignorespaces BadBoy Recording Software}}{18}{figure.8}
-\contentsline {figure}{\numberline {9}{\ignorespaces HTTP Test Script Recorder}}{19}{figure.9}
-\contentsline {figure}{\numberline {10}{\ignorespaces JMeter Lasttest non-GUI Asuf\IeC {\"u}hrung}}{20}{figure.10}
-\contentsline {figure}{\numberline {11}{\ignorespaces Dashboard Diagramm der Response Zeiten}}{22}{figure.11}
-\contentsline {figure}{\numberline {12}{\ignorespaces JDBC Request Sampler}}{24}{figure.12}
-\contentsline {figure}{\numberline {13}{\ignorespaces JDBC Request Results Tree}}{25}{figure.13}
-\contentsline {figure}{\numberline {14}{\ignorespaces JUnit Tests von Calculator}}{25}{figure.14}
+\contentsline {figure}{\numberline {9}{\ignorespaces HTTP-Test-Script-Recorder}}{19}{figure.9}
+\contentsline {figure}{\numberline {10}{\ignorespaces JMeter Lasttest im Non-GUI-Mode}}{20}{figure.10}
+\contentsline {figure}{\numberline {11}{\ignorespaces Dashboard-Diagramm der Antwortzeiten}}{22}{figure.11}
+\contentsline {figure}{\numberline {12}{\ignorespaces JDBC-Request-Sampler}}{24}{figure.12}
+\contentsline {figure}{\numberline {13}{\ignorespaces JDBC-Request-Results-Tree}}{25}{figure.13}
+\contentsline {figure}{\numberline {14}{\ignorespaces JUnit-Tests von Calculator}}{25}{figure.14}
 \contentsline {figure}{\numberline {15}{\ignorespaces JUnit View Results Tree}}{26}{figure.15}
 \contentsline {figure}{\numberline {16}{\ignorespaces Verewndung von Java in Beanshell}}{27}{figure.16}
 \contentsline {figure}{\numberline {17}{\ignorespaces Speichern von Passw\IeC {\"o}rter im Klartext}}{28}{figure.17}

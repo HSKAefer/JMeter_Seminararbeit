@@ -16,6 +16,7 @@
 \usepackage[hang]{footmisc}
 \usepackage{fancyhdr}	%package for calling \pagestyle{fancy} 
 \usepackage{ifthen} %to set the chaptertitle not in the tocs
+\usepackage{ifthen} %to set the chaptertitle not in the tocs
 \usepackage{titletoc}
 
 \makeatletter
@@ -122,13 +123,13 @@ Man erlebt es immer wieder, das Webseiten unter zu hoher Last in die Knie gezwun
 
 Gerade letzteres Szenario lässt sich im voraus gut vermeiden, da man die grobe Anzahl der Studierenden kennt und somit präventiv die Webseite auf die eingehende Last testen kann. Dabei werden sehr viele nebenläufige Anfragen an einen Anwendung gestartet und die Antwortzeiten ausgewertet. Diese Art von Tests nennt man Last- oder Performance-Tests und wird in die Klasse der Systemtests kategorisiert \cite{online:LastUndPerformanceTest}. 
 
-Das frei verfügbare, unter Public License Key stehende Java Programm JMeter bietet diese und weitere Funktionalität um die Leistung einer Webseite bis ins kleinste Detail zu analysieren, testen, auswerten und visualisieren.
+Das frei verfügbare, unter Public-License-Key stehende Java Programm JMeter bietet diese und weitere Funktionalität, um die Leistung einer Webseite bis ins kleinste Detail zu analysieren, zu testen, auszuwerten und zu visualisieren.
 
-\subsection{Manuelle vs automatisierte Tests}
+\subsection{Manuelle und automatisierte Tests}
 Bevor es an das eigentliche Thema JMeter geht, gibt es einen kleinen Exkurs in die sogenannten Systemtests. Diese wurden im vorherigen Abschnitt kurz erwähnt und haben die Besonderheit, dass sie sowohl manuell, als auch automatisiert ausgeführt werden können. 
 
 \subsubsection{Manuelles Testen}
-Beim manuellen Testen werden bestimmte Aktionen und Request von mehreren Benutzern nach bestimmten Vorgaben gestartet und die resultierenden Ergebnisse protokolliert. Es liegt auf der Hand, dass diese Art des testens ziemlich zeit -und resourcenaufwändig ist. Zusätzlich muss das Personal, sprich die Tester organisiert, betreut und verpflegt werden. Falls es sich dabei um die Programmierer selbst handelt, stehen diese im Zeitraum auch nicht für andere Tätigkeiten zur Verfügung. Der Faktor Mensch spielt natürlich bei dieser Art der Tests eine Rolle, wodurch nicht ausgeschlossen werden kann, dass Fehler während der Testphasen gemacht und diese entsprechend nicht erfasst werden. \cite[S. 11]{book:ApacheJMeter}
+Beim manuellen Testen werden bestimmte Aktionen und Anfragen von mehreren Benutzern nach bestimmten Vorgaben gestartet und die resultierenden Ergebnisse protokolliert. Es liegt auf der Hand, dass diese Art des testens ziemlich zeit -und resourcenaufwändig ist. Zusätzlich muss das Personal, sprich die Tester organisiert, betreut und verpflegt werden. Falls es sich dabei um die Programmierer selbst handelt, stehen diese im Zeitraum auch nicht für andere Tätigkeiten zur Verfügung. Der Faktor Mensch spielt natürlich bei dieser Art der Tests eine Rolle, wodurch nicht ausgeschlossen werden kann, dass Fehler während der Testphasen gemacht und diese entsprechend nicht erfasst werden. \cite[S. 11]{book:ApacheJMeter}
 
 Trotz dieser Nachteile sollte man auf zusätzliche manuelle Tests\footnote{Das sogenannte User Acceptance Testing (UAT) ist gerade im finalen Entwicklungsstadium einer Anwendung unabdingbar. \cite{online:wikiUAT}} einer Anwendung nie verzichten, da eine "`reale"' Person über den Tellerrand schauen kann und es dadurch möglich ist, diverse Bugs ausfindig zu machen, die mit dem eigentlichen Test unter Umständen gar nichts zu tun haben.
 
@@ -138,61 +139,61 @@ Automatisiertes Testen funktionieren immer dann recht gut, wenn häufige Wiederh
 Jedoch haben automatisierte Tests den großen Vorteil, dass sie kosteneffizienter sind. Man benötigt lediglich ein Budget für etwaige Lizenzgebühren der Software oder für den Support. Des weiteren ist man durch Testsoftware in der Lage, sehr viele Benutzer gleichzeitig zu erzeugen und parallel auf ein System zugreifen zu lassen. Mit Testskripten sogar rund um die Uhr \cite{online:Testautomatisierung}. Dadurch werden Systeme bis zur ihren Grenzen und darüber hinaus getestet.
 
 \section{Apache JMeter}
-Wen man sich nun für die Testautomation entschieden hat, steht man vor der Wahl einer entsprechenden Software. Diese befinden sich in einer Preisspanne von kostenlos bis hin zu einem fünfstelligen Bereich. Die Wahl hängt letzten Endes von den eigenen Anforderungen ab \cite[S. 15]{book:ApacheJMeter}. Da sich die Arbeit auf JMeter bezieht richten wir unser Augenmerk auf diese spezielle Software.
+Wen man sich nun für die Testautomation entschieden hat, steht man vor der Wahl einer entsprechenden Software. Diese befinden sich in einem Preissegment von kostenlos bis hin zu fünfstelligen Bereichen. Die Wahl hängt letzten Endes von den eigenen Anforderungen ab \cite[S. 15]{book:ApacheJMeter}. Da sich die Arbeit auf JMeter bezieht richten wir unser Augenmerk auf diese spezielle Software.
 
-Wie man in Abbildung~\ref{fig:jmeter_gui} erkennen kann, erscheint Apache JMeter mit seinen "`Metal-Look-and-Feel"' \cite{online:wikiSwing} Widgets wie das Relikt aus einer längst vergangenen Zeit. Man sollte sich jedoch von der veralteten und trägen Swing-basierten GUI nicht täuschen lassen, denn hinter der Oberfläche steckt ein mächtiges Werkzeug, mit dem man alle möglichen Arten von Tests erstellen und ausführen kann. \cite{online:heiseJMeterOderGatling}
+Wie man in Abbildung~\ref{fig:jmeter_gui} erkennen kann, erscheint Apache JMeter mit seinen "`Metal-Look-and-Feel-Widgets"' \cite{online:wikiSwing} wie das Relikt aus einer längst vergangenen Zeit. Man sollte sich jedoch von der veralteten und trägen Swing-basierten GUI nicht täuschen lassen, denn hinter der Oberfläche steckt ein mächtiges Werkzeug, mit dem man alle möglichen Arten von Tests erstellen und ausführen kann. \cite{online:heiseJMeterOderGatling}
 
-Tatsächlich stammt JMeter aus einer Zeit als das Web und Application Server noch in den Kinderschuhen steckten. Ursprünglich wurde es entwickelt um den Application Server Tomcat zu testen. Seitdem wurde das Programm fortlaufend weiter entwickelt, so dass man heute in der Lage ist diverse Tests zu realisieren. Von verteilten Tests in der Cloud, über das Testen von dynamischen Webseiten bis hin zu Javas JUnit Tests. \cite{online:ApacheJMeter}
+Tatsächlich stammt JMeter aus einer Zeit als das Web und die Application-Server noch in den Kinderschuhen steckten. Ursprünglich wurde es entwickelt um den Application-Server Tomcat zu testen. Seitdem wurde das Programm fortlaufend weiter entwickelt, so dass man heute in der Lage ist diverse Tests zu realisieren. Von verteilten Tests in der Cloud, über das Testen von dynamischen Webseiten bis hin zu Javas JUnit-Tests. \cite{online:ApacheJMeter}
 
 \begin{figure}[htb]%[ht]
  \centering
     \includegraphics[width=1\textwidth]{bilder/jmeter_1.png}
-  \caption{Apache JMeter GUI}
+  \caption{Apache JMeter}
   \label{fig:jmeter_gui}
 \end{figure}
-Apache JMeter wurde in Java geschrieben und kann durch seine platformunabhängigkeit unter jedem beliebigen Betriebssystem, welches eine Java Runtime Environment (JRE) installiert hat, verwendet werden. Neben der GUI kann man Apache JMeter auch mit der Kommandozeile bedienen. Dies ist gerade bei speicherintensiven Lasttests empfehlenswert, da die GUI schnell an ihre Grenzen kommt und sich die Testergebnisse nicht mehr genau erfassen lassen. Mehr zum Thema Kommandozeile in Abschnitt~\ref{chap:jmeter_commandline}.
+Apache JMeter wurde in Java geschrieben und kann durch seine platformunabhängigkeit unter jedem beliebigen Betriebssystem, welches eine Java-Runtime-Environment (JRE) installiert hat, verwendet werden. Neben der GUI kann man Apache JMeter auch mit der Kommandozeile bedienen. Dies ist gerade bei speicherintensiven Lasttests empfehlenswert, da die GUI schnell an ihre Grenzen gerät und sich die Testergebnisse dadurch nicht mehr genau erfassen lassen. Die Verwendung der JMeter Kommandozeile wird in Abschnitt~\ref{chap:jmeter_commandline} genauer betrachtet.
 
 Apache JMeter bietet zusätzlich eine gut dokumentierte API an, mit der es möglich ist das Programm selbständig zu erweitern.
 
 \subsection{Historisches}
-Ursprünglich wurde Apache JMeter von Stefano Mazzocchi, seiner Zeit Entwickler bei der Apache Software Foundation, programmiert um die Performance von Apache Tomcat (damals noch Apache JServ) zu testen. Kurz danach wurde das Programm neu entworfen und mit einer verbesserten GUI und zusätzlichen Möglichkeiten von Funktionstests ausgestattet. Im Jahr 2011 wurde JMeter zu einem sogenannten Top Level Apache project, was eine offizielle Homepage und ein Projekt Management Committee mit sich brachte \cite{online:officialJMeter}.
+Ursprünglich wurde Apache JMeter von Stefano Mazzocchi, seiner Zeit Entwickler bei der Apache Software Foundation, programmiert um die Performance von Apache Tomcat (damals noch Apache JServ) zu testen. Kurz danach wurde das Programm neu entworfen und mit einer verbesserten GUI und zusätzlichen Möglichkeiten von Funktionstests ausgestattet. Im Jahr 2011 wurde JMeter zu einem sogenannten Top-Level-Apache-Project, was eine offizielle Homepage und ein Projekt-Management-Committee mit sich brachte \cite{online:officialJMeter}.
 
-Mittlerweile ist Apache JMeter ein wichtiger Bestandteil von Performance Tests in sehr vielen Firmen geworden. Großkonzerne wie SAP oder 1\&1 verwenden regelmäßig JMeter um die Verfügbarkeit ihrer Produkte unter hoher Last zu prüfen. 
+Mittlerweile ist Apache JMeter ein wichtiger Bestandteil von Performance-Tests in sehr vielen Firmen geworden. Großkonzerne wie SAP oder 1\&1 verwenden regelmäßig JMeter um die Verfügbarkeit ihrer Produkte unter hoher Last zu prüfen. 
 
 \subsection{Was kann JMeter}
-Apache JMeter dient in einer Client/Server Landschaft als Client und kann dadurch Anfragen an bestimmte Anwendungen absetzen. Dadurch erhält man unter anderem die Responsezeit, Responsemesage oder aber auch den Speicherverbrauch.
+Apache JMeter dient in einer Client/Server Landschaft als Client und kann dadurch Anfragen an bestimmte Anwendungen absetzen. Dadurch erhält man unter anderem die Antwortzeit, Antwortmessage oder aber auch den Speicherverbrauch der Anfrage.
 
-Anfragen können sowohl an statische als auch an dynamische Resourcen erfolgen. Darunter fallen unter anderem statische Dateien, Servlets, FTP Server, Datenbanken, Java Objekte und Skripte.
-Um diese Anfragen in einer entsprechend großen Anzahl abzufeuern, bietet das Programm die Simulation von vielen gleichzeitigen Benutzern an. Diese Threads lassen sich in einzelne Thread Gruppen unterteilen.
+Anfragen können sowohl an statische als auch an dynamische Resourcen erfolgen. Darunter fallen unter anderem statische Dateien, Servlets, FTP-Server, Datenbanken, Java-Objekte und Skripte.
+Um diese Anfragen in einer entsprechend großen Anzahl abzufeuern, bietet das Programm die Simulation von vielen gleichzeitigen Benutzern an. Diese sogenannten Threads lassen sich in einzelne Thread-Gruppen unterteilen.
 
 In JMeter ist es ebenfalls möglich, den Test in eine Cloud Infrastruktur auszulagern und die Tests unabhängig vom eigenen System bzw. Hardware laufen zu lassen. Ebenfalls kann man mehrere Systeme dazu bringen, die Tests verteilt auszuführen, was den Vorteil bringt, deutlich mehr Resourcen zur Verfügung stehen zu haben. 
 
-Nach den Tests bietet JMeter ein HTML Dashboard an, in dem sehr viele Informationen über die Anfragen und Ergebnisse in Tabellen und Statistiken grafisch aufbereitet dargestellt werden. Abbildung~\ref{fig:dashboard} zeigt einen Ausschnitt des Dashboards, welches im Abschnitt~\ref{chap:html_dashboard} genauer untersucht wird.  
+Nach den Tests bietet JMeter ein HTML-Dashboard an, in dem sehr viele Informationen über die Anfragen und Ergebnisse in Tabellen und Statistiken grafisch aufbereitet dargestellt werden. Abbildung~\ref{fig:dashboard} zeigt einen Ausschnitt des Dashboards, welches im Abschnitt~\ref{chap:html_dashboard} genauer untersucht wird.  
 
 \begin{figure}[htb]%[ht]
  \centering
     \includegraphics[width=1\textwidth]{bilder/dashboard.png}
-  \caption{HTML Dashboard Report}
+  \caption{HTML-Dashboard-Report}
   \label{fig:dashboard}
 \end{figure}
 
-Eine weitere nützliche Funktion ist das Aufzeichnen von Userinteraktionen. Dieser Http Test Script Recorder wird in JMeter mit bestimmten Filtern und Pattern vorkonfiguriert und gestartet. Jede Aktion im Browser mit der entsprechenden URL und Port wird dann als einzelner HTTP Request Sampler angelegt. Der Recorder wird initial einmal ausgeführt und kann dann für diverse Tests recycelt werden.    
+Eine weitere nützliche Funktion ist das Aufzeichnen von Userinteraktionen. Dieser Http-Test-Script-Recorder wird in JMeter mit bestimmten Filtern und Pattern vorkonfiguriert und gestartet. Jede Aktion im Browser mit der entsprechenden URL und Port wird dann als einzelner HTTP-Request-Sampler angelegt. Der Recorder wird initial einmal ausgeführt und kann dann für diverse Tests recycelt werden.    
 
-Seit der JMeter Version 2.1.2 ist es außerdem möglich in Java geschriebene JUnit Tests als JUnit Sampler zu importieren und ausführen. Diese nützliche Funktion wird im Abschnitt \nameref{chap:junit_tests} untersucht.
+Seit der JMeter Version 2.1.2 ist es außerdem möglich in Java geschriebene JUnit-Tests als JUnit-Sampler zu importieren und auszuführen. Diese nützliche Funktion wird in Abschnitt \ref{chap:junit_tests} untersucht.
 
 \subsection{Installation}
 Im folgenden Kapitel werden notwendige Schritte zur Inbetriebnahme von Apache JMeter erklärt.
 
 \subsubsection{Einrichten der Umgebung}
-Apache JMeter wurde als reine Java Anwendung entwickelt. Sie ist dadurch platformunabhängig und benötigt keine zusätzlichen Treiber oder Installation. Alle notwendigen Abhängigkeiten und Klassen sind im entsprechenden Archiv hinterlegt. Zum Starten muss man lediglich die *.jar Datei aus dem Verzeichnis ausführen.
+Apache JMeter wurde als reine Java Anwendung entwickelt. Sie ist dadurch platformunabhängig und benötigt keine zusätzlichen Treiber oder Installation. Alle notwendigen Abhängigkeiten und Klassen sind im entsprechenden Archiv hinterlegt. Zum Starten muss man lediglich die JAR-Datei aus dem \codeInLine{\\bin} Verzeichnis ausführen.
 
-Auf der offiziellen Seite von Apache JMeter \url{http://jmeter.apache.org/download_jmeter.cgi} muss man sich zunächst eine Release Version herunterladen. Den Build entpackt man dann in ein beliebiges Verzeichnis, beispielsweise \codeInLine{C:\\\\Program Files\\jmeter\\}.
-Es sollte bereits eine aktuelle JRE vorhanden sein, da diese Grundvorausstzung ist um *.jar Dateien auszuführen. Prüfen kann man dies, indem man in der Kommandozeile den Befehl \codeInLine{java -version} eingibt. Wenn keine JRE installiert ist kommt eine entsprechende Meldung, dass der Befehl nicht gefunden wurde. In diesem Fall hilft eine Installation der Java runtime environment von der offiziellen Oracle Seite unter \url{http://www.oracle.com/technetwork/java/javase/downloads/index.html}.
+Auf der offiziellen Seite von Apache JMeter\footnote{\url{http://jmeter.apache.org/download_jmeter.cgi}} muss man sich zunächst eine Release-Version herunterladen. Den Build entpackt man dann in ein beliebiges Verzeichnis, beispielsweise \codeInLine{C:\\\\Program Files\\jmeter\\}.
+Es sollte bereits eine aktuelle JRE vorhanden sein, da diese Grundvorausstzung ist um JAR-Dateien auszuführen. Prüfen kann man dies, indem man in der Kommandozeile den Befehl \codeInLine{java -version} eingibt. Wenn keine JRE installiert ist kommt eine entsprechende Meldung, dass der Befehl nicht gefunden wurde. In diesem Fall hilft eine Installation der Java runtime environment von der offiziellen Oracle Seite unter \url{http://www.oracle.com/technetwork/java/javase/downloads/index.html}.
 
-Im Installationspfad befinden sich mehrere Unterverzeichnisse. Wichtig sind hier der \codeInLine{\\bin} Ordner und der \codeInLine{\\lib} Ordner. Im ersteren befindet sich die ApacheJMeter.jar Datei welche die GUI von JMeter startet. Im lib Verzeichnis sind alle Libraries und Erweiterungen hinterlegt. Dies ist auch der Ort an dem zusätzliche Third-Party -Plugins hineinkopiert werden müssen.
+Im Installationspfad befinden sich mehrere Unterverzeichnisse. Wichtig sind hier der \codeInLine{\\bin} Ordner und der \codeInLine{\\lib} Ordner. Im ersteren befindet sich die ApacheJMeter.jar, welche die GUI von JMeter startet. Im \codeInLine{\\lib} Verzeichnis sind alle Bibliotheken und Erweiterungen hinterlegt. Dies ist auch der Ort an dem zusätzliche Third-Party-Plugins hineinkopiert werden müssen.
 
 \subsubsection{Starten von JMeter}
-JMeter lässt sich wie bereits erwähnt als GUI bzw. als Kommandozeilenprogramm verwenden.  Um JMeter als GUI zu starten kann man direkt die ApacheJMeter.jar ausführen. Sitzt man hinter einer Firewall empfiehlt es sich die GUI via Kommandozeile zu starten. Folgende Parameter  sollten dabei verwendet werden:
+JMeter lässt sich wie bereits erwähnt als GUI bzw. als Kommandozeilenprogramm verwenden.  Um JMeter als GUI zu starten kann man direkt die ApacheJMeter.jar ausführen. Sitzt man hinter einer Firewall oder einem Proxy-Server empfiehlt es sich die GUI via Kommandozeile zu starten, da man hier zusätzlichen Funktionsumfang hat um den Proxy zu übergeben. Folgende Parameter sollten dabei verwendet werden:
 
 \begin{table}[H]
 	\centering
@@ -200,18 +201,18 @@ JMeter lässt sich wie bereits erwähnt als GUI bzw. als Kommandozeilenprogramm 
 		\hline
 		\textbf{Parametername} & \textbf{Bedeutung} \\
 		\hline
-		-H & Proxy Server Hostname bzw. IP-Adresse \\
-		-P & Port vom Proxy Server \\
-		-N & Host ohne Proxy (localhost) \\ 
-		-u & Benutzername für den Proxy \\
-		-p & Passwort für den Proxy \\
+		-H & Proxy-Server-Hostname bzw. IP-Adresse \\
+		-P & Port des Proxy-Servers \\
+		-N & Host ohne Proxy-Server (localhost) \\ 
+		-u & Benutzername für den Proxy-Server \\
+		-p & Passwort für den Proxy-Server \\
 		\hline
 	\end{tabular}
 	\caption[tab_parameter_gui]{Befehle für Firewall Einstellungen}
 	\label{tab_parameter_gui}
 \end{table}
 
-Beispiel: Aus der Kommandozeile ins /bin Verzeichnis von JMeter navigieren und folgenden Befehl ausführen: 
+Beispiel: Aus der Kommandozeile ins \codeInLine{\\bin} Verzeichnis von JMeter navigieren und folgenden Befehl ausführen: 
 \begin{lstlisting}
 jmeter -H 196.168.178.1 -P 1337 -u lindan -a hispassword -N localhost
 \end{lstlisting}
@@ -223,47 +224,46 @@ Alternativ dazu die Befehle der JMeter Kommandozeile ohne GUI:
 		\hline
 		\textbf{Parametername} & \textbf{Bedeutung} \\
 		\hline
-		-n & non-GUI - keine GUI Oberfläche \\
-		-t & jmx Datei, dass die Testfälle enthält \\
-		-l & jtl Datei, in dem die Logs gespeichert werden \\ 
-		-r & Verwende alle Remote Server aus jmeter.properties \\
+		-n & non-GUI; keine GUI-Oberfläche \\
+		-t & JMX-Datei, dass die Testfälle enthält \\
+		-l & JTL-Datei, für die Protokolle \\ 
+		-r & Verwende alle Remote-Server aus jmeter.properties \\
 		\hline
 	\end{tabular}
 	\caption[tab_parameter_non_gui]{Befehle für JMeter Kommandozeile}
 	\label{tab_parameter_non_gui}
 \end{table}
 
-Beispiel um die test.jmx Datei auszuführen und in logtest.jmx zu speichern: Aus der Kommandozeile ins /bin Verzeichnis von JMeter navigieren und folgenden Befehl ausführen: \
+Beispiel um die test.jmx Datei auszuführen und in logtest.jmx zu speichern: Aus der Kommandozeile ins \codeInLine{\\bin} Verzeichnis von JMeter navigieren und folgenden Befehl ausführen: \
 \begin{lstlisting}
 jmeter -n -t test.jmx -l logtest.jtl
 \end{lstlisting}
-Mehr zum Thema GUI und Kommandozeilenaufurf in den nachfolgenden Kapiteln.
 
-\subsection{JMeter GUI}
+\subsection{JMeter-GUI}
 Die GUI von JMeter ist die erste Anlaufstelle für Anfänger und interessierte Benutzer. Hier kann man schnell und einfach Testaufrufe erzeugen und Ergebnisse anhand von Graphen und Tabellen anzeigen. 
 
-Die GUI wird von erfahrenen Anwendern hauptsächlich dazu verwendet um die Test Sampler zu generieren, die dann später aus der Kommandozeile heraus als *.jmx Dateien gestartet werden.
+Die GUI wird von erfahrenen Anwendern hauptsächlich dazu verwendet um die Test-Sampler zu generieren, die dann später aus der Kommandozeile heraus als JMX-Dateien gestartet werden.
 
-Hier kann man auch den HTTP Test Script Recorder konfigurieren und starten, mit dem es möglich ist, diverse HTTP Anfragen an Webseiten aufzuzeichnen. Mehr zum Thema Recording und Aufzeichnen von Aktionen in Kapitel \ref{sec:wissenswertes}. Abbildung \ref{fig:gui_graph} zeigt die GUI beim Abarbeiten mehrerer gleichzeitiger Anfragen an eine Webseite. Der Graph kann das ganze zusätzlich visualisieren. Dadurch erkennt man, an welchen Stellen noch  optimiert werden kann.
+Hier kann man auch den HTTP-Test-Script-Recorder konfigurieren und starten, mit dem es möglich ist, diverse HTTP Anfragen an Webseiten aufzuzeichnen. Abbildung~\ref{fig:gui_graph} zeigt die GUI beim Abarbeiten mehrerer gleichzeitiger Anfragen an eine Webseite. Der Graph kann das ganze zusätzlich visualisieren. Dadurch erkennt man, an welchen Stellen noch  optimiert werden kann.
 
 \begin{figure}[htb]%[ht]
  \centering
     \includegraphics[width=1\textwidth]{bilder/jmeter_2.png}
-  \caption{JMeter GUI mit Graph}
+  \caption{JMeter-GUI mit Graph}
   \label{fig:gui_graph}
 \end{figure}
 
 \subsection{JMeter Kommandozeile}
 \label{chap:jmeter_commandline}
-Möchte man nun einen auswendigeren Lasttest machen, eignet sich die GUI ab einer gewissen Anzahl von gleichzeitigen Benutzern nicht mehr. Durch die steigende Anzahl der Anfragen wird auch der Resourcenbedarf immer größer und der ohnehin schon recht hohe Speicherbedarf der GUI selbst kann sich dann negativ auf die Messergebnisse auswirken und diese verfälschen.
+Möchte man nun einen komplexeren Lasttest machen, eignet sich die GUI ab einer gewissen Anzahl von gleichzeitigen Benutzern nicht mehr. Durch die steigende Anzahl der Anfragen wird auch der Resourcenbedarf immer größer und der ohnehin schon recht hohe Speicherbedarf der GUI selbst kann sich dann negativ auf die Messergebnisse auswirken und diese verfälschen.
 
-Hier kommt der sogenannte "`Non-GUI Modus"' ins Spiel. Dies ist die Bezeichnung um JMeter in der Kommandozeile auszuführen. Mit Hilfe des Kommandozeilenaufrufes lassen sich am Ende des Tests CSV oder XML Dateien erstellen, die Testergebnisse beinhalten. Auch der HTML Dashboard Report lässt sich nur hier generieren.
+Hier kommt der sogenannte "`Non-GUI-Mode"' ins Spiel. Dies ist die Bezeichnung um JMeter in der Kommandozeile auszuführen. Mit Hilfe des Kommandozeilenaufrufes lassen sich am Ende des Tests CSV oder XML Dateien erstellen, die Testergebnisse beinhalten. Auch der HTML-Dashboard-Report lässt sich nur hier generieren.
 
-Zuerst sollte ein Testscript verfügbar sein. In diesem sind alle Requests und Konfigurationen wie Cache/Cookie verhalten und Authorization Management enthalten. Man kann hier ein vorhandenes File verwenden oder in JMeter selbst ein neues jmx-File erzeugen. Minimale Voraussetzungen sind eine Thread Group sowie ein Sampler, beispielsweise ein HTTP Request, mit entsprechender URI und Operation.
+Zuerst sollte ein Testscript verfügbar sein. In diesem sind alle Anfragen und Konfigurationen wie Cache/Cookie-Verhalten und Authorization-Management enthalten. Man kann hier eine vorhandene Datei verwenden oder in JMeter selbst eine neue JMX-Datei erzeugen. Minimale Voraussetzungen sind eine Thread-Gruppe sowie ein Sampler, beispielsweise ein HTTP-Request, mit entsprechender URI und Operation.
 
-Nun startet man die Kommandozeile und navigiert in das /bin Verzeichnis von JMeter. Dort startet man den Test via folgendem Befehl:
+Nun öffnet man die Kommandozeile und navigiert in das \codeInLine{\\bin} Verzeichnis von JMeter. Dort startet man den Test via folgendem Befehl:
 \begin{lstlisting}
-jmeter -n -t [Pfad zum jmx-file] -l [Pfad zum result file] -e -o [Pfad zum HTML Dashboard Ordner]
+jmeter -n -t [Pfad zur JMX-Datei] -l [Pfad zur Ergebnisdatei] -e -o [Pfad zum HTML-Dashboard Ordner]
 \end{lstlisting} 
 In der folgenden Tabelle sieht man einige häufig verwendete Parameter und ihre Bedeutung. Um eine Übersicht aller Parameter zu erhalten, kann man in der Kommandozeile den Befehl \codeInLine{jmeter -?} ausführen. Ein zweiter sehr nützlicher Befehl ist \codeInLine{jmeter -h}, welcher eine Vorauswahl von Kommandozeilenbefehle von JMeter anbietet.
 \begin{table}[H]
@@ -272,27 +272,27 @@ In der folgenden Tabelle sieht man einige häufig verwendete Parameter und ihre 
 		\hline
 		\textbf{Parametername} & \textbf{Bedeutung} \\
 		\hline
-		-n & Non-GUI Modus \\
+		-n & Non-GUI-Mode \\
 		-t & Pfad zum JMeter Skript; in Verbindung mit -n \\
-		-l & Pfad zum Result File \\
+		-l & Pfad zur Result-Datei \\
 		-? & Hilfe; zeigt alle Parameter an \\
 		-h & Beispielbefehle, die man verwenden kann \\
-		-L & Log level - Wann soll etwas geloggt werden \\
-		-e & Um HTML Reports zu erzeugen\\
-		-o & Pfad zum Output Folder; in Verbindung mit -e or -g \\
-		-g & HTML Report wird aus einem CSV file erzeugt \\ 
-		-j & Log Datei nicht überschreiben, neues generieren \\
+		-L & Log-Level - Wann soll etwas protokolliert werden \\
+		-e & Um HTML-Reports zu erzeugen\\
+		-o & Pfad zum Output-Ordner; in Verbindung mit -e or -g \\
+		-g & HTML-Report wird aus einer CSV-Datei erzeugt \\ 
+		-j & Protokoll-Datei nicht überschreiben, neue generieren \\
 		\hline
 	\end{tabular}
 	\caption[tab_parameter_non_gui_all]{Befehle der JMeter Kommandozeile}
 	\label{tab_parameter_non_gui_all}
 \end{table}
 
-Pauschal kann man sagen, dass man die GUI bei kleineren Tests bzw. Testplanerstellung verwendet. Für alles andere sollte der Non-GUI Modus die erste Wahl sein.
+Pauschal kann man sagen, dass man die GUI bei kleineren Tests bzw. Testplanerstellung verwendet. Für alles andere sollte der Non-GUI-Mode die erste Wahl sein.
 
 \section{Der Testplan}
 Nach dem ganzen Vorgeplänkel geht es nun an die Erstellung eines ersten Testplans für JMeter.
-Doch was ist überhaupt ein Testplan? Jeder JMeter Test hat genau einen Testplan, der als Wurzel in der Hierarchie angelegt ist. Man kann ihn sich als einen Container vorstellen, der weitere Komponenten beinhaltet kann, die nötig sind um einen Testlauf erfolgreich zu starten. Der Testplan ist ein Skript in einem speziellen JMX Format. Betrachtet man die Datei in einem Texteditor erkennt man, dass es sich hier um eine xml-Datei handelt (Siehe Abbildung \ref{fig:jmx_xml}). Nach anlegen und abspeichern des Testplans kann man diesen via Kommandozeile oder GUI starten. Falls man auf einem Testplan die Option "`Functional Test Mode"' aktiviert, sorgt das dafür, dass JMeter den Response jedes Sample-Aufrufs in ein Log-File speichert. Diese Log-Files lassen sich in den Listenern konfigurieren.
+Doch was ist überhaupt ein Testplan? Jeder JMeter Test hat genau einen Testplan, der als Wurzel in der Hierarchie angelegt ist. Man kann ihn sich als einen Container vorstellen, der weitere Komponenten beinhaltet kann, die nötig sind um einen Testlauf erfolgreich zu starten. Der Testplan ist ein Skript in einem speziellen JMX-Format. Betrachtet man die Datei in einem Texteditor erkennt man, dass es sich hier um eine XML-Datei handelt (Siehe Abbildung \ref{fig:jmx_xml}). Nach Anlegen und Abspeichern des Testplans kann man diesen via Kommandozeile oder GUI starten. Falls man auf einem Testplan die Option "`Functional-Test-Mode"' aktiviert, sorgt das dafür, dass JMeter die Antwort jedes Sample-Aufrufs in eine Protokoll-Datei speichert. Diese Protokolldateien lassen sich in den Listenern konfigurieren.
 
 \begin{figure}[htb]%[ht]
  \centering
@@ -302,53 +302,53 @@ Doch was ist überhaupt ein Testplan? Jeder JMeter Test hat genau einen Testplan
 \end{figure}
 
 \subsection{Elemente eines Testplans}
-Um einen Test zu starten benötigt man mindestens einen Testplan, darunter eine Thread Group sowie einer oder mehrere Sampler. Nachfolgend eine Auflistung der wichtigsten Elemente und ihre Funktion, die in einem Testplan verwendet werden.
+Um einen Test zu starten benötigt man mindestens einen Testplan, darunter eine Thread-Gruppe sowie einer oder mehrere Sampler. Nachfolgend eine Auflistung der wichtigsten Elemente und ihre Funktion, die in einem Testplan verwendet werden.
 
-\subsubsection{Thread Groups}
-Zu jedem Testplan gehört mindestens eine Thread-Group. Diese steht stellvertretend für die Anzahl der gleichzeitigen Benutzer und Wiederholungen, die simuliert werden. Abbildung~\ref{fig:thread_group} zeigt die wichtigsten Einstellungen der Thread Group. Neben den selbsterklärenden Bezeichnungen und Werte gibt es noch die Ramp-Up Period. Diese gibt an, in welcher Zeitspanne die Threads erzeugt werden sollen.
-Angenommen man gibt 10 Threads an und die Ramp-Up Period stellt man auf 20 Sekunden, wird alle 2 Sekunden ein neuer Thread erzeugt. Dies verhindert ein gleichzeitiges Erzeugen aller Threads und dadurch eine zu hohe Systemauslastung zu Beginn des Tests.
+\subsubsection{Thread-Gruppe}
+Zu jedem Testplan gehört mindestens eine Thread-Gruppe. Diese steht stellvertretend für die Anzahl der gleichzeitigen Benutzer und Wiederholungen, die simuliert werden. Abbildung~\ref{fig:thread_group} zeigt die wichtigsten Einstellungen der Thread-Gruppe. Neben den selbsterklärenden Bezeichnungen und Werte gibt es noch die Ramp-Up-Period. Diese gibt an, in welcher Zeitspanne die Threads erzeugt werden sollen.
+Angenommen man gibt 10 Threads an und die Ramp-Up-Period stellt man auf 20 Sekunden, wird alle zwei Sekunden ein neuer Thread erzeugt. Dies verhindert ein gleichzeitiges Erzeugen aller Threads und dadurch eine zu hohe Systemauslastung zu Beginn des Tests.
 
 \begin{figure}[htb]%[ht]
  \centering
     \includegraphics[width=1\textwidth]{bilder/thread_group.png}
-  \caption{Wichtige Einstellungen der Thread-Group}
+  \caption{Wichtige Einstellungen der Thread-Gruppe}
   \label{fig:thread_group}
 \end{figure}
 
-Thread Groups kann man zusätzlich auch als setUp- oder tearDown Gruppen anlegen. Diese werden analog zu JUnit Tests entsprechend vor der eigentlichen Thread Group gestartet oder eben nach Beendigung aller Thread Groups. Sehr hilfreich, wenn man beispielsweise Werte aus einer Datenbank auslesen und diese in Variablen speichern möchte, bevor der eigentliche Test beginnt und das Auslesen nicht in den eigentlichen Test mit einfließen sollen \cite{online:testingJournals}.
+Thread-Gruppen kann man zusätzlich auch als SetUp- oder TearDown-Gruppen anlegen. Diese werden analog zu JUnit-Tests entsprechend vor der eigentlichen Thread-Gruppe gestartet oder eben nach Beendigung aller Thread-Gruppen. Sehr hilfreich, wenn man beispielsweise Werte aus einer Datenbank auslesen und diese in Variablen speichern möchte, bevor der eigentliche Test beginnt und das Auslesen nicht in den eigentlichen Test mit einfließen sollen \cite{online:testingJournals}.
 
 \subsubsection{Sampler}
-Sampler und Logic Controller steuern die Abarbeitung eines Tests. Dabei sind Sampler für das Senden eines Requests verantwortlich und die Logic Controller für den zeitlichen Aspekt, also wann dieser Request gesendet wird. Innerhalb der Thread-Group lassen sich mehrere Sampler anlegen. Diese Sampler sind die eigentlichen Anfragen des Tests und stellen die Verbindung zu den zu testenden Objekten her. Es gibt Sampler für die unterschiedlichsten Protokolle wie HTTP, FTP, JDBC SOAP/XML und Java-Objekte. 
+Sampler und Logic-Controller steuern die Abarbeitung eines Tests. Dabei sind Sampler für das Senden einer Anfrage verantwortlich und die Logic-Controller für den zeitlichen Aspekt, also wann diese Anfrage gesendet wird. Innerhalb der Thread-Gruppe lassen sich mehrere Sampler anlegen. Diese Sampler sind die eigentlichen Anfragen des Tests und stellen die Verbindung zu den zu testenden Objekten her. Es gibt Sampler für die unterschiedlichsten Protokolle wie HTTP, FTP, JDBC SOAP/XML und Java-Objekte. 
 
-HTTP-Sampler sind die wohl am häufigsten eingesetzten Sampler. Mit ihnen lassen sich unter anderem REST Aufrufe an entsprechende Server starten. Abbildung \ref{fig:http_request_sampler} zeigt einen HTTP-Request Sampler an die hochschulinterne API mit der GET-Methode.
+HTTP-Sampler sind die wohl am häufigsten eingesetzten Sampler. Mit ihnen lassen sich unter anderem REST Aufrufe an entsprechende Server starten. Abbildung \ref{fig:http_request_sampler} zeigt einen HTTP-Request-Sampler an die hochschulinterne API mit der GET-Methode.
 
 \begin{figure}[htb]%[ht]
  \centering
     \includegraphics[width=1\textwidth]{bilder/http_request_sampler.png}
-  \caption{HTTP-Request Sampler}
+  \caption{HTTP-Request-Sampler}
   \label{fig:http_request_sampler}
 \end{figure}
 
-\subsubsection{Logic Controller}
-Der Logic Controller steuert den zeitlichen Ablauf einzelner Teile, insbesondere der Sampler und kann man unter anderem angeben, wie oft ein Sampler wiederholt werden soll oder wann dieser gestartet werden soll. Aber auch komplexere Szenarien, etwa durch reguläre Ausdrücke bei beim If-Controller sind machbar.
+\subsubsection{Logic-Controller}
+Der Logic-Controller steuert den zeitlichen Ablauf einzelner Teile, insbesondere der Sampler und kann man unter anderem angeben, wie oft ein Sampler wiederholt werden soll oder wann dieser gestartet werden soll. Aber auch komplexere Szenarien, etwa durch reguläre Ausdrücke bei beim If-Controller sind machbar.
 
 \subsubsection{Timer}
-Durch einen Timer kann man eine Verzögerung nach jedem Thread einbauen, so dass der Test für kurze Zeit angehalten wird. Es gibt konstante und Zufallstimer.
+Durch einen Timer kann man eine Verzögerung nach jedem Thread einbauen, so dass der Test für kurze Zeit angehalten wird. Es gibt konstante- und Zufallstimer.
 
-\subsubsection{Config Elements}
-Zu einzelnen Samplern oder Thread Groups gibt es noch diverse Config Elements. Diese dienen dazu default parameter einmalig anzulegen und darauf zuzugreifen. Wird dann in den jeweiligen Controllern kein Wert in die entsprechenden Label eingetragen, wird auf den Wert im Config Element zurückgegriffen. Speziell für HTTP-Sampler gibt es darüber hinaus noch weitere Config Elemente, wie Header, Authorization oder Cookie Informationen, die man zentral für den ganzen Testplan abspeichern kann \cite{online:performanceTools}.
+\subsubsection{Config-Elemente}
+Zu einzelnen Samplern oder Thread-Gruppen gibt es noch diverse Config-Elemente. Diese dienen dazu Default-Parameter einmalig anzulegen und darauf zuzugreifen. Wird dann in den jeweiligen Controllern kein Wert in die entsprechenden Felder eingetragen, wird auf den Wert im Config-Element zurückgegriffen. Speziell für HTTP-Sampler gibt es darüber hinaus noch weitere Config-Elemente, wie Header, Authorization oder Cookie-Informationen, die man zentral für den ganzen Testplan abspeichern kann \cite{online:performanceTools}.
 
 \subsubsection{Listener}
-Listener sind Elemente die Informationen über die Ergebnisse der Performance Tests enthalten. Es gib verschiedene Arten von Listenern, wie etwa den Graph Result Listener, den View Results Tree Listener oder den Aggregation Report. Wichtiger Hinweis an der Stelle: Egal welcher Listener verwendet wird, die Daten die gespeichert werden sind immer die selben. Lediglich die Darstellung dieser auf dem Ausgabemedium unterscheidet sich. Man kann Listener an jede beliebige Stelle im Test hängen; auch unter einem Testplan. Es werden jedesmal die Daten gesammelt, die ab der eingehängter Stelle präsent sind.
+Listener sind Elemente die Informationen über die Ergebnisse der Performance-Tests enthalten. Es gib verschiedene Arten von Listenern, wie etwa den Graph-Result-Listener, den View-Results-Tree-Listener oder den Aggregation-Report. Wichtiger Hinweis an der Stelle: Egal welcher Listener verwendet wird, die Daten die gespeichert werden sind immer die selben. Lediglich die Darstellung dieser auf dem Ausgabemedium unterscheidet sich. Man kann Listener an jede beliebige Stelle im Test hängen; auch unter einem Testplan. Es werden jedesmal die Daten gesammelt, die ab der eingehängter Stelle präsent sind.
 
 \subsubsection{Assertions}
-Mit JMeter lassen sich auch Assertions untersuchen. Dazu wird der Response eines Requests auf seinen Statuscode hin überprüft. Auch Antwortzeiten lassen sich mit Hilfe von Assertions prüfen. Liegt die Response in einer bestimmten Zeitspanne oder überschreitet der Response diese Zeit kann man entsprechend darauf reagieren.  
+Mit JMeter lassen sich auch Zusicherungen, sogenannte Assertions untersuchen. Dazu wird die Antwort einer Anfrage auf ihren Statuscode hin überprüft. Auch Antwortzeiten lassen sich mit Hilfe von Assertions prüfen. Liegt die Antwort in einer bestimmten Zeitspanne oder überschreitet sie diese Zeitspanne, kann man entsprechend darauf reagieren.  
 
 \section{Aufzeichnen von Aktionen}
 Es leuchtet ein, dass wenn man eine Webseite auf ihre Performance untersuchen will, sehr viele, möglichst unterschiedliche Anfragen an die Seite stellen möchte. Es soll natürlich eine Testabdeckung von nahezu 100\% erreicht werden und so gut es geht alle Pfade innerhalb der URL zumindest einmal besucht werden. Um in JMeter nicht jeden Sampler einzeln anzulegen, gibt es diverse Tools, die Aktionen auf Webseiten aufzeichnen, die in den folgenden Kapiteln kurz erwähnt werden.  
 
-\subsection{Chrome Plugin Blazemeter}
-Ein wohl recht bekanntes Tool ist Blazemeter. Das kostenlose platformunabhängige Chrome-Plugin ist in der Lage Aktionen von bestimmten URLS aufzunehmen und danach zu exportieren. Ein kleiner Wermutstropfen muss man hier noch zu erwähnen. Für das exportieren der Aufzeichnung in das JMX Format muss man sich für die Anwendung kostenlos registrieren. Wem dies nichts ausmacht, erhält mit Blazemeter ein solides Recorcing Tool, dass eng mit JMeter zusammenarbeitet. 
+\subsection{Chrome-Plugin Blazemeter}
+Ein wohl recht bekanntes Tool ist Blazemeter. Das kostenlose platformunabhängige Chrome-Plugin ist in der Lage Aktionen von bestimmten URLs aufzunehmen und danach zu exportieren. Ein kleiner Wermutstropfen muss man hier noch zusätzlich erwähnen. Für das exportieren der Aufzeichnung in das JMX-Format ist eine kostenlose registrieren für Blazemeter erforderlich. Wem dies nichts ausmacht, erhält mit Blazemeter ein solides Recorcing-Tool, dass eng mit JMeter zusammenarbeitet. 
 
 \begin{figure}[htb]%[ht]
  \centering
@@ -358,7 +358,7 @@ Ein wohl recht bekanntes Tool ist Blazemeter. Das kostenlose platformunabhängig
 \end{figure}
 
 \subsection{Spezielle Software}
-Natürlich gibt es auch die Möglichkeit speziell für Recording entwickelte Software zu verwenden. Diese gibt es in Hülle und Fülle im Internet. Sowohl kostenpflichtig als auch Open-Source-Lösungen. Für Windows Nutzer gibt es beispielsweise die Software BadBoy. Unter \url{http://www.badboy.com.au} kann man sich die neuste Version unter Angaben eines Namen und Email Adresse herunterladen und installieren. Abbildung~\ref{fig:badboy} zeigt die Oberfläche von BadBoy in Aktion. 
+Natürlich gibt es auch die Möglichkeit speziell für Recording entwickelte Software zu verwenden. Diese gibt es in Hülle und Fülle im Internet. Sowohl kostenpflichtig als auch Open-Source-Lösungen. Für Windows Nutzer gibt es beispielsweise die Software BadBoy. Unter \url{http://www.badboy.com.au} kann man sich die neuste Version unter Angaben eines Namen und Email Adresse herunterladen und installieren. BadBoy bietet wie Blazemeter die Möglichkeit Abrufe bestimmter URLs aufzunehmen und abzuspeichern. In Abbildung~\ref{fig:badboy} sieht man die Oberfläche von BadBoy, bei der gerade die API des Intranets aufgerufen und aufgezeichnet wird. 
 
 \begin{figure}[htb]%[ht]
  \centering
@@ -368,20 +368,20 @@ Natürlich gibt es auch die Möglichkeit speziell für Recording entwickelte Sof
 \end{figure}
 
 \subsection{Build-in Lösung}
-Für JMeter Enthusiasten gibt es einen integrierten Testscript Recorder. Diesen findet man entweder beim Testplan unter folgendem Menüpunkt $\rightarrow$ Add $\rightarrow$ Non-Test-Elements $\rightarrow$ HTTP Test Script Recorder oder über den Weg File $\rightarrow$ Templates... $\rightarrow$ Recording Template Create.
-Abbildung~\ref{fig:https_recorder} zeigt den erstellten Recorder. Falls man den Weg direkt über den Testplan geht muss man zusätzlich eine Thread-Group sowie einen Recording Controller erstellen.
+Für JMeter Enthusiasten gibt es einen integrierten Testscript-Recorder. Diesen findet man entweder beim Testplan unter folgendem Menüpunkt $\rightarrow$ Add $\rightarrow$ Non-Test-Elements $\rightarrow$ HTTP-Test-Script-Recorder oder über den Weg File $\rightarrow$ Templates... $\rightarrow$ Recording-Template $\rightarrow$ Create.
+In Abbildung~\ref{fig:https_recorder} sieht man den erstellten Recorder. Falls man den Weg direkt über den Testplan gehen möchte, muss man zusätzlich eine Thread-Gruppe sowie einen Recording-Controller erstellen.
 
 \begin{figure}[htb]%[ht]
  \centering
     \includegraphics[width=1\textwidth]{bilder/https_recorder.png}
-  \caption{HTTP Test Script Recorder}
+  \caption{HTTP-Test-Script-Recorder}
   \label{fig:https_recorder}
 \end{figure}
 
-Nachdem der Port angepasst wurde klickt man auf Start und muss nun im Browser den entsprechenden ProxyServer konfigurieren. Als Adresse wählt man \codeInLine{localhost} und der Port entsprechend den JMeter Settings. Jede Aktion die nun im Browser getriggert wird, wird als Sampler im JMeter Testplan unter der entsprechenden Thread-Group angelegt. Zusätzliche Cookies und Variable Konfigurationen werden automatisch angelegt.
+Nachdem der Port angepasst wurde klickt man auf Start und muss nun im Browser den entsprechenden ProxyServer konfigurieren. Als Adresse wählt man \codeInLine{localhost} und der Port entsprechend den JMeter Settings. Jede Aktion die nun im Browser getriggert wird, wird als Sampler im JMeter Testplan unter der entsprechenden Thread-Gruppe angelegt. Zusätzliche Cookies und Variable Konfigurationen werden automatisch angelegt.
 
 \section{Lasttests von Webseiten}
-Nach dem Aufzeichnen der Ablauffolgen und der Sampler kann man nun einen ersten intensiven Lasttest starten. Es wird zunächst empfohlen, die Java Heap Größe zu erhöhen, da der Standard 1GB Speicher für Lasttests ab einer gewissen Anzahl von Threads nicht ausreichend ist. Zum permanenten Ändern der Heap Größe muss man ein zusätzliches File \codeInLine{setenv.sh} im \codeInLine{/bin} Ordner anlegen. Diese Datei wird ausgeführt, sobald man JMeter startet. 
+Nach dem Aufzeichnen der Ablauffolgen und der Sampler kann man nun einen ersten intensiven Lasttest starten. Es wird zunächst empfohlen, die Java Heap-Größe zu erhöhen, da der Standard 1GB Speicher für Lasttests ab einer gewissen Anzahl von Threads nicht ausreichend ist. Zum permanenten Ändern der Heap-Größe muss man eine zusätzliche Datei \codeInLine{setenv.sh} im \codeInLine{\\bin} Ordner anlegen. Diese Datei wird ausgeführt, sobald man JMeter startet. 
 
 \begin{lstlisting}
 # Config file bin/setenv.sh
@@ -395,17 +395,17 @@ Jetzt hat man statt den Defaultwerten einen 2GB großen Heap. Das erstellte Test
 jmeter -n -t IWI_PAGE.jmx -l testfolder/IWI_PAGE.csv -e -o testfolder/html_dashboard
 \end{lstlisting} 
 
-Nach einer kurzen Rechenzeit sollte JMeter fertig sein und ein "`end of run"' erscheinen. Siehe Abbildung~\ref{fig:start_jmeter_cmd}. Es wird bereits während des Testens einiges an Informationen angezeigt, wie etwa aktive Threads, Fehlerhäufigkeit oder Dauer. 
+Nach einer kurzen Rechenzeit sollte JMeter fertig sein und ein "`end-of-run"' erscheinen. Siehe Abbildung~\ref{fig:start_jmeter_cmd}. Es wird bereits während des Testens einiges an Informationen angezeigt, wie etwa aktive Threads, Fehlerhäufigkeit oder Dauer. 
 
 \begin{figure}[htb]%[ht]
  \centering
     \includegraphics[width=1\textwidth]{bilder/start_jmeter_cmd.png}
-  \caption{JMeter Lasttest non-GUI Asuführung}
+  \caption{JMeter Lasttest im Non-GUI-Mode}
   \label{fig:start_jmeter_cmd}
 \end{figure}
 
-\subsection{Result File}
-Die interessanteren Ergebnisse befinden sich jedoch im zuvor angelegten Ordner "`testfolder"'. Mit dem Flag -l hat man dafür gesort, dass eine Datei IWI\_PAGE.csv erzeugt wurde. Dieses sogenannte Result File ist gleichbedeutend mit einem Listener aus dem Testplan und listet alle Requests auf, die gesendet wurden, sowie zusätzliche Informationen. Ein kleiner Teil der Informationen ist in der folgenden Tabelle gelistet. Eine Übersicht aller Befehle gibt es auf \url{https://jmeter.apache.org/usermanual/listeners.html}. Falls die default-Werte immer noch nicht ausreichen, hat man die Möglichkeit das \codeInLine{jmeter.properties} File zu bearbeiten. Darin lassen sich weitere Werte hinzufügen.  
+\subsection{Result-File}
+Die interessanteren Ergebnisse befinden sich jedoch im zuvor angelegten Ordner "`testfolder"'. Mit dem Flag -l hat man dafür gesort, dass eine Datei IWI\_PAGE.csv erzeugt wurde. Dieses sogenannte Result-File ist gleichbedeutend mit einem Listener aus dem Testplan und listet alle Anfragen auf, die gesendet wurden, sowie zusätzliche Informationen. Ein kleiner Teil der Informationen ist in der folgenden Tabelle abgebildet. Eine Übersicht aller Befehle gibt es auf \url{https://jmeter.apache.org/usermanual/listeners.html}. Falls die Defaultwerte immer noch nicht ausreichen, hat man die Möglichkeit, die \codeInLine{jmeter.properties} Datei zu bearbeiten. Darin lassen sich weitere Werte hinzufügen.  
 
 \begin{table}[H]
 	\centering
@@ -413,77 +413,77 @@ Die interessanteren Ergebnisse befinden sich jedoch im zuvor angelegten Ordner "
 		\hline
 		\textbf{Bezeichnung} & \textbf{Erklärung} \\
 		\hline
-		elapsed & Benötigte Zeit für den Request \\
-		bytes & Anzahl Bytes im Sampler hat \\
+		elapsed & Benötigte Zeit für die Anfrage \\
+		bytes & Anzahl Bytes im Sampler \\
 		sentBytes & Anzahl der Bytes die man gesendet hat \\
-		grpThreads & Anzahl aktiver Threads in dieser Threadgruppe \\
+		grpThreads & Anzahl aktiver Threads in dieser Thread-Gruppe \\
 		allThreads & Anzahl aktiver Threads in allen Gruppen \\
-		latency & Zeitraum bis zur ersten Response \\
+		latency & Zeitraum bis zur ersten Antwort \\
 		connect & Zeitraum um die Verbindung herzustellen \\
 		\hline
 	\end{tabular}
-	\caption[tab_csv_file]{Request Informationen der CSV}
+	\caption[tab_csv_file]{Informationen der CSV}
 	\label{tab_csv_file}
 \end{table}
 
 Neben dem gängigen CSV-Format werden auch andere Formate, wie etwa JTL unterstützt. CSV hat allerdings den Vorteil, dass man es damit gut in Excel filtern und analysieren kann.
 
-\subsection{HTML Dashboard}
+\subsection{HTML-Dashboard}
 \label{chap:html_dashboard}
 Mit dem Flag \codeInLine{-e -o testfolder/html_dashboard} lässt sich ein zweites tolles Feature erzeugen. Hier wird im "`testfolder"' eine index.html generiert, die man sich im Browser betrachten kann.
 Die schön gestalteten Torten -und Liniendiagramme geben sehr viel Auskunft über die einzelnen Aufrufe.
 
-Auf der Dashboard Hauptseite gibt es Test und Reportinformationen mit Start- und Endzeit, verwendete Filter, sowie der Name des Result Files, aus dem das Dashboard generiert wurde. Es gibt ein Tortendiagramm welches anzeigt, wieviel Prozent der Requests erfolgreich waren und wie viel schief liefen. 
-Und es wird ein sogenannter Application Performance Index (APDEX) angezeigt. APDEX ist ein offener Standard, der die Leistung von Anwendungen misst. Hier wurde die durchschnittliche Dauer, einer Anfrage an einen bestimmten Endpunkt ermittelt. Anhand von vordefinierten "`Toleration treshold"' und "`Frustration treshold"'-Werten, wird der Endpunkt dann als OK oder KO bewertet. Diese Werte lassen sich selbst definieren. Dazu muss man in das /bin Verzeichnis navigieren und Datei \codeInLine{user.properties} anpassen. Weiterhin gibt es Statistik Tabellen und zwei Error Tabellen für jeden Sampler.
+Auf der Dashboard Hauptseite gibt es Test und Reportinformationen mit Start- und Endzeit, verwendete Filter, sowie der Name des Result-Files, aus dem das Dashboard generiert wurde. Es gibt ein Tortendiagramm welches anzeigt, wieviel Prozent der Anfragen erfolgreich waren und wie viel schief liefen. 
+Und es wird ein sogenannter Application-Performance-Index (APDEX) angezeigt. APDEX ist ein offener Standard, der die Leistung von Anwendungen misst. Hier wurde die durchschnittliche Dauer, einer Anfrage an einen bestimmten Endpunkt ermittelt. Anhand von vordefinierten "`Toleration-treshold"' und "`Frustration-treshold"'-Werten, wird der Endpunkt dann als OK oder KO bewertet. Diese Werte lassen sich selbst definieren. Dazu muss man in das \codeInLine{\\bin} Verzeichnis navigieren und Datei \codeInLine{user.properties} anpassen. Weiterhin gibt es Statistiktabellen und zwei Fehlertabellen für jeden Sampler.
 
-Hinter der Kategorie Charts verbergen sich Diagramme, die nochmals in "`Over Time"', "`Throughput"' und "`Response Times"' unterteilt sind. Wie die Namen vermuten lassen, kann man sich hier visualisierte Ergebnisse der einzelnen Samplern anzeigen lassen. Etwa über einen gewissen Zeitraum hinweg, den Datendurchsatz während der Testphase oder die Antwortzeiten. Abbildung ~\ref{fig:response_time_dashboard} zeigt ein Liniendiagramm der prozentualen Verteilung von Responsezeiten einzelner Sampler. Es ist auch möglich nur bestimmte Sampler in dem Diagramm, durch klicken der URL im unteren Bildrand, zu aktivieren.
+Hinter der Kategorie Charts verbergen sich Diagramme, die nochmals in "`Over-Time"', "`Throughput"' und "`Response-Times"' unterteilt sind. Wie die Namen vermuten lassen, kann man sich hier visualisierte Ergebnisse der einzelnen Samplern anzeigen lassen. Etwa über einen gewissen Zeitraum hinweg, den Datendurchsatz während der Testphase oder die Antwortzeiten. Abbildung ~\ref{fig:response_time_dashboard} zeigt ein Liniendiagramm der prozentualen Verteilung von Antwortzeiten einzelner Sampler. Es ist auch möglich nur bestimmte Sampler in dem Diagramm, durch klicken der URL im unteren Bildrand, zu aktivieren.
 
 \begin{figure}[htb]%[ht]
  \centering
     \includegraphics[width=1\textwidth]{bilder/response_time_dashboard.png}
-  \caption{Dashboard Diagramm der Response Zeiten}
+  \caption{Dashboard-Diagramm der Antwortzeiten}
   \label{fig:response_time_dashboard}
 \end{figure}
 
-Weiteres tolles Feature: Die Diagramme lassen sich alle direkt aus der HTML-Seite als PNG Datei abspeichern und wiederverwenden.
+Weiteres tolles Feature: Die Diagramme lassen sich alle direkt aus der HTML-Seite als PNG-Datei abspeichern und wiederverwenden.
 
 \section{Verteiltes Testen}
-Zunächst hört sich das Testen auf verteilten Systemen recht unkompliziert an. Man hat eine Master Instanz von JMeter laufen und mehrere Slave Instanzen. Über die Master Instanz werden die Slaves gesteuert, gestartet und beendet \cite{online:jmetercloud}. Dadurch kann man völlig problemlos mehrere 1000+ Threads auf eine Webseite zugreifen lassen.
+Zunächst hört sich das Testen auf verteilten Systemen recht unkompliziert an. Man hat eine Master-Instanz von JMeter laufen und mehrere Slave-Instanzen. Über die Master-Instanz werden die Slaves gesteuert, gestartet und beendet \cite{online:jmetercloud}. Dadurch kann man völlig problemlos mehrere 1000+ Threads auf eine Webseite zugreifen lassen.
 So die Theorie. In der Praxis jedoch hat man mit einigen Problemen zu kämpfen:
 \begin{itemize}
   \item Verfügbarkeit von mehreren Servern
 	
-	Um die Performance Tests zu clustern, benötigt man natürlich mehrere Systeme. Da nicht jeder Anwender einen oder mehrere Server zu Hause stehen hat, geht man in der Regel den Weg in die Cloud und verwendet die dort zur Verfügung stehenden Resourcen, etwa EC2 Instanzen\footnote{EC2 sind Compute Units von Amazon in der Cloud \url{https://aws.amazon.com/ec2/}}.
+	Um die Performance Tests zu clustern, benötigt man natürlich mehrere Systeme. Da nicht jeder Anwender einen oder mehrere Server zu Hause stehen hat, geht man in der Regel den Weg in die Cloud und verwendet die dort zur Verfügung stehenden Resourcen, etwa EC2-Instanzen\footnote{EC2 sind Compute-Units von Amazon in der Cloud \url{https://aws.amazon.com/ec2/}}.
   \item Kommunikationsprotokoll von JMeter
 	
-	JMeter verwendet zur Kommunikation mit den Slave Systemen das Java RMI (Remote Method Invocation)\footnote{\url{https://en.wikipedia.org/wiki/Java_remote_method_invocation}} und dazu müssen Master und Slave im gleichen Subnetz sein. Dies ist aber in Cloud Umgebungen nicht machbar. Unter \cite{online:jmetercloud} gibt einen Workaround um genau die Subnetzproblematik zu umgehen. 
+	JMeter verwendet zur Kommunikation mit den Slave-Systemen das Java RMI (Remote-Method-Invocation)\footnote{\url{https://en.wikipedia.org/wiki/Java_remote_method_invocation}} und dazu müssen Master und Slave im gleichen Subnetz sein. Dies ist aber in Cloud Umgebungen nicht machbar. Unter \cite{online:jmetercloud} gibt es einen Workaround um genau die Subnetzproblematik zu umgehen. 
 
 	\item Aktive Firewall
 	
 	Falls man eine Firewall aktiviert hat, sollte man diese für Testzwecke kurz beenden oder sicherstellen, dass die JMeter Ports offen sind. 
 \end{itemize}
 
-Für die Master Instanz sollte sichergestellt sein, dass in der jmeter.properties Datei im \codeInLine{/bin} Ordner, die Zeile \codeInLine{remote_hosts=127.0.0.1} durch die entsprechenden Instanzen Komma separiert ersetzt wird. Die Master Instanz führt lediglich das Starten der Slave Instanzen aus und sollte keine Tests beeinhalten. Das Starten der Anwendungen geschieht dann über die Datei \codeInLine{jmeter-server.bat} aus dem \codeInLine{/bin} Verzeichnis.
+Für die Master-Instanz sollte sichergestellt sein, dass in der jmeter.properties Datei im \codeInLine{\\bin} Ordner, die Zeile \codeInLine{remote_hosts=127.0.0.1} durch die entsprechenden Instanzen Komma separiert ersetzt wird. Die Master-Instanz führt lediglich das Starten der Slave-Instanzen aus und sollte keine Tests beeinhalten. Das Starten der Anwendungen geschieht dann über die Datei \codeInLine{jmeter-server.bat} aus dem \codeInLine{\\bin} Verzeichnis.
 
 Eine Ausführliche Anleitung zum verteilten Testen von JMeter findet man auch auf der offiziellen Apache Seite \cite{online:apache_distributed}.
 
-\section{Datenbank Testing}
+\section{Testen der Datenbank}
 Apache JMeter bietet ebenfalls die Möglichkeit Lasttests auf Datenbankservern auszuführen. Dazu benötigt man lediglich entsprechende Zugangsberechtigung für die Datenbank und passende JDBC Treiber. 
 
-Ein kleines Beispiel zeigt einen Test auf eine lokale Postgres Datenbank:
+Ein kleines Beispiel zeigt einen Test auf eine lokale Postgres-Datenbank:
 
 \begin{enumerate}
-	\item JDBC Treiber
+	\item JDBC-Treiber
 		
-	Aktuelle JDBC Treiber\footnote{\url{https://jdbc.postgresql.org/download.html}} für die Datenbank herunterladen und in das \codeInLine{/lib} Verzeichnis von JMeter kopieren. 
+	Aktuelle JDBC-Treiber\footnote{\url{https://jdbc.postgresql.org/download.html}} für die Datenbank herunterladen und in das \codeInLine{\\lib} Verzeichnis von JMeter kopieren. 
 	
-	\item Test Plan + Thread Group anlegen
+	\item Testplan und Thread-Gruppe anlegen
 	
-	In der Thread Group kann man nach einer erfolgreichen Verbindung zur Datenbank die Useranzahl und gleichzeitige Verbindungen erhöhen.
+	In der Thread-Gruppe kann man nach einer erfolgreichen Verbindung zur Datenbank die Benutzeranzahl und gleichzeitige Verbindungen erhöhen.
 	
-	\item JDBC Connection Configuration
+	\item JDBC-Connection-Configuration
 	
-	Auf der Thread Group rechtsklick $\rightarrow$ Add $\rightarrow$ Config Element $\rightarrow$ JDBC Connection Configuration. Hier den Variablen namen für den Pool festlegen (myDatabase) und die Database Connection Configuration mit folgenden Werten füttern:
+	Auf der Thread-Gruppe rechtsklick $\rightarrow$ Add $\rightarrow$ Config-Element $\rightarrow$ JDBC-Connection-Configuration. Hier den Variablennamen für den Pool festlegen (myDatabase) und die Database-Connection-Configuration mit folgenden Werten füttern:
 	
 	\begin{table}[H]
 	\centering
@@ -497,48 +497,48 @@ Ein kleines Beispiel zeigt einen Test auf eine lokale Postgres Datenbank:
 		Password & ******** \\
 		\hline
 	\end{tabular}
-	\caption[tab_jdbc_values]{Postgres JDBC Connection Configuration}
+	\caption[tab_jdbc_values]{Postgres JDBC-Connection-Configuration}
 	\label{tab_jdbc_values}
 \end{table}
 	
-	\item JDBC Request Sampler
+	\item JDBC-Request-Sampler
 	
-	Auf der Thread Group einen JDBC Request Sampler adden und im Feld "`Variable Name Bound to Pool"' den zuvor gewählten Variablennamen (myDatabase) eintragen.  
-	Im SQL Query Feld kann man nun ein entsprechendes Statement abfeuern um die Datenbank zu kontaktieren. Siehe Abbildung~\ref{fig:jdbc_request} In diesem Fall wurden die Spalten "`id"' und "`name"' Tabelle "`country"' ausgewählt.
+	Auf der Thread-Gruppe einen JDBC-Request-Sampler adden und im Feld "`Variable-Name-Bound-to-Pool"' den zuvor gewählten Variablennamen (myDatabase) eintragen.  
+	Im SQL-Query-Feld kann man nun ein entsprechendes Statement abfeuern um die Datenbank zu kontaktieren. Siehe Abbildung~\ref{fig:jdbc_request} In diesem Fall wurden die Spalten "`id"' und "`name"' Tabelle "`country"' ausgewählt.
 	
 	\begin{figure}[htb]%[ht]
  \centering
     \includegraphics[width=1\textwidth]{bilder/jdbc_request.png}
-  \caption{JDBC Request Sampler}
+  \caption{JDBC-Request-Sampler}
   \label{fig:jdbc_request}
 \end{figure}
 	
-	\item View Results tree
+	\item View-Results-Tree
 	
-	Das Ergebnis des Query lässt sich mit einem Listener, etwa View Results Tree anzeigen. Abbildung~\ref{fig:jdbc_results} zeigt den erfolgreiche Response mit drei gefundenen Ländern.
+	Das Ergebnis der Anfrage lässt sich mit einem Listener, etwa View-Results-Tree anzeigen. Abbildung~\ref{fig:jdbc_results} zeigt die erfolgreiche Antwort mit drei gefundenen Ländern.
 		
 			\begin{figure}[htb]%[ht]
  \centering
     \includegraphics[width=1\textwidth]{bilder/jdbc_results.png}
-  \caption{JDBC Request Results Tree}
+  \caption{JDBC-Request-Results-Tree}
   \label{fig:jdbc_results}
 \end{figure}
 \end{enumerate}
 
-Im nächsten Schritt wird man nun die Anzahl der Benutzer und Requests in der Thread Group erhöhen und anpassen. Beispielsweise 50 Benutzer (Threads), 2 Requests und 100 Wiederholungen. Macht insgesamt 10000 JDBC Requests und würde die Datenbank deutlich mehr belasten.
+Im nächsten Schritt würde man nun die Anzahl der Benutzer und Anfragen in der Thread-Gruppe erhöhen und anpassen. Beispielsweise 50 Benutzer (Threads), zwei Anfragen und 100 Wiederholungen. Macht insgesamt 10000 JDBC-Requests und würde die Datenbank deutlich mehr belasten.
 
-\section{JUnit Tests}
+\section{JUnit-Tests}
 \label{chap:junit_tests}
-Ab Version 2.1.2 ist es möglich JUnit Sampler auszuführen und damit auch JUnit Tests zu untersuchen. Doch warum sollte man die altbewährte JUnit Tests der IDE durch angepasste Jmeter Tests ergänzen? Es bietet sich an, durch die Möglichkeiten von JMeter ganz bestimmte Lasten und Zeiten auf individuelle Tests zu setzen und dadurch deutlich mehr Umfang im Test zu erzielen. Zunächst sollte eine JUnit Testklasse vorhanden sein. Wichtig ist hier, dass sowohl alle Testmethoden, als auch die Testklasse selbst als "`public"' deklariert werden, da diese sonst nicht gefunden werden können. Abbildung~\ref{fig:calculator_test} zeigt zwei Testmethoden. Die \codeInLine{addTest()} Methode schlägt fehl, die \codeInLine{quadTest()} Methode läuft erfolgreich durch. 
+Ab Version 2.1.2 ist es möglich JUnit-Sampler auszuführen und damit auch JUnit-Tests zu untersuchen. Doch warum sollte man die altbewährte JUnit-Tests der IDE durch angepasste Jmeter Tests ergänzen? Es bietet sich an, durch die Möglichkeiten von JMeter ganz bestimmte Lasten und Zeiten auf individuelle Tests zu setzen und dadurch deutlich mehr Umfang im Test zu erzielen. Zunächst sollte eine JUnit Testklasse vorhanden sein. Wichtig ist hier, dass sowohl alle Testmethoden, als auch die Testklasse selbst als "`public"' deklariert werden, da diese sonst nicht gefunden werden können. Abbildung~\ref{fig:calculator_test} zeigt zwei Testmethoden. Die \codeInLine{addTest()} Methode schlägt fehl, die \codeInLine{quadTest()} Methode läuft erfolgreich durch. 
 
 		\begin{figure}[htb]%[ht]
  \centering
     \includegraphics[width=1\textwidth]{bilder/calculator_test.png}
-  \caption{JUnit Tests von Calculator}
+  \caption{JUnit-Tests von Calculator}
   \label{fig:calculator_test}
 \end{figure}
 
-Diese Klasse muss man als JAR-File exportieren und in das Verzeichnis \codeInLine{/lib/junit} kopieren. Jetzt kann man in JUnit einen JUnit Request Sampler anlegen. Darin kann man Einstellungen vornehmen wie "`Success Messages"', "`Success Codes"' und andere. Wenn jetzt eine Test Methode aus der Testklasse ausgewählt und gestartet wird kann man diese wiederum in einem Listener anzeigen lassen und analysieren (Siehe Abbildung~\ref{fig:calculator_test_jmeter}).
+Diese Klasse muss man als JAR-File exportieren und in das Verzeichnis \codeInLine{\\lib\\junit} kopieren. Jetzt kann man in JUnit einen JUnit-Request-Sampler anlegen. Darin kann man Einstellungen vornehmen wie "`Success-Messages"', "`Success-Codes"' und Andere. Wenn jetzt eine Testmethode aus der Testklasse ausgewählt und gestartet wird kann man diese wiederum in einem Listener anzeigen lassen und analysieren (Siehe Abbildung~\ref{fig:calculator_test_jmeter}).
 
 	\begin{figure}[htb]%[ht]
  \centering
@@ -552,7 +552,7 @@ Diese Klasse muss man als JAR-File exportieren und in das Verzeichnis \codeInLin
 Dieses Kapitel gibt einen kleinen Exkurs in erweiterte Funktionen und Besonderheiten, die Apache JMeter zu bieten hat.
 
 \subsection{Java Code in JMeter verwenden}
-Wenn man die Funktionalität von JMeter um eigene Methoden erweitern möchte, gibt es BeanShell Sampler \cite{online:beanshell}. BeanShell ist eine leichtgewichtige Skriptsprache für Java, welche die JMeter API nutzen kann und das darunter liegende Java SDK. Abbildung~\ref{fig:beanshell} zeigt eine zuvor in Java erstellte Klasse Calculator welche in JMeter bei einem Testplan als JAR hinzugefügt wurde und die Methoden daraus in der Beanshell verwendet werden.
+Wenn man die Funktionalität von JMeter um eigene Methoden erweitern möchte, gibt es BeanShell-Sampler \cite{online:beanshell}. BeanShell ist eine leichtgewichtige Skriptsprache für Java, welche die JMeter API nutzen kann und das darunter liegende Java-SDK. Abbildung~\ref{fig:beanshell} zeigt eine zuvor in Java erstellte Klasse Calculator welche in JMeter bei einem Testplan als JAR hinzugefügt wurde und die Methoden daraus in der Beanshell verwendet werden.
 
 \begin{figure}[htb]%[ht]
  \centering
@@ -561,15 +561,15 @@ Wenn man die Funktionalität von JMeter um eigene Methoden erweitern möchte, gi
   \label{fig:beanshell}
 \end{figure}
 
-Das Ergebnis der zwei Berechnungen sieht man in der Logging Console. Falls sie nicht aktiviert ist, genügt ein Klick auf das gelbe Dreieck mit dem Ausrufezeichen in der rechten oberen Ecke.
+Das Ergebnis der zwei Berechnungen sieht man in dem Log-Viewer-Panel. Falls dieser nicht aktiviert ist, genügt ein Klick auf das gelbe Dreieck mit dem Ausrufezeichen in der rechten oberen Ecke.
 
-\subsection{JMeter Plugin Manager}
-Erwähnenswert ist der Plugin Manager von JMeter. Anstatt sich diverse Plugins manuell zu installieren und sich mit unterschiedlichen Versionen und JARs herumzuärgern, übernimmt der Plugin Manager die Installation, Deinstallation und Upgradeverwaltung für den Benutzer. \cite{online:jmeter}
+\subsection{JMeter-Plugin-Manager}
+Erwähnenswert ist der Plugin-Manager von JMeter. Anstatt sich diverse Plugins manuell zu installieren und sich mit unterschiedlichen Versionen und JARs herumzuärgern, übernimmt der Plugin-Manager die Installation, Deinstallation und Upgradeverwaltung für den Benutzer. \cite{online:jmeter}
 
-Unter Options $\rightarrow$ Plugin Manager gelangt man in die Erweiterung. Dort kann man oben genannten Aktionen ausführen. Um eine Übersicht der JMeter Erweiterungen zu erhalten sollte man die Webseite \url{https://jmeter-plugins.org/} besuchen.
+Unter Options $\rightarrow$ Plugin-Manager gelangt man in die Erweiterung. Dort kann man oben genannten Aktionen ausführen. Um eine Übersicht der JMeter Erweiterungen zu erhalten sollte man die Webseite \url{https://jmeter-plugins.org/} besuchen.
 
-\subsection{Extrahieren von Daten aus einem Request}
-Sehr hilfreich sind auch die Post Processor Extraktoren. Diese werden nach dem Request ausgeführt und können zusätzliche Informationen in Form von XPath -und Regular Expressions aus dem Response herauslesen und etwa in JMeter Variablen speichern. Die Sampler hierfür befinden sich unter $\rightarrow$ Post Processors $\rightarrow$ Regular Expression Extractor / XPath Extractor.
+\subsection{Extrahieren von Daten aus einer Anfrage}
+Sehr hilfreich sind auch die Post-Processor-Extraktoren. Diese werden nach der Anfrage ausgeführt und können zusätzliche Informationen in Form von XPath -und Regular-Expressions aus der Antwort herauslesen und etwa in JMeter-Variablen speichern. Die Sampler hierfür befinden sich unter $\rightarrow$ Post-Processors $\rightarrow$ Regular-Expression-Extractor / XPath-Extractor.
 
 Ein praxisbezogenes Beispiel wäre hier das herauslesen einer serverseitig vergebenen ID für ein neu angelegtes Objekt, welches man dann im Folgeaufruf erneut verwenden kann \cite{online:lasttestjmeter}.   
 
@@ -579,12 +579,12 @@ Neben der Vielzahl von positiven Features gibt es natürlich auch einige Mängel
 \begin{itemize}
 	\item Konfigurationsfehler
 	
-	Wenn ein Variablenfeld in den JMeter Config Elements (Z.B. JDBC Connection Configuration) required ist, erkennt man dies nicht direkt im Feld, sondern erst beim Ausführen.
+	Wenn ein Variablenfeld in den JMeter-Config-Elementen (Z.B. JDBC-Connection-Configuration) "`required"' ist, erkennt man dies nicht direkt im Feld, sondern erst beim Ausführen.
 	
 	\item Passwörter
 	
-	Ein großer sicherheitskritischer Punkt ist, dass eingegebene Passwörter bei Recorder im Klartext in der Config Datei gespeichert werden (Siehe Abbildung~\ref{fig:password}. Diese sollten so schnell wie möglich durch entsprechende Variablen, etwa \$\{USER\} und \$\{PASSWORD\}, ersetzt werden. In diesen Variablen muss man die entsprechenden Werte verschlüsselt hinterlegen (Stichwort Base64).
-Gerade bei JMeter Tests in Cloud Umgebungen ist es enorm wichtig, dass die Klartextwerte nicht einsehbar sind.  
+	Ein großer sicherheitskritischer Punkt ist, dass eingegebene Passwörter bei Recorder im Klartext in der Config Datei gespeichert werden (Siehe Abbildung~\ref{fig:password}). Diese sollten so schnell wie möglich durch entsprechende Variablen, etwa \$\{USER\} und \$\{PASSWORD\}, ersetzt werden. In diesen Variablen muss man die entsprechenden Werte verschlüsselt hinterlegen (Stichwort Base64).
+Gerade bei JMeter-Tests in Cloud Umgebungen ist es enorm wichtig, dass die Klartextwerte nicht einsehbar sind.  
 
 	\begin{figure}[htb]%[ht]
  \centering
@@ -597,9 +597,9 @@ Gerade bei JMeter Tests in Cloud Umgebungen ist es enorm wichtig, dass die Klart
 	
 	Wie in der Einführung bereits erwähnt, ist Apache JMeter im GUI Modus sehr ressourcenhungrig. Selbst auf einer Maschine mit 16GB Arbeitsspeicher hat sich die Oberfläche hin und wieder aufgehängt und reagierte nicht mehr. Falls man JMeter über die Kommandozeile verwendet, was bei größeren Lasttests auch empfohlen wird, hat man jedoch weniger Probleme und kann diesen Punkt getrost ignorieren.
 
-\item Captcha Erkennung
+\item Captcha-Erkennung
 
-Eine Captcha Abfrage dient dazu, eine "`reale"' Person von einem Bot oder Computerprogramm zu unterscheiden. Dementsprechend trickreich sind die Captcha Abfragen aufgebaut. Für JMeter ist es daher auch nicht möglich die Captchas als Programm zu erkennen. Man sollte daher die Captcha Erkennung serverseitig entweder deaktivieren oder ein vordefiniertes Captcha mit der entsprechenden Antwort bereitstellen, auf das im Test zurückgegriffen wird.
+Eine Captcha-Abfrage dient dazu, eine "`reale"' Person von einem Bot oder Computerprogramm zu unterscheiden. Dementsprechend trickreich sind die Captcha-Abfragen aufgebaut. Für JMeter ist es daher auch nicht möglich diese Captchas als Programm zu erkennen. Man sollte daher die Captcha-Erkennung serverseitig entweder deaktivieren oder ein vordefiniertes Captcha mit der entsprechenden Antwort bereitstellen, auf das im Test zurückgegriffen wird.
 
 \end{itemize}
 
@@ -612,17 +612,17 @@ Alternative  Last- und Performancetest Produkte auf dem Markt sollen natürlich 
 \end{itemize}
 
 \section{Fazit}
-Durch eine Vielzahl von Literatur und Manuals, auch auf der offiziellen Apache Webseite, fällt einem der Einstieg in die Welt von Performance Tests sehr leicht und durch die flache Lernkurve bleibt man stets motiviert sich weiter mit dem Thema zu beschäftigen.
+Durch eine Vielzahl von Literatur und Handbüchern, auch auf der offiziellen Apache Webseite, fällt einem der Einstieg in die Welt von Performance-Tests sehr leicht und durch die flache Lernkurve bleibt man stets motiviert sich weiter mit dem Thema zu beschäftigen.
 
-Um Anwendungen und insbesondere HTTP-Server bezüglich ihrer Performance zu testen, ist JMeter trotz des hohen Resourcenverbrauchs, ein hervorragendes Tool, welches eine große Menge an Möglichkeiten der Konfiguration des Testes bietet. Sowohl die Laststeuerung als auch Requeststeuerung ermöglichen aussagekräftige Ergebnisse.
+Um Anwendungen und insbesondere HTTP-Server bezüglich ihrer Performance zu testen, ist JMeter trotz des hohen Resourcenverbrauchs, ein hervorragendes Tool, welches eine große Menge an Möglichkeiten der Konfiguration des Testes bietet. Sowohl die Laststeuerung als auch Anfragensteuerung ermöglichen aussagekräftige Ergebnisse.
 
-Tolle Visualisierungsmöglichkeiten der Ergebnisse, etwa durch den HTML Dashboard, können dazu verwendet werden um aussagekräftige und verständliche Reports zu kommunizieren und Schwachstellen und Engpässe im System zu erkennen und entgegenzusteuern.
+Tolle Visualisierungsmöglichkeiten der Ergebnisse, etwa durch den HTML-Dashboard, können dazu verwendet werden um aussagekräftige und verständliche Reports zu kommunizieren und Schwachstellen und Engpässe im System zu erkennen und entgegenzusteuern.
 
-Durch eine breite Protokollunterstützung wie HTTP, FTP, JDBC oder das Aufrufen von Java Klassen, kann man nicht durch typische Webanwendungen, sondern sogar eine gesamte Systeminfrastruktur testen.
+Durch eine breite Protokollunterstützung wie HTTP, FTP, JDBC oder das Aufrufen von Java-Klassen, kann man nicht durch typische Webanwendungen, sondern sogar eine gesamte Systeminfrastruktur testen.
 
 Zum ausführlichen Testen von JMeter in der Cloud fehlten leider die Ressourcen, um eine aussagekräftiges Fazit geben zu können. Alle Cloud Dienste die zur Auswahl standen, etwa EC2 oder Blazemeter, waren kostenpflichtig und konnten nicht getestet werden.
 
-Im Vergleich zu Unit oder Integrationstests fristen Last- und Performance Tests in vielen Unternehmen, aufgrund von Zeit oder Geldmangel immer noch ein Nischen-Dasein. Dort sind Lasttests eher ein wildes unkontrolliertes umherklicken von mehreren Mitarbeitern. Diese Tests können jedoch nicht reproduziert werden und haben keine Aussagekraft bezüglich Performance Engpässen der Software oder Webanwendungen. 
+Im Vergleich zu Unit oder Integrationstests fristen Last- und Performance Tests in vielen Unternehmen, aufgrund von Zeit oder Geldmangel immer noch ein Nischen-Dasein. Dort sind Lasttests eher ein wildes unkontrolliertes umherklicken von mehreren Mitarbeitern. Diese Tests können jedoch nicht reproduziert werden und haben keine Aussagekraft bezüglich Performance-Engpässen der Software oder Webanwendungen. 
 
 Man kann sich nur erhoffen, dass sich diese Sichtweise über längere Zeit ändert und die Firmen wieder verstärkt auf diesen Sektor eingehen. So hat man etwa bei kritischen Situationen und Stoßzeiten, die Gewissheit, dass die Webanwendung den Ansturm vieler Nutzer meistert und die Kundenzufriedenheit dadurch gewährleistet ist.
 
