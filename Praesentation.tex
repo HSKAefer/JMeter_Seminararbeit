@@ -6,6 +6,7 @@
 \usepackage{tikz}
 \usepackage{pgfplots}
 \usepackage{booktabs}
+\usepackage[abs]{overpic}
 \usepackage[scientific-notation=true]{siunitx}
 \usetikzlibrary{decorations.pathreplacing}
 \usetheme{MarburG}
@@ -33,6 +34,7 @@ cross/.default={1mm}}
 
 %\setbeameroption{hide notes} % Only slide
 %\setbeameroption{show only notes} % Only notes
+%\setbeameroption{show notes}
 \setbeameroption{show notes on second screen=left} % Both
 
 \title{Last-Tests von Webseiten mit JMeter}
@@ -61,9 +63,71 @@ cross/.default={1mm}}
 \section{Einleitung}
 \begin{frame}
 \frametitle{Einleitung}
-Was sind Last-Tests?
-Wozu Last-Tests? (Stabilität der Anwendung prüfen)
-\note{IWI Seite bricht am Stichtag ein}
+%\begin{overpic}[width=1\textwidth, grid, tics=10]{bilder/elephants}
+\begin{center}\begin{overpic}[width=1\textwidth]{bilder/elephants}
+\put(10, 80){\tiny Bildquelle: https://www.businessnewsdaily.com/6620-what-work-life-balance.html}
+\end{overpic}
+\end{center}
+
+\note{bild fand ich ganz passend. es stammt aus einem work life balance artikel aber trifft lasttest ganz gut. worum geht es? ich will kurz die motiviation ansprechen. wozu braucht man lasttests, danach basiswissen von lasttests vermitteln und was für anforderungen man benötigt.}
+\end{frame}
+%----------------------
+
+%-------1.1------------
+\subsection{Motivation}
+\begin{frame}
+\frametitle{Motivation}
+\begin{center}\includegraphics[angle=10, width=0.7\textwidth]{bilder/unerreichbar}
+\end{center}
+IWI-Intranet Seite geht am Anmeldetermin der Seminar/Projektarbeiten unter der Last in die Knie! 
+\note{Weitere beispiele wie Neue Webseite oder Shop die viele Besucher erwartet, hat große Latenzzeiten oder
+ist gar nicht mehr erreichbar (Worst Case)}
+\note{Greg Linden - Amazon hat ermittelt, dass sie pro 100ms verzögerung 1\% weniger verkaufserlöse haben. Daraus folgt Zeit = Geld / schneller = besser}
+\end{frame}
+%----------------------
+
+%-------1.2.1----------
+\subsection{Grundlagen Lasttests}
+\begin{frame}
+\frametitle{Grundlagen Lasttests}
+\textbf{Was sind Lasttests?}\newline
+Bei einem Lasttest wird hohe Last auf einem System erzeugt und das Verhalten untersucht. Ziel:
+\begin{itemize}
+		\item Erfüllung nicht funktionaler Anforderungen wie Antwortzeiten / Mengenbewältigung
+		\item Dimensionierung von Hardwareresourcen  	
+		\item Aufdeckung nicht gefundener Fehler (Nebenläufigkeit und blockierende Prozesse)
+\end{itemize}
+\textbf{Wozu Lasttests?} \newline Stabilität der Anwendung prüfen
+\end{frame}
+%----------------------
+
+%-------1.2.2----------
+
+\begin{frame}
+\frametitle{Grundlagen Lasttests}
+
+\textbf{Manuelles Testen}
+\begin{itemize}
+\item "`echte"' Personen bedienen die Anwendung
+\item Zeit- und resourcenintensiv \newline
+\note{Man benötigt einige Benutzer, in kleineren Firmen oft die Entwickler selbst, die in dem Zeitraum nicht zur Verfügung stehen. man verwechselt häufig Lasttests mit UAT. user akzeptanztests sollten schon gemacht werden. allerdings mehr auf funktionalität bezogen und weniger auf die Last}
+\end{itemize}
+
+\textbf{Automatisiertes Testen}
+\begin{itemize}
+\item Tools wie JMeter
+\item Simulation von vielen Benutzern (Threads)
+\note{achtung man sollte parametrisierte werte wie passwörter/benutzernamen (base64) oder eventuelle captchas (einheitlich) im vorfeld beachten. } 
+\end{itemize}
+\end{frame}
+
+%-------1.3------------
+\subsection{Anforderungen an Lasttests}
+\begin{frame}
+\frametitle{Anforderungen an Lasttests}
+Lastvarianten (Gleichzeitig, AKtiv, Spitze)
+Antwortzeiten und Durchsatz
+Infrastruktur Hardware
 \end{frame}
 %----------------------
 
@@ -71,6 +135,9 @@ Wozu Last-Tests? (Stabilität der Anwendung prüfen)
 \section{Apache JMeter}
 \begin{frame}
 \frametitle{Apache JMeter}
+\begin{center}\includegraphics[width=1\textwidth]{bilder/jmeter_1}
+\end{center}
+\note{JMeter ist ein open source Lasttestprogramm von Apache und wurde von Stefano MAzzocchi entwickelt um die performance von Apache Tomcat zu testen. Hat sich daraufhin stetig weiterentwickelt und ist heute bei großkonzernen wie sap und 1und1 regelmäßig im einsatz und den resourcenbedarf von anwendungen zu ermitteln. auf die hier abgebildete gui wird später genauer eingegangen }
 \end{frame}
 %----------------------
 
@@ -79,6 +146,29 @@ Wozu Last-Tests? (Stabilität der Anwendung prüfen)
 \subsection{JMeter Übersicht}
 \begin{frame}
 \frametitle{JMeter Übersicht}
+
+\begin{itemize}
+\item Open Source / platformunabhängig (Java-Anwendung)
+\item JMeter erzeugt Anfragen und somit Last auf Servern
+\item Kann sehr viele Protokolle wie HTTP (SOAP/REST), JDBC, FTP, ..
+\item GUI + Non-GUI-Modus
+\item Kann Benutzer (Threads) simulieren
+\item Master-Slave-fähig für Cloud-Anwendungen
+\item Umfangreiche Reporting Funktionen
+\end{itemize}
+\end{frame}
+%----------------------
+
+%------2.2.1-----------
+\subsection{Funktionsweise von JMeter}
+\begin{frame}
+\frametitle{Funktionsweise von JMeter}
+\begin{itemize}
+\item Erstellung eines Skripts durch Aufzeichnen von Browserinteraktionen
+\item Parametrisierung z.b. durch Anzahl Benutzer, Benutzernamen, Passwörter, Servernamen, Ports
+\item Test ausführen und anschließend analysieren 
+\note{Analyse dann durch Reports}
+\end{itemize}
 \end{frame}
 %----------------------
 
@@ -117,8 +207,15 @@ Wozu Last-Tests? (Stabilität der Anwendung prüfen)
 \begin{frame}
 	\frametitle{Vor- und Nachteile}
 	\begin{itemize}
-	  \pro xxx
-		\con yyy
+		\pro Platformunabhängig
+		\pro Testerstellung in GUI
+		\pro Testlauf in GUI/Kommandozeile
+		\pro Ergebnisse in HTML Dashboard
+		\pro Timer um Tests zu automatisieren
+		
+		\con Swing Oberfläche
+		\con Testpläne in XML-Format \note{JMX Format ist eine XML Datei. Daher unhandlich ohne GUI werte zu ändern}
+		\con GUI resourcenhungrig
 	\end{itemize}
 \end{frame}
 
@@ -127,9 +224,9 @@ Wozu Last-Tests? (Stabilität der Anwendung prüfen)
 \begin{frame}
 \frametitle{Abschließende Worte}
 
-\note[item]{in den zeiten von TDD ist der fokus vermehrt wieder testen gerückt. allerdings nur in richtung unit component integration testing. lasttests fristen nach wie vor ein nischendaschein... hoffentlich ändert sich es blabla..}
+\note[item]{Lasttests sind nach wie vor ein zweischneidiges schwert. in den zeiten von TDD ist der fokus vermehrt wieder testen gerückt. allerdings nur in richtung unit/component/integration testing. lasttests fristen nach wie vor ein nischendaschein und JMeter und konsorten werden leider viel zu selten in der entwicklung eingesetzt. denn nach wie vor ist es immer noch wichtiger, dass ein produkt erst fertig wird (aufgrund von zeitdruck und knappem budget) als resourcen in optimierung zu setzen}
 
-	Die Funktionalität einer Anwendungen steht immer an erster Stelle. Erst wenn alle Anforderungen erfüllt sind und noch Zeit/Budget vorhanden ist wird optimiert! 
+	Die Funktionalität einer Anwendungen steht immer an erster Stelle. Erst wenn alle Anforderungen des Kunden erfüllt sind und noch Zeit/Budget vorhanden ist wird optimiert! 
 	\end{frame}
 
 
