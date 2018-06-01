@@ -37,7 +37,7 @@ cross/.default={1mm}}
 %\setbeameroption{show notes}
 \setbeameroption{show notes on second screen=left} % Both
 
-\title{Last-Tests von Webseiten mit JMeter}
+\title{Lasttests von Webseiten mit JMeter}
 \subtitle{Seminararbeit SS 2018}
 \titlegraphic {\includegraphics[width=2cm]{bilder/hskalogo_only}}
 \author{Daniel Schäfer}
@@ -64,8 +64,8 @@ cross/.default={1mm}}
 \begin{frame}
 \frametitle{Einleitung}
 %\begin{overpic}[width=1\textwidth, grid, tics=10]{bilder/elephants}
-\begin{center}\begin{overpic}[width=1\textwidth]{bilder/elephants}
-\put(10, 80){\tiny Bildquelle: https://www.businessnewsdaily.com/6620-what-work-life-balance.html}
+\begin{center}\begin{overpic}[width=0.75\textwidth]{bilder/elephants}
+\put(10, 40){\tiny Bildquelle: https://www.businessnewsdaily.com/6620-what-work-life-balance.html}
 \end{overpic}
 \end{center}
 
@@ -80,7 +80,7 @@ cross/.default={1mm}}
 \begin{center}\includegraphics[angle=10, width=0.7\textwidth]{bilder/unerreichbar}
 \end{center}
 IWI-Intranet Seite geht am Anmeldetermin der Seminar/Projektarbeiten unter der Last in die Knie! 
-\note{Weitere beispiele wie Neue Webseite oder Shop die viele Besucher erwartet, hat große Latenzzeiten oder
+\note{Bestes beispiel und dass dem herrn vogelsang immer wieder nachhängen wird ist die iwi seite, die unter der last in die knie ging. Weitere beispiele wie Neue Webseite oder Shop die viele Besucher erwartet, hat große Latenzzeiten oder
 ist gar nicht mehr erreichbar (Worst Case)}
 \note{Greg Linden - Amazon hat ermittelt, dass sie pro 100ms verzögerung 1\% weniger verkaufserlöse haben. Daraus folgt Zeit = Geld / schneller = besser}
 \end{frame}
@@ -90,14 +90,18 @@ ist gar nicht mehr erreichbar (Worst Case)}
 \subsection{Grundlagen Lasttests}
 \begin{frame}
 \frametitle{Grundlagen Lasttests}
+\note{bei einem lasttest, wird wie der name es vermuten lasst hohe last auf einem system erzeugt und das verhalten untersucht. lasttests haben folgende ziele 1 2 3
+lasttests sind oft die letzten schritte der entwicklung bevor die software eingeführt wird, was dazu verleitet diese so schnell wie möglich hinter sich zu bringen. man sollte sich dennoch genügend zeit für sie nehmen um am ende nicht noch eine böse überraschung zu erleben}
 \textbf{Was sind Lasttests?}\newline
-Bei einem Lasttest wird hohe Last auf einem System erzeugt und das Verhalten untersucht. Ziel:
+Bei einem Lasttest wird hohe Last auf einem System erzeugt und dessen Verhalten untersucht. \newline
+
+\textbf{Wozu Lasttests?}
 \begin{itemize}
 		\item Erfüllung nicht funktionaler Anforderungen wie Antwortzeiten / Mengenbewältigung
 		\item Dimensionierung von Hardwareresourcen  	
 		\item Aufdeckung nicht gefundener Fehler (Nebenläufigkeit und blockierende Prozesse)
-\end{itemize}
-\textbf{Wozu Lasttests?} \newline Stabilität der Anwendung prüfen
+		\item Allgemein $\rightarrow$ Stabilität der Anwendung prüfen
+	\end{itemize}
 \end{frame}
 %----------------------
 
@@ -115,7 +119,7 @@ Bei einem Lasttest wird hohe Last auf einem System erzeugt und das Verhalten unt
 
 \textbf{Automatisiertes Testen}
 \begin{itemize}
-\item Tools wie JMeter
+\item Tools wie JMeter, Gatling oder The Grinder
 \item Simulation von vielen Benutzern (Threads)
 \note{achtung man sollte parametrisierte werte wie passwörter/benutzernamen (base64) oder eventuelle captchas (einheitlich) im vorfeld beachten. } 
 \end{itemize}
@@ -125,9 +129,12 @@ Bei einem Lasttest wird hohe Last auf einem System erzeugt und das Verhalten unt
 \subsection{Anforderungen an Lasttests}
 \begin{frame}
 \frametitle{Anforderungen an Lasttests}
-Lastvarianten (Gleichzeitig, AKtiv, Spitze)
-Antwortzeiten und Durchsatz
-Infrastruktur Hardware
+\note{Ein lasttest sollte folgende fälle abdecken können: verschiedene lastvariationen, z.b. viele gleichzeitige anfragen über einen konstanten zeitraum, ab einer bestimmten tageszeit sehr viele zugriffe - spitzenzeiten, die antwortnachrichten sowie zeiten sowie der datendurchsatz sollte einsehbar sprich loggbar sein, die verteilung der tests auf mehrere server oder cloud dienste sollte machbar sein}
+\begin{itemize}
+\item Lastvarianten (Gleichzeitig Zugriffe, Spitzenzeiten)
+\item Antwortzeiten und Datendurchsatz
+\item Auf welcher Infrastruktur soll der Test laufen
+\end{itemize}
 \end{frame}
 %----------------------
 
@@ -137,7 +144,7 @@ Infrastruktur Hardware
 \frametitle{Apache JMeter}
 \begin{center}\includegraphics[width=1\textwidth]{bilder/jmeter_1}
 \end{center}
-\note{JMeter ist ein open source Lasttestprogramm von Apache und wurde von Stefano MAzzocchi entwickelt um die performance von Apache Tomcat zu testen. Hat sich daraufhin stetig weiterentwickelt und ist heute bei großkonzernen wie sap und 1und1 regelmäßig im einsatz und den resourcenbedarf von anwendungen zu ermitteln. auf die hier abgebildete gui wird später genauer eingegangen }
+\note{All dies bietet das open source Lasttestprogramm JMeter von Apache. version 1.0 wurde von Stefano Mazzocchi im jahr 1999 entwickelt um ursprüunglich die performance von Apache Tomcat zu testen. Hat sich daraufhin stetig weiterentwickelt und ist heute der de facto standard bei großkonzernen wie sap und 1und1 wo es regelmäßig im einsatz ist und den resourcenbedarf von anwendungen ermittelt. auf die hier abgebildete gui wird später genauer eingegangen }
 \end{frame}
 %----------------------
 
@@ -150,11 +157,18 @@ Infrastruktur Hardware
 \begin{itemize}
 \item Open Source / platformunabhängig (Java-Anwendung)
 \item JMeter erzeugt Anfragen und somit Last auf Servern
-\item Kann sehr viele Protokolle wie HTTP (SOAP/REST), JDBC, FTP, ..
+\item Kann sehr viele Protokolle wie
+\begin{itemize}
+	\item HTTP (SOAP/REST)
+	\item JDBC 
+	\item FTP
+	\item Beanshell (Java), JUnit
+	\end{itemize}
 \item GUI + Non-GUI-Modus
-\item Kann Benutzer (Threads) simulieren
+\note{gui um aufzeichnung zu erstellen und eventuell einfache tests zu machen. non gui in der cloud, performanter. man kann automatisiert ablaufen lassen}
+\item Simulation von Benutzern (Threads)
 \item Master-Slave-fähig für Cloud-Anwendungen
-\item Umfangreiche Reporting Funktionen
+\item Umfangreiche Analyse-Funktionen
 \end{itemize}
 \end{frame}
 %----------------------
@@ -163,12 +177,13 @@ Infrastruktur Hardware
 \subsection{Funktionsweise von JMeter}
 \begin{frame}
 \frametitle{Funktionsweise von JMeter}
-\begin{itemize}
-\item Erstellung eines Skripts durch Aufzeichnen von Browserinteraktionen
+\begin{enumerate}
+\item Erstellung eines Testskripts durch Aufzeichnen von Browserinteraktionen
 \item Parametrisierung z.b. durch Anzahl Benutzer, Benutzernamen, Passwörter, Servernamen, Ports
-\item Test ausführen und anschließend analysieren 
+\item Lasttest ausführen 
+\item Visualisierung und Analyse der Ergebnisse 
 \note{Analyse dann durch Reports}
-\end{itemize}
+\end{enumerate}
 \end{frame}
 %----------------------
 
@@ -176,6 +191,9 @@ Infrastruktur Hardware
 \subsection{Die JMeter GUI}
 \begin{frame}
 \frametitle{Die JMeter GUI}
+\note{sobald man jmeter heruntergeladen und entpackt hat, kann man es entweder via kommandozeile oder ausführen der jmeter exe aus dem bin verzeichnis starten. kommandozeile hat den vorteil dass man mehrere kommandos mitgeben kann, wie etwa ein html dashboard auf das ich noch später zurückkomme. auch ist der resourcenverbrauch deutlich geringer als mit der gui}
+\begin{center}\includegraphics[width=1\textwidth]{bilder/jmeter_gui}
+\end{center}
 \end{frame}
 %----------------------
 
@@ -183,6 +201,72 @@ Infrastruktur Hardware
 \subsection{JMeter Elemente}
 \begin{frame}
 \frametitle{JMeter Elemente}
+\begin{tikzpicture}
+\draw (0,8) rectangle (9.8, 0) node at (0.8, 7.6) {\small Testplan};
+%\node at (0.2 ,7.8) ;
+\end{tikzpicture}
+\note{als root element in der hierarchie steht der testplan. diesen gibt es pro jmx file nur 1 mal. hier kann man optionen für thread gruppen einstellen (ob hintereinander oder alle auf einmal starten, man kann hier libraries importieren usw. auch user variablen können hier global festgelegt werden}
+\end{frame}
+%----------------------
+
+%------thread-gruppe-------------
+\begin{frame}
+\frametitle{JMeter Elemente}
+\begin{tikzpicture}
+\draw (0,8) rectangle (9.8, 0) node at (0.8, 7.6) {\small Testplan};
+\draw (0.3,7) rectangle (9.5, 1.6) node at (1.6, 6.6) {\small Thread-Gruppe};
+\end{tikzpicture}
+\note{jeder testplan kann 1 oder mehrere thread gruppen enthalten. diese steuern die anzahl der threads, welche die sampler starten}
+\end{frame}
+%----------------------
+
+%------sampler-------------
+\begin{frame}
+\frametitle{JMeter Elemente}
+\begin{tikzpicture}
+\draw (0,8) rectangle (9.8, 0) node at (0.8, 7.6) {\small Testplan};
+\draw (0.3,7) rectangle (9.5, 1.6) node at (1.6, 6.6) {\small Thread-Gruppe};
+\draw (0.6 , 6) rectangle (9.2, 4) node at (1.4, 5.6) {\small Sampler};
+\end{tikzpicture}
+\note{in den thread gruppen kann man dann die sampler erstellen, welche gegen ein system gefeuert werden. jdbc, http, java usw..} 
+\end{frame}
+%----------------------
+
+
+%------config-elemente-------------
+\begin{frame}
+\frametitle{JMeter Elemente}
+\begin{tikzpicture}
+\draw (0,8) rectangle (9.8, 0) node at (0.8, 7.6) {\small Testplan};
+\draw (0.3,7) rectangle (9.5, 1.6) node at (1.6, 6.6) {\small Thread-Gruppe};
+\draw (0.6 , 6) rectangle (9.2, 4) node at (1.4, 5.6) {\small Sampler};
+
+\draw (4.2, 5.2) rectangle (6.9, 4.4) node at (5.5, 4.8) {\small Config-Elemente};
+
+\draw (0.6, 2.8) rectangle (3.3, 2) node at (1.9, 2.4) {\small Config-Elemente};
+
+\draw (0.3, 1.1) rectangle (3.0, 0.3) node at (1.6, 0.7) {\small Config-Elemente};
+\end{tikzpicture}
+\end{frame}
+%----------------------
+
+%------listener-------------
+\begin{frame}
+\frametitle{JMeter Elemente}
+\begin{tikzpicture}
+\draw (0,8) rectangle (9.8, 0) node at (0.8, 7.6) {\small Testplan};
+\draw (0.3,7) rectangle (9.5, 1.6) node at (1.6, 6.6) {\small Thread-Gruppe};
+\draw (0.6 , 6) rectangle (9.2, 4) node at (1.4, 5.6) {\small Sampler};
+
+\draw (4.2, 5.2) rectangle (6.9, 4.4) node at (5.5, 4.8) {\small Config-Elemente};
+\draw (7.3, 5.2) rectangle (8.9, 4.4) node at (8.1, 4.8) {\small Listener};
+
+\draw (0.6, 2.8) rectangle (3.3, 2) node at (1.9, 2.4) {\small Config-Elemente};
+\draw (3.7, 2.8) rectangle (5.3, 2) node at (4.5, 2.4) {\small Listener};
+
+\draw (0.3, 1.1) rectangle (3.0, 0.3) node at (1.6, 0.7) {\small Config-Elemente};
+\draw (3.4, 1.1) rectangle (5.0, 0.3) node at (4.2, 0.7) {\small Listener};
+\end{tikzpicture}
 \end{frame}
 %----------------------
 
@@ -198,24 +282,28 @@ Infrastruktur Hardware
 %----------------------
 
  
-\section{Fazit}
-\begin{frame}
-\frametitle{Fazit}
-\end{frame}
 
-\subsection{Vor- und Nachteile}	
+\section{Fazit}	
 \begin{frame}
-	\frametitle{Vor- und Nachteile}
+	\frametitle{Fazit}
 	\begin{itemize}
 		\pro Platformunabhängig
+		\pro Open-Source-Software
 		\pro Testerstellung in GUI
 		\pro Testlauf in GUI/Kommandozeile
 		\pro Ergebnisse in HTML Dashboard
-		\pro Timer um Tests zu automatisieren
 		
 		\con Swing Oberfläche
-		\con Testpläne in XML-Format \note{JMX Format ist eine XML Datei. Daher unhandlich ohne GUI werte zu ändern}
+		\con Testpläne in XML-Format 
 		\con GUI resourcenhungrig
+		
+		\note{JMX Format ist eine XML Datei. Daher unhandlich ohne GUI werte zu ändern.
+		
+		jmeter ist ein super tool um die lasttests an webseiten auszuführen. es ist kostenlos hat viele tutorials und how-tos auf der offiziellen seite von apache. durch eine flache lernkurve bleibt man stehts motiviert sich weiter mit dem thema zu beschäftigen.
+
+Die visualisierung der ergebnisse durch das html dashboard sind natürlich super.
+		
+gibt alternativen zu jmeter wie z.b. gatling oder selenium oder the grinder. wer lust hat kann sich gerne damit befassen. oder als nächste seminararbeit}
 	\end{itemize}
 \end{frame}
 

@@ -156,7 +156,7 @@ Apache JMeter wurde in Java geschrieben und kann durch seine platformunabhängig
 Apache JMeter bietet zusätzlich eine gut dokumentierte API an, mit der es möglich ist das Programm selbständig zu erweitern.
 
 \subsection{Historisches}
-Ursprünglich wurde Apache JMeter von Stefano Mazzocchi, seiner Zeit Entwickler bei der Apache Software Foundation, programmiert um die Performance von Apache Tomcat (damals noch Apache JServ) zu testen. Kurz danach wurde das Programm neu entworfen und mit einer verbesserten GUI und zusätzlichen Möglichkeiten von Funktionstests ausgestattet. Im Jahr 2011 wurde JMeter zu einem sogenannten Top-Level-Apache-Project, was eine offizielle Homepage und ein Projekt-Management-Committee mit sich brachte \cite{online:officialJMeter}.
+Ursprünglich wurde Apache JMeter von Stefano Mazzocchi, seiner Zeit Entwickler bei der Apache Software Foundation, programmiert um die Performance von Apache Tomcat (damals noch Apache JServ) zu testen. Kurz danach wurde das Programm neu entworfen und mit einer verbesserten GUI und zusätzlichen Möglichkeiten von Funktionstests ausgestattet. Im Jahr 2011 wurde JMeter zu einem sogenannten Top-Level-Apache-Project, was ein Projekt-Management-Committee und eine offizielle Homepage mit sich brachte \cite{online:officialJMeter}.
 
 Mittlerweile ist Apache JMeter ein wichtiger Bestandteil von Performance-Tests in sehr vielen Firmen geworden. Großkonzerne wie SAP oder 1\&1 verwenden regelmäßig JMeter um die Verfügbarkeit ihrer Produkte unter hoher Last zu prüfen. 
 
@@ -257,9 +257,11 @@ Hier kann man auch den HTTP-Test-Script-Recorder konfigurieren und starten, mit 
 \label{chap:jmeter_commandline}
 Möchte man nun einen komplexeren Lasttest machen, eignet sich die GUI ab einer gewissen Anzahl von gleichzeitigen Benutzern nicht mehr. Durch die steigende Anzahl der Anfragen wird auch der Resourcenbedarf immer größer und der ohnehin schon recht hohe Speicherbedarf der GUI selbst kann sich dann negativ auf die Messergebnisse auswirken und diese verfälschen.
 
-Hier kommt der sogenannte "`Non-GUI-Mode"' ins Spiel. Dies ist die Bezeichnung um JMeter in der Kommandozeile auszuführen. Mit Hilfe des Kommandozeilenaufrufes lassen sich am Ende des Tests CSV oder XML Dateien erstellen, die Testergebnisse beinhalten. Auch der HTML-Dashboard-Report lässt sich nur hier generieren.
+Hier kommt der sogenannte "`Non-GUI-Mode"' ins Spiel. Dies ist die Bezeichnung um JMeter in der Kommandozeile auszuführen. Mit Hilfe des Kommandozeilenaufrufes lassen sich am Ende des Tests CSV oder XML Dateien erstellen, die Testergebnisse beinhalten. 
 
-Zuerst sollte ein Testscript verfügbar sein. In diesem sind alle Anfragen und Konfigurationen wie Cache/Cookie-Verhalten und Authorization-Management enthalten. Man kann hier eine vorhandene Datei verwenden oder in JMeter selbst eine neue JMX-Datei erzeugen. Minimale Voraussetzungen sind eine Thread-Gruppe sowie ein Sampler, beispielsweise ein HTTP-Request, mit entsprechender URI und Operation.
+Auch der HTML-Dashboard-Report lässt sich nur hier generieren.
+
+Zuerst sollte ein Testscript verfügbar sein. In diesem sind alle Anfragen und Konfigurationen wie Cache/Cookie-Verhalten und Auth-Management enthalten. Man kann hier eine vorhandene Datei verwenden oder in JMeter selbst eine neue JMX-Datei erzeugen. Minimale Voraussetzungen sind eine Thread-Gruppe sowie ein Sampler, beispielsweise ein HTTP-Request, mit entsprechender URI und Operation.
 
 Nun öffnet man die Kommandozeile und navigiert in das \codeInLine{\\bin} Verzeichnis von JMeter. Dort startet man den Test via folgendem Befehl:
 \begin{lstlisting}
@@ -339,7 +341,8 @@ Durch einen Timer kann man eine Verzögerung nach jedem Thread einbauen, so dass
 Zu einzelnen Samplern oder Thread-Gruppen gibt es noch diverse Config-Elemente. Diese dienen dazu Default-Parameter einmalig anzulegen und darauf zuzugreifen. Wird dann in den jeweiligen Controllern kein Wert in die entsprechenden Felder eingetragen, wird auf den Wert im Config-Element zurückgegriffen. Speziell für HTTP-Sampler gibt es darüber hinaus noch weitere Config-Elemente, wie Header, Authorization oder Cookie-Informationen, die man zentral für den ganzen Testplan abspeichern kann \cite{online:performanceTools}.
 
 \subsubsection{Listener}
-Listener sind Elemente die Informationen über die Ergebnisse der Performance-Tests enthalten. Es gib verschiedene Arten von Listenern, wie etwa den Graph-Result-Listener, den View-Results-Tree-Listener oder den Aggregation-Report. Wichtiger Hinweis an der Stelle: Egal welcher Listener verwendet wird, die Daten die gespeichert werden sind immer die selben. Lediglich die Darstellung dieser auf dem Ausgabemedium unterscheidet sich. Man kann Listener an jede beliebige Stelle im Test hängen; auch unter einem Testplan. Es werden jedesmal die Daten gesammelt, die ab der eingehängter Stelle präsent sind.
+Listener enthalten Informationen über die Ergebnisse der Performance-Tests. Es gib verschiedene Arten von Listenern, wie etwa den Graph-Result-Listener, den View-Results-Tree-Listener oder einen Aggregation-Report. 
+Wichtiger Hinweis an der Stelle: Egal welcher Listener verwendet wird, die Daten die gespeichert werden sind immer die selben. Lediglich die Darstellung dieser auf dem Ausgabemedium unterscheidet sich. Man kann Listener an jede beliebige Stelle im Test hängen; auch unter einem Testplan. Es werden jedesmal die Daten gesammelt, die ab der eingehängter Stelle präsent sind.
 
 \subsubsection{Assertions}
 Mit JMeter lassen sich auch Zusicherungen, sogenannte Assertions untersuchen. Dazu wird die Antwort einer Anfrage auf ihren Statuscode hin überprüft. Auch Antwortzeiten lassen sich mit Hilfe von Assertions prüfen. Liegt die Antwort in einer bestimmten Zeitspanne oder überschreitet sie diese Zeitspanne, kann man entsprechend darauf reagieren.  
@@ -483,7 +486,7 @@ Ein kleines Beispiel zeigt einen Test auf eine lokale Postgres-Datenbank:
 	
 	\item JDBC-Connection-Configuration
 	
-	Auf der Thread-Gruppe rechtsklick $\rightarrow$ Add $\rightarrow$ Config-Element $\rightarrow$ JDBC-Connection-Configuration. Hier den Variablennamen für den Pool festlegen (myDatabase) und die Database-Connection-Configuration mit folgenden Werten füttern:
+	Auf der Thread-Gruppe rechtsklick $\rightarrow$ Add $\rightarrow$ Config-Element $\rightarrow$ JDBC-Connection-Configuration. Hier den Variablennamen für den Pool festlegen (myDatabase) und die Database-Connection-Config\-uration mit folgenden Werten füttern:
 	
 	\begin{table}[H]
 	\centering
