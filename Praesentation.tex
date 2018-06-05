@@ -34,10 +34,10 @@ cross/.default={1mm}}
       ($(right)+(-0.22cm,-0.2cm)$);}
 }
 
-%\setbeameroption{hide notes} % Only slide
+\setbeameroption{hide notes} % Only slide
 %\setbeameroption{show only notes} % Only notes
 %\setbeameroption{show notes}
-\setbeameroption{show notes on second screen=left} % Both
+%\setbeameroption{show notes on second screen=left} % Both
 
 \title{Lasttests von Webseiten mit JMeter}
 \subtitle{Seminararbeit SS 2018}
@@ -66,9 +66,12 @@ cross/.default={1mm}}
 \begin{frame}
 \frametitle{Einleitung}
 %\begin{overpic}[width=1\textwidth, grid, tics=10]{bilder/elephants}
-\begin{center}\begin{overpic}[width=0.75\textwidth]{bilder/elephants}
-\put(10, 40){\tiny Bildquelle: https://www.businessnewsdaily.com/6620-what-work-life-balance.html}
-\end{overpic}
+\begin{center}
+%\begin{overpic}[width=0.75\textwidth]{bilder/elephants}
+%\put(10, 40){\footnote{\tiny Bildquelle: https://www.businessnewsdaily.com/6620-what-work-life-balance.html}}
+%\end{overpic}
+\includegraphics[width=0.7\textwidth]{bilder/elephants}
+\footnote{\tiny https://www.businessnewsdaily.com/6620-what-work-life-balance.html}
 \end{center}
 
 \note{bild fand ich ganz passend. es stammt aus einem work life balance artikel aber trifft lasttest ganz gut. worum geht es? ich will kurz die motiviation ansprechen. wozu braucht man lasttests, danach basiswissen von lasttests vermitteln und was für anforderungen man benötigt.}
@@ -204,9 +207,7 @@ Bei einem Lasttest wird hohe Last auf einem System erzeugt und dessen Verhalten 
 \frametitle{JMeter Elemente}
 \begin{tikzpicture}
 \draw[shade, top color=blue!40!white] (0,8) rectangle (9.8, 0) node at (0.8, 7.6) {\small Testplan};
-%\node at (0.2 ,7.8) ;
 \end{tikzpicture}
-\note{als root element in der hierarchie steht der testplan. diesen gibt es pro jmx file nur 1 mal. hier kann man optionen für thread gruppen einstellen (ob hintereinander oder alle auf einmal starten, man kann hier libraries importieren usw. auch user variablen können hier global festgelegt werden}
 \end{frame}
 %----------------------
 
@@ -217,7 +218,6 @@ Bei einem Lasttest wird hohe Last auf einem System erzeugt und dessen Verhalten 
 \draw (0,8) rectangle (9.8, 0) node at (0.8, 7.6) {\small Testplan};
 \draw[shade, top color=blue!40!white] (0.3,7) rectangle (9.5, 1.6) node at (1.6, 6.6) {\small Thread-Gruppe};
 \end{tikzpicture}
-\note{testplan ist eine jmx datei die im xml format gespeichert wird. jeder testplan kann 1 oder mehrere thread gruppen enthalten. diese steuern die anzahl der threads, sowie wiederholungen. außerdem kann man hier das fehlerverhalten steuern. (also was soll bei einem fehler passieren}
 \end{frame}
 %----------------------
 
@@ -229,7 +229,6 @@ Bei einem Lasttest wird hohe Last auf einem System erzeugt und dessen Verhalten 
 \draw (0.3,7) rectangle (9.5, 1.6) node at (1.6, 6.6) {\small Thread-Gruppe};
 \draw[shade, top color=blue!40!white] (0.6 , 6) rectangle (9.2, 4) node at (1.4, 5.6) {\small Sampler};
 \end{tikzpicture}
-\note{in den thread gruppen kann man dann die sampler erstellen, welche gegen ein system gefeuert werden. jdbc, http, java usw.. JUnit} 
 \end{frame}
 %----------------------
 
@@ -242,7 +241,6 @@ Bei einem Lasttest wird hohe Last auf einem System erzeugt und dessen Verhalten 
 \draw (0.6 , 6) rectangle (9.2, 4) node at (1.4, 5.6) {\small Sampler};
 \draw[shade, top color=blue!40!white] (5.7, 2.8) rectangle (7.8, 2) node at (6.6, 2.4) {\small Controller};
 \end{tikzpicture}
-\note{der controller nur im thread-group steuert zeitlichen ablauf. wie oft wann etc. den durchsatz und unterstüzt if while foreach bla} 
 \end{frame}
 %----------------------
 
@@ -255,14 +253,13 @@ Bei einem Lasttest wird hohe Last auf einem System erzeugt und dessen Verhalten 
 \draw (0.3,7) rectangle (9.5, 1.6) node at (1.6, 6.6) {\small Thread-Gruppe};
 \draw (0.6 , 6) rectangle (9.2, 4) node at (1.4, 5.6) {\small Sampler};
 
-\draw[shade, top color=blue!40!white] (4.2, 5.2) rectangle (6.9, 4.4) node at (5.5, 4.8) {\small Config-Elemente};
+\draw[shade, top color=blue!40!white] (0.9, 5.2) rectangle (3.6, 4.4) node at (2.2, 4.8) {\small Config-Elemente};
 
 \draw[shade, top color=blue!40!white] (0.6, 2.8) rectangle (3.3, 2) node at (1.9, 2.4) {\small Config-Elemente};
 \draw (5.7, 2.8) rectangle (7.8, 2) node at (6.6, 2.4) {\small Controller};
 
 \draw[shade, top color=blue!40!white] (0.3, 1.1) rectangle (3.0, 0.3) node at (1.6, 0.7) {\small Config-Elemente};
 \end{tikzpicture}
-\note{config elemente können sowohl im sampler selbst, der threadgruppe oder auch global im testplan liegen. hier kann man variablen deklarieren und platzhalter für gewisse werte definieren http header oder cookies verwalten}
 \end{frame}
 %----------------------
 
@@ -274,8 +271,8 @@ Bei einem Lasttest wird hohe Last auf einem System erzeugt und dessen Verhalten 
 \draw (0.3,7) rectangle (9.5, 1.6) node at (1.6, 6.6) {\small Thread-Gruppe};
 \draw (0.6 , 6) rectangle (9.2, 4) node at (1.4, 5.6) {\small Sampler};
 
-\draw (4.2, 5.2) rectangle (6.9, 4.4) node at (5.5, 4.8) {\small Config-Elemente};
-\draw[shade, top color=blue!40!white] (7.3, 5.2) rectangle (8.9, 4.4) node at (8.1, 4.8) {\small Listener};
+\draw (0.9, 5.2) rectangle (3.6, 4.4) node at (2.2, 4.8) {\small Config-Elemente};
+\draw[shade, top color=blue!40!white] (4.1, 5.2) rectangle (5.7, 4.4) node at (4.9, 4.8) {\small Listener};
 
 \draw (0.6, 2.8) rectangle (3.3, 2) node at (1.9, 2.4) {\small Config-Elemente};
 \draw[shade, top color=blue!40!white] (3.7, 2.8) rectangle (5.3, 2) node at (4.5, 2.4) {\small Listener};
@@ -284,7 +281,6 @@ Bei einem Lasttest wird hohe Last auf einem System erzeugt und dessen Verhalten 
 \draw (0.3, 1.1) rectangle (3.0, 0.3) node at (1.6, 0.7) {\small Config-Elemente};
 \draw[shade, top color=blue!40!white] (3.4, 1.1) rectangle (5.0, 0.3) node at (4.2, 0.7) {\small Listener};
 \end{tikzpicture}
-\note{Listener sind für die ausgabe der ergebnisse zuständig. diese gibts es z.b. als results tree wo die ergebnisse nur aufgelistet werden, oder als graph schön visualisiert oder auch als aggragation report. wichtig ist zu wissen, dass es sich bei den unterschiedlichen listenern immer um die gleichen daten handelt. lediglich die darstellung ist eine andere}
 \end{frame}
 %----------------------
 
@@ -293,7 +289,7 @@ Bei einem Lasttest wird hohe Last auf einem System erzeugt und dessen Verhalten 
 \begin{frame}
 \frametitle{Live Demos}
 \begin{itemize}
-	\item Test von 500 Threads im GUI Modus mit Graph 
+	\item Test von 300 Threads im GUI Modus mit Graph 
 	\item HTML-Dashboard erzeugen und analysieren
 \end{itemize}
 \end{frame}
@@ -312,7 +308,6 @@ Bei einem Lasttest wird hohe Last auf einem System erzeugt und dessen Verhalten 
 		\pro Ergebnisse in HTML-Dashboard
 		
 		\con Swing Oberfläche
-		\con Passwörter beim Recording im Klartext
 		\con Testpläne in XML-Format
 		\con GUI resourcenhungrig
 		
